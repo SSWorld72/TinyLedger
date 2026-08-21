@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小小計帳本 (TinyLedger)</title>
+    <!-- Prevent favicon 404 error -->
+    <link rel="icon" href="data:,">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Tailwind CSS (For utils components) -->
+    <!-- Tailwind CSS (For utils components) -->
+    <script>
+        tailwind.config = {
+            darkMode: ['class', '[data-theme="dark"]'],
+            corePlugins: {
+                preflight: false, // Disable preflight to avoid breaking TinyLedger's custom CSS
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入通用錯誤處理器 (攔截未預期異常) -->
+    <script src="utils/js/errorHandler.js"></script>
+    <!-- Prevent flash of unstyled theme -->
+    <script>
+            (function () {
+                try {
+                    const savedTheme = localStorage.getItem('tinyledger-theme');
+                    if (savedTheme === 'dark') {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    } else if (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                } catch (e) { }
+            })();
+    </script>
+    <!-- Custom CSS -->
+    <!-- Base UI Styles -->
+    <link rel="stylesheet" href="utils/css/modern-ui.css?v=1.0.1">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <style>
+        /* 確保背景色填滿，避免在內容過少時下方出現瀏覽器預設白邊 */
+        html,
+        body {
+            min-height: 100vh;
+            background-color: var(--bg-color, #f4f6f9);
+            /* 確保 sticky 能夠正常運作，使用 clip 代替 hidden 來防止破壞 sticky */
+            overflow-x: clip !important;
+            overflow-y: visible !important;
+        }
+
+        /* 確保 Google Maps Autocomplete 的選單不會被 Modal 遮蓋 */
+        .pac-container {
+            z-index: 99999 !important;
+        }
+
+        /* 恢復：將頁尾固定在畫面最下方 */
+        #global-footer-element {
+            position: fixed !important;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+    </style>
+    <style>
+        :root {
+            --app-header-height: 74px;
+        }
+
+        /* 確保頁首完全固定在畫面頂端 */
+        .app-header {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000 !important;
+        }
+
+        /* 為內容區域保留頁首的空間，避免被固定的頁首遮擋 */
+        .app-main {
+            margin-top: var(--app-header-height);
+        }
+
+        /* 電腦版：固定所有面板 */
+        @media (min-width: 769px) {
+            .sticky-top-panel {
+                position: fixed !important;
+                top: var(--app-header-height) !important;
+                left: 0;
+                right: 0;
+                margin: 0 auto !important;
+                width: 100%;
+                max-width: 1200px;
+                z-index: 90 !important;
+                background-color: var(--bg-color, #f8fafc);
+                padding: 1rem 2rem 1rem 2rem !important; /* 桌面版 padding，修正邊距 */
+                border-bottom: 1px solid var(--border-color); /* 加底線以區分內容 */
+            }
+        }
+
+        .mobile-text {
+            display: none;
+        }
+
+        .desktop-text {
+            display: inline;
+        }
+
+        /* 預設 (電腦版)：垂直排列 (Tabs 在上、Summary 居中、Budget 在下) */
+        .dashboard-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-grid .tabs-container {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .dashboard-grid .summary-bar {
+            background: var(--surface-color);
+            border-radius: var(--border-radius-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-grid .budget-container {
+            background: var(--surface-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 針對手機版進行大幅度的空間壓縮 (Compact UI) */
+        @media (max-width: 768px) {
+            :root {
+                --app-header-height: 54px;
+                /* Header 變矮 */
+            }
+
+            /* 縮小 Header */
+            .app-header {
+                padding: 0.5rem 0.25rem !important;
+            }
+            
+            /* 縮小左右全域邊界與上方邊界 */
+            .app-main {
+                padding: 0.5rem 0.25rem !important;
+                /* 確保不會被固定的 header 蓋住 */
+                margin-top: var(--app-header-height) !important;
+            }
+
+            .icon-btn {
+                padding: 6px !important;
+            }
+
+            /* 縮小 Sticky Panel 邊距，改為 fixed 定位確保一定會置頂 */
+            .sticky-top-panel {
+                position: fixed !important;
+                top: var(--app-header-height) !important;
+                left: 0;
+                right: 0;
+                width: 100%;
+                z-index: 90 !important;
+                background-color: var(--bg-color);
+                margin: 0 !important;
+                /* 向上與向左右拉伸，完全貼齊 */
+                padding: 0.5rem 0.25rem 0.25rem 0.25rem !important;
+                border-bottom: 1px solid var(--border-color); /* 加底線以區分內容 */
+            }
+
+            /* 手機版：Tabs 與 Summary 同行，Budget 在下一行 */
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                grid-template-areas: 
+                    "tabs summary"
+                    "budget budget";
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .dashboard-grid .tabs-container {
+                grid-area: tabs;
+                padding: 2px;
+                gap: 2px;
+                margin: 0 !important;
+                height: 100% !important;
+            }
+            
+            .dashboard-grid .summary-bar {
+                grid-area: summary;
+                padding: 0.4rem 0.5rem !important;
+                border-radius: 8px !important;
+                border: 1px solid var(--border-color) !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                height: 100% !important;
+            }
+            
+            .dashboard-grid .budget-container {
+                grid-area: budget;
+                padding: 0.4rem 0.5rem !important;
+                border-radius: 8px !important;
+            }
+
+            .tab-btn {
+                padding: 4px 6px !important;
+                line-height: 1.1 !important;
+                font-size: 0.75rem !important;
+            }
+
+            .dashboard-grid .summary-item {
+                border-right: none !important;
+            }
+
+            .dashboard-grid .summary-label {
+                font-size: 0.65rem !important;
+                opacity: 0.9;
+            }
+
+            .dashboard-grid .summary-item .amount {
+                font-size: 1rem !important;
+            }
+
+            /* 縮小預算卡片文字 */
+            #budget-text-left,
+            #budget-text-right {
+                font-size: 0.75rem !important;
+            }
+
+            .budget-progress-bar {
+                height: 6px !important;
+                margin-bottom: 0 !important;
+                /* 消除進度條下方的空隙 */
+            }
+
+            /* 讓篩選器變成單行橫向滑動 (避免折行佔用高度) */
+            .filter-row {
+                padding: 0.25rem 0.5rem !important;
+                /* 減少上下 padding */
+                gap: 0.5rem !important;
+                margin-bottom: 0 !important;
+                /* 移除與下方清單標題的間距 */
+                flex-wrap: nowrap !important;
+                overflow-x: auto;
+                scrollbar-width: none;
+                /* Firefox */
+                -ms-overflow-style: none;
+                /* IE/Edge */
+            }
+
+            .filter-row::-webkit-scrollbar {
+                display: none;
+                /* Chrome/Safari */
+            }
+
+            .filter-group label {
+                font-size: 0.75rem !important;
+                white-space: nowrap;
+            }
+
+            .filter-group label.hide-on-mobile {
+                display: none !important;
+            }
+
+            .mobile-text {
+                display: inline !important;
+            }
+
+            .desktop-text {
+                display: none !important;
+            }
+
+            .filter-group .form-control,
+            #select-major-cat,
+            #select-sub-cat,
+            #select-target {
+                padding: 4px 8px !important;
+                font-size: 0.85rem !important;
+                height: auto !important;
+                min-height: 28px !important;
+                line-height: 1.2 !important;
+            }
+
+            /* 縮小新增紀錄對話框內的標籤與間距 */
+            #select-major-cat, #select-sub-cat, #select-target {
+                width: 100% !important; /* 確保維持原本的寬度比例 */
+            }
+            #select-major-cat, #select-sub-cat, #select-target,
+            #select-major-cat + *, #select-sub-cat + *, #select-target + * {
+                /* 確保不會被其他 form-control 的高度設定影響 */
+            }
+            .form-row .form-group {
+                margin-bottom: 0.5rem !important;
+            }
+            .form-row .form-label {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.2rem !important;
+            }
+
+            /* 強制修正 iOS 手機版日期與金額欄位高度不一致的問題 */
+            #input-date-single, #input-amount,
+            #input-date-start, #input-date-end {
+                -webkit-appearance: none !important;
+                appearance: none !important;
+                height: 40px !important;
+                min-height: 40px !important;
+                max-height: 40px !important;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                line-height: 40px !important;
+                box-sizing: border-box !important;
+                margin: 0 !important;
+            }
+
+            /* 縮小紀錄清單邊距與間距 (相容 list-row 與 record-item) */
+            .record-item,
+            .list-row {
+                padding: 0.4rem 0.25rem !important;
+                /* 上下邊距由 0.75rem 縮小至 0.4rem，左右維持 0.25rem */
+            }
+
+            .list-header-row {
+                padding: 0.25rem 0.5rem !important;
+                /* 藍色標題列的內邊距縮小 */
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/calendar.css?v=1.0.1">
+    <script type="module">
+        import { ThemeSwitcher } from './utils/js/themeSwitcher.js';
+        window.themeSwitcher = new ThemeSwitcher('tinyledger-theme', 'auto');
+        window.addEventListener('load', () => document.body.classList.remove('preload'));
+    </script>
+</head>
+
+<body class="preload">
+    <div id="app-container" class="app-container">
+        <header class="app-header">
+            <div class="header-left">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <h1
+                        style="font-size: 1.25rem; font-weight: 700; color: #2563eb; letter-spacing: -0.025em; white-space: nowrap; margin: 0;">
+                        小小計帳本</h1>
+                </div>
+            </div>
+            <div style="flex:1;"></div>
+            <nav class="header-right">
+                <button class="icon-btn action-add" title="新增交易紀錄" id="btn-add-record"><span
+                        class="material-icons">add</span></button>
+                <button class="icon-btn" title="返回清單" id="btn-nav-list" style="display: none;"><span
+                        class="material-icons">format_list_bulleted</span></button>
+                <button class="icon-btn" title="統計圖" id="btn-nav-stats"><span
+                        class="material-icons">pie_chart</span></button>
+                <button class="icon-btn" id="btn-nav-calendar" title="萬年曆"><span
+                        class="material-icons">calendar_today</span></button>
+                <button class="icon-btn" title="設定" id="btn-nav-settings"><span
+                        class="material-icons">settings</span></button>
+            </nav>
+        </header>
+
+        <main class="app-main">
+            <div id="sticky-top-panel" class="sticky-top-panel">
+                <!-- 頂部控制區：響應式 Grid 排版 -->
+                <div class="dashboard-grid">
+                    <div class="tabs-container">
+                        <button class="tab-btn active" data-target="tab-general">
+                            <span class="desktop-text">一般紀錄</span>
+                            <span class="mobile-text">一般<br>紀錄</span>
+                        </button>
+                        <button class="tab-btn" data-target="tab-fixed">
+                            <span class="desktop-text">固定紀錄</span>
+                            <span class="mobile-text">固定<br>紀錄</span>
+                        </button>
+                    </div>
+
+                    <div class="summary-bar" id="summary-bar-container">
+                        <div id="summary-content" style="display: flex; width: 100%; justify-content: space-between; transition: opacity 0.3s;">
+                            <div class="summary-item text-green">
+                                <span class="summary-label">收入</span>
+                                <span class="amount" id="total-income">0</span>
+                            </div>
+                            <div class="summary-item text-red">
+                                <span class="summary-label">支出</span>
+                                <span class="amount" id="total-expense">0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">結餘</span>
+                                <span class="amount" id="total-balance">0</span>
+                            </div>
+                        </div>
+                        <!-- Delete overlay -->
+                        <div id="summary-delete-overlay"
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fee2e2; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--accent-red); opacity: 0; pointer-events: none; transition: opacity 0.3s; user-select: none;">
+                            <span class="material-icons" style="margin-right: 8px; font-size: 20px;">delete</span>
+                            <span id="summary-delete-text" style="font-weight: 500; font-size: 1rem;">刪除所選 (0)</span>
+                        </div>
+                    </div>
+
+                    <div class="budget-container">
+                        <div
+                            style="display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--text-muted); font-size: 0.85rem;">
+                            <span id="budget-text-left">本月總預算 0 · 總支出已用 0%</span>
+                            <span id="budget-text-right" class="text-green">剩餘 0</span>
+                        </div>
+                        <div class="budget-progress-bar"
+                            style="background: var(--border-color); border-radius: 4px; height: 8px; overflow: hidden; margin-bottom: 0;">
+                            <div id="budget-progress" class="progress"
+                                style="background: #fbbf24; height: 100%; width: 0%; transition: width 0.3s, background-color 0.3s;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Row -->
+                <div class="filter-row"
+                    style="display: flex; gap: 1rem; margin-bottom: 1rem; background: var(--surface-color); padding: 1rem 1.5rem; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-sm); align-items: center; flex-wrap: wrap;">
+
+                    <div id="filter-group-month" class="filter-group"
+                        style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label class="hide-on-mobile"
+                            style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">年月</label>
+                        <input type="month" id="month-selector" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;" onclick="this.showPicker()" />
+                    </div>
+                    <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;"><span
+                                class="desktop-text">大類</span><span class="mobile-text">類別</span></label>
+                        <select id="filter-major" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label class="hide-on-mobile"
+                            style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">小類</label>
+                        <select id="filter-minor" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">對象</label>
+                        <select id="filter-target" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- 列表固定標題欄位 (金額標題欄位) -->
+                <div class="list-row list-header-row" id="global-list-header" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 0.5rem; background: var(--bg-color); position: relative; z-index: 10;">
+                    <div class="col-check"><input type="checkbox" id="cb-select-all-global"></div>
+                    <div class="col-main" id="global-list-title">類別 / 明細</div>
+                    <div class="col-amount">金額</div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="main-content">
+
+                <div id="summary-section" class="summary-section">
+                    <div id="tab-general" class="tab-content active">
+                        <ul class="record-list" id="general-record-list">
+                            <!-- General records will be injected here -->
+                        </ul>
+                    </div>
+                    <div id="tab-fixed" class="tab-content">
+                        <ul class="record-list" id="fixed-record-list">
+                            <!-- Fixed records list will be rendered here -->
+                        </ul>
+                    </div>
+                    <div id="tab-stats" class="tab-content" style="padding: 4px 6px 0 6px;">
+                        <!-- Chart Type Tabs -->
+                        <div style="display:flex; gap:6px; margin-bottom:16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; overflow-x: auto; white-space: nowrap;"
+                            class="custom-scrollbar">
+                            <button class="btn btn-outline stats-tab-btn active" data-type="pie"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;">圓餅圖</button>
+                            <button class="btn btn-outline stats-tab-btn" data-type="bar"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;">長條圖</button>
+                            <button class="btn btn-outline stats-tab-btn" data-type="line"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;">折線圖</button>
+                            <button class="btn btn-outline stats-tab-btn" data-type="annual"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;">年度圖</button>
+                        </div>
+
+                        <!-- Filters container -->
+                        <div id="stats-filters">
+                            <!-- Primary Filters Row: Period & Group By -->
+                            <div id="stats-primary-filters"
+                                style="display:flex; gap:16px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
+                                <!-- Period (except for annual) -->
+                                <div id="stats-filter-period"
+                                    style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+                                    <span
+                                        style="font-size:0.85rem; color:var(--primary-color); font-weight:600; margin-right:2px; display:inline-block; min-width:3.5em; text-align:right;">區間：</span>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="week">本週</button>
+                                    <button class="btn btn-outline stats-period-btn active"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="month">本月</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="year">今年</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="all">全部</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="custom">自訂</button>
+
+                                    <!-- Custom Range -->
+                                    <div id="stats-custom-range"
+                                        style="display:none; gap:8px; align-items:center; margin-left:4px;">
+                                        <input type="date" id="stats-start-date" class="form-control"
+                                            style="flex:1; cursor: pointer; font-size:0.85rem;"
+                                            onclick="this.showPicker()">
+                                        <span style="color:var(--text-muted); font-size:0.85rem;">~</span>
+                                        <input type="date" id="stats-end-date" class="form-control"
+                                            style="flex:1; cursor: pointer; font-size:0.85rem;"
+                                            onclick="this.showPicker()">
+                                    </div>
+
+                                    <!-- Range Display -->
+                                    <div id="stats-range-display"
+                                        style="font-size:0.8rem; color:var(--primary-color); font-weight:600; background:rgba(37,99,235,0.1); padding:2px 8px; border-radius:4px; margin-left:4px;">
+                                    </div>
+                                </div>
+                                <!-- Group By (except for annual) -->
+                                <div id="stats-filter-groupby" style="display:flex; gap:6px; align-items:center;">
+                                    <span
+                                        style="font-size:0.85rem; color:var(--primary-color); font-weight:600; margin-right:2px; display:inline-block; min-width:3.5em; text-align:right;">分類：</span>
+                                    <button class="btn btn-outline stats-group-btn active"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-groupby="major">大類</button>
+                                    <button class="btn btn-outline stats-group-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-groupby="sub">小類</button>
+                                    <button class="btn btn-outline stats-group-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-groupby="payee">對象</button>
+                                    <div style="display:flex; gap:4px; margin-left:auto; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; padding: 2px;">
+                                        <button class="btn btn-primary stats-type-btn active"
+                                            style="padding:4px 12px; font-size:0.85rem; border:none; box-shadow:none; border-radius:4px;" data-type="expense">支出</button>
+                                        <button class="btn btn-outline stats-type-btn"
+                                            style="padding:4px 12px; font-size:0.85rem; border:none; box-shadow:none; border-radius:4px;" data-type="income">收入</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <!-- X Axis Granularity (only for bar/line) -->
+                            <div id="stats-filter-x-axis"
+                                style="display:none; gap:6px; margin-bottom:16px; align-items:center;">
+                                <span style="font-size:0.85rem; color:var(--primary-color); font-weight:600; margin-right:2px; display:inline-block; min-width:3.5em; text-align:right;">Ｘ軸：</span>
+                                <button class="btn btn-outline stats-x-btn active"
+                                    style="padding:4px 12px; font-size:0.85rem;" data-x="day">以日</button>
+                                <button class="btn btn-outline stats-x-btn" style="padding:4px 12px; font-size:0.85rem;"
+                                    data-x="month">以月</button>
+                            </div>
+
+                            <!-- Year Select (only for annual) -->
+                            <div id="stats-filter-year"
+                                style="display:none; gap:8px; margin-bottom:16px; align-items:center;">
+                                <span style="font-size:0.8rem; color:var(--text-muted);">年份：</span>
+                                <select id="stats-annual-year" class="form-control"
+                                    style="width: 120px; font-size:0.85rem; padding: 4px 8px;"></select>
+                            </div>
+                        </div>
+
+                        <!-- Views Content -->
+                        <div id="stats-view-content" style="padding-bottom: 0;">
+                            <!-- Will be populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- New Calendar Tab -->
+                    <div id="tab-calendar" class="tab-content" style="padding: 0 16px 16px 16px; max-width: 800px; margin: 0 auto;">
+                        <div class="modal-header" style="padding: 4px 0.5rem 8px 0.5rem; border-bottom: none;">
+                            <div style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+                                <select id="calendar-year-select" class="form-input"
+                                    style="width: auto; padding: 4px 8px; font-size: 0.85rem; font-weight: 500; background: var(--bg-color); color: var(--text-color); border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;"></select>
+                                <select id="calendar-month-select" class="form-input"
+                                    style="width: auto; padding: 4px 8px; font-size: 0.85rem; font-weight: 500; background: var(--bg-color); color: var(--text-color); border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;"></select>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <button class="icon-btn" id="btn-cal-prev"><span
+                                        class="material-icons">chevron_left</span></button>
+                                <button class="icon-btn" id="btn-cal-today"><span
+                                        class="material-icons">today</span></button>
+                                <button class="icon-btn" id="btn-cal-next"><span
+                                        class="material-icons">chevron_right</span></button>
+                            </div>
+                        </div>
+                        <div class="modal-body" style="padding: 0;">
+                            <div class="calendar-grid-header">
+                                <div>日</div>
+                                <div>一</div>
+                                <div>二</div>
+                                <div>三</div>
+                                <div>四</div>
+                                <div>五</div>
+                                <div>六</div>
+                            </div>
+                            <div class="calendar-grid" id="calendar-grid">
+                                <!-- Days will be rendered here -->
+                            </div>
+
+                            <div id="calendar-day-detail" class="calendar-day-detail" style="display: none;">
+                                <div style="flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 0;">
+                                    <div class="day-detail-header">
+                                        <h3 id="day-detail-date"></h3>
+                                        <button class="btn-close" id="btn-close-day-detail-top">&times;</button>
+                                    </div>
+                                    <div class="day-detail-bazi" id="day-detail-bazi">
+                                        <!-- Bazi blocks -->
+                                    </div>
+                                    <h4 style="margin-top: 16px; margin-bottom: 8px;">當日交易紀錄</h4>
+                                    <div id="day-detail-records" class="day-detail-records" style="margin-bottom: 16px;">
+                                        <!-- Records will be rendered here -->
+                                    </div>
+                                </div>
+                                <div
+                                    style="padding: 12px 16px; border-top: 1px solid var(--border-color); flex-shrink: 0; background-color: var(--surface-color);">
+                                    <button id="btn-close-day-detail" class="btn btn-secondary"
+                                        style="width: 100%; padding: 12px; font-weight: bold;">收起明細</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- New Settings Tab -->
+                    <div id="tab-settings" class="tab-content" style="padding: 16px; max-width: 800px; margin: 0 auto;">
+                        <div class="modal-header">
+                            <h2>系統設定</h2>
+                        </div>
+                        <div class="modal-body" style="padding: 0;">
+                            <div style="margin-bottom: 2rem;">
+                                <h3>外觀主題</h3>
+                                <div style="display: flex; gap: 8px; margin-top: 0.5rem; flex-direction: row;">
+                                    <button id="btn-theme-light" class="btn btn-outline"
+                                        style="flex: 1; padding: 12px; font-size: 1rem;">淺色</button>
+                                    <button id="btn-theme-dark" class="btn btn-outline"
+                                        style="flex: 1; padding: 12px; font-size: 1rem;">深色</button>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 2rem;">
+                                <h3>預算設定</h3>
+                                <div style="display: flex; gap: 8px; margin-top: 0.5rem; flex-direction: column;">
+                                    <label class="form-label">本月預算</label>
+                                    <input type="number" id="settings-budget" class="form-control" placeholder="例如: 25000">
+                                </div>
+                            </div>
+
+                            <h2>資料管理</h2>
+                            <div style="margin-top:16px; margin-bottom: 2rem;">
+                                <div style="display: flex; flex-direction: row; gap: 8px;">
+                                    <button id="btn-open-settings-expense" class="btn btn-outline"
+                                        style="flex: 1; text-align:center; padding: 12px 4px; font-size: 0.9rem;">📝
+                                        支出類別</button>
+                                    <button id="btn-open-settings-income" class="btn btn-outline"
+                                        style="flex: 1; text-align:center; padding: 12px 4px; font-size: 0.9rem;">📝
+                                        收入類別</button>
+                                    <button id="btn-open-settings-target" class="btn btn-outline"
+                                        style="flex: 1; text-align:center; padding: 12px 4px; font-size: 0.9rem;">👤
+                                        管理對象</button>
+                                </div>
+                            </div>
+
+                            <h2>萬年曆與顯示設定</h2>
+                            <div class="settings-grid">
+                                <div class="setting-card card-red" style="flex-wrap: wrap;">
+                                    <div class="setting-info" style="flex: 1 1 50%; min-width: 200px;">
+                                        <h4>國定假日</h4>
+                                        <p>顯示人事行政總處公告之國定假日</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-national-holiday" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <div
+                                        style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">
+                                        <span id="label-holiday-updated">上次更新：無</span>
+                                        <button id="btn-update-holidays" class="btn btn-outline"
+                                            style="padding: 6px 12px; font-size: 0.85rem;">立即更新</button>
+                                    </div>
+                                </div>
+                                <div class="setting-card card-blue">
+                                    <div class="setting-info">
+                                        <h4>農曆日期</h4>
+                                        <p>顯示農曆初幾 (如：初一、十五)</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-lunar-date" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-card card-green">
+                                    <div class="setting-info">
+                                        <h4>天干地支</h4>
+                                        <p>顯示日干支 (如：甲子、乙丑)</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-lunar-stembranch" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-card card-yellow">
+                                    <div class="setting-info">
+                                        <h4>二十四節氣</h4>
+                                        <p>顯示當日節氣名稱 (如：立春、清明)</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-lunar-solarterm" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-card card-purple">
+                                    <div class="setting-info">
+                                        <h4>節慶假日</h4>
+                                        <p>顯示傳統節慶與紀念日 (春節、記者節等)</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-lunar-festival" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-card card-cyan">
+                                    <div class="setting-info">
+                                        <h4>八字完整排盤</h4>
+                                        <p>點選日期時顯示四柱、十神、藏干、納音</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-bazi-chart" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-card card-pink">
+                                    <div class="setting-info">
+                                        <h4>趣味情人節</h4>
+                                        <p>顯示每月 14 號的特色情人節 (如：白色、黑色情人節)</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-calendar-valentine">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <h2 style="margin-top: 2rem;">重要節日提醒設定</h2>
+                            <div class="settings-grid">
+                                <div class="setting-card card-orange">
+                                    <div class="setting-info">
+                                        <h4>啟用重要節日提醒</h4>
+                                        <p>在節日到達前，記帳時會自動跳出提示，並在日曆顯示專屬星形標記</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-important-festivals">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div id="important-festivals-container" style="display: none; grid-column: 1 / -1; background: var(--surface-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div id="important-festivals-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+                                    <button class="btn btn-outline" id="btn-add-important-festival" style="margin-top: 12px; width: 100%;">
+                                        <span class="material-icons" style="font-size:18px; vertical-align:middle; margin-right:4px;">add</span>新增節日 (最多 10 組)
+                                    </button>
+                                </div>
+                            </div>
+                            <h2>附加設定</h2>
+                            <div id="google-api-module-container"></div>
+                            
+                            <div style="margin-top: 16px; padding: 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="margin: 0; font-size: 0.95rem; font-weight: 600;">清單地點連結地圖</h4>
+                                    <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">允許在首頁紀錄清單中直接點擊地點來開啟地圖</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="toggle-list-map-link">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <h2 style="margin-top: 2rem;">資料備份與還原</h2>
+                            <div style="margin-top: 16px;">
+                            <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 p-4 rounded-xl mb-6">
+                                <div class="flex items-center text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                    <svg class="w-4 h-4 text-slate-500 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
+                                    </svg>
+                                    手動檔案備份 (Local JSON)
+                                </div>
+                                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+                                    將目前的記帳紀錄匯出為 JSON 檔案下載至您的裝置中。您可於換機或資料遺失時透過此檔案手動還原。
+                                </p>
+                                <p id="backup-record-count"
+                                    style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; padding: 8px 12px; background: rgba(0,0,0,0.03); border-radius: 8px; text-align: center;">
+                                </p>
+                                <div style="display: flex; gap: 8px;">
+                                    <button id="btn-export-json" class="btn btn-primary"
+                                        style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; border-radius: 8px;">
+                                        <span class="material-icons" style="font-size: 1.25rem;">upload</span>
+                                        匯出備份
+                                    </button>
+                                    <label class="btn btn-outline hover-card"
+                                        style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; border-radius: 8px; margin: 0; cursor: pointer;">
+                                        <span class="material-icons" style="font-size: 1.25rem;">download</span>
+                                        匯入備份
+                                        <input type="file" id="input-import-json" accept=".json"
+                                            style="display:none;">
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="gas-backup-module"></div>
+
+                                <!-- 危險操作區掛載點 -->
+                                <div id="danger-zone-module"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+        </main>
+
+        <!-- Modals Container -->
+        <div id="modals-container">
+
+
+            <!-- Settings Manage Category Modal -->
+            <div class="modal-overlay" id="settings-manage-cat-modal">
+                <div class="modal-container">
+                    <div class="modal-header"
+                        style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="btn btn-outline" id="btn-back-settings-cat"
+                                style="display: none; padding: 4px 8px; font-size: 0.9rem;">
+                                <span class="material-icons" style="font-size: 16px;">arrow_back</span>
+                            </button>
+                            <h2 id="settings-cat-modal-title" style="margin: 0;">管理類別</h2>
+                        </div>
+                        <button class="btn-close" id="btn-close-settings-cat">&times;</button>
+                    </div>
+                    <div id="settings-cat-mode-toggles"
+                        style="display: flex; gap: 8px; padding: 0 16px 12px 16px; border-bottom: 1px solid var(--border-color); background: var(--card-bg);">
+                        <button class="btn btn-primary" id="btn-mode-cat-manage"
+                            style="flex: 1; padding: 6px 0; font-size: 0.9rem;">管理模式</button>
+                        <button class="btn btn-outline" id="btn-mode-cat-reorder-major"
+                            style="flex: 1; padding: 6px 0; font-size: 0.9rem;">排序大類</button>
+                        <button class="btn btn-outline" id="btn-mode-cat-reorder-minor"
+                            style="flex: 1; padding: 6px 0; font-size: 0.9rem;">排序小類</button>
+                    </div>
+                    <div class="modal-body" id="settings-cat-list-container">
+                        <!-- Categories will be rendered here -->
+                    </div>
+                    <div class="modal-footer" style="display: flex; align-items: center; gap: 16px;">
+                        <label
+                            style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-right: auto; font-size: 0.9rem;">
+                            <input type="checkbox" id="cb-select-all-cats" autocomplete="off">
+                            <span>全選</span>
+                        </label>
+                        <button class="btn btn-outline" id="btn-delete-selected-cats"
+                            style="color: var(--accent-red); border-color: var(--accent-red); display: none;">🗑️
+                            刪除所選</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Manage Targets Modal -->
+            <div class="modal-overlay" id="settings-manage-target-modal">
+                <div class="modal-container">
+                    <div class="modal-header">
+                        <h2>管理對象</h2>
+                        <button class="btn-close" id="btn-close-settings-target">&times;</button>
+                    </div>
+                    <div id="settings-target-mode-toggles"
+                        style="display: flex; gap: 8px; padding: 0 16px 12px 16px; border-bottom: 1px solid var(--border-color); background: var(--card-bg);">
+                        <button class="btn btn-primary" id="btn-mode-target-manage"
+                            style="flex: 1; padding: 6px 0; font-size: 0.9rem;">管理模式</button>
+                        <button class="btn btn-outline" id="btn-mode-target-reorder"
+                            style="flex: 1; padding: 6px 0; font-size: 0.9rem;">排序對象</button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="manage-list" id="settings-target-list-container">
+                            <!-- Targets will be rendered here -->
+                        </ul>
+                        <button class="btn btn-outline" id="btn-settings-add-target"
+                            style="width: 100%; margin-top: 8px;">
+                            <span class="material-icons"
+                                style="font-size:18px; vertical-align:middle; margin-right:4px;">add</span>新增對象
+                        </button>
+                    </div>
+                    <div class="modal-footer" style="display: flex; align-items: center; gap: 16px;">
+                        <label
+                            style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-right: auto; font-size: 0.9rem;">
+                            <input type="checkbox" id="cb-select-all-targets" autocomplete="off">
+                            <span>全選</span>
+                        </label>
+                        <button class="btn btn-outline" id="btn-delete-selected-targets"
+                            style="color: var(--accent-red); border-color: var(--accent-red); display: none;">🗑️
+                            刪除所選</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Record Modal Overlay -->
+            <div class="modal-overlay" id="add-record-modal">
+                <div class="modal-container">
+                    <div class="modal-header">
+                        <h2>新增紀錄</h2>
+                        <button class="btn-close" id="btn-close-record-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="read-only-notice"
+                            style="display: none; padding: 10px 16px; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 8px; margin-bottom: 16px; font-size: 0.95rem; align-items: center; justify-content: center; gap: 6px;">
+                            <span class="material-icons" style="font-size: 18px;">info</span>
+                            <span>此為系統自動產生的明細，僅供檢視，無法修改。</span>
+                        </div>
+                        <div class="modal-tabs">
+                            <button class="modal-tab-btn active" data-type="expense">支出</button>
+                            <button class="modal-tab-btn" data-type="income">收入</button>
+                        </div>
+                        <div class="modal-tabs">
+                            <button class="modal-tab-btn active" data-mode="single">單次</button>
+                            <button class="modal-tab-btn" data-mode="fixed">固定</button>
+                        </div>
+
+                        <div class="form-row">
+                            <!-- Date Side -->
+                            <div style="flex: 1;">
+                                <div id="date-group-single" class="form-group" style="margin-bottom: 0;">
+                                    <div class="form-label">日期</div>
+                                    <input type="date" class="form-control" id="input-date-single" required
+                                        style="cursor: pointer;" onclick="this.showPicker()">
+                                </div>
+
+                                <div class="date-group-fixed" style="display: none;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <div class="form-label">起訖日期</div>
+                                        <div class="form-row">
+                                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                                <input type="date" class="form-control" id="input-date-start" required
+                                                    placeholder="開始日期" style="position: relative; cursor: pointer;"
+                                                    onclick="this.showPicker()">
+                                            </div>
+                                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                                <input type="date" class="form-control" id="input-date-end"
+                                                    placeholder="結束日期" style="position: relative; cursor: pointer;"
+                                                    onclick="this.showPicker()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Amount Side -->
+                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                <div class="form-label">金額</div>
+                                <input type="number" class="form-control" id="input-amount" placeholder="0">
+                            </div>
+                        </div>
+
+                        <div class="form-row date-group-fixed" style="display: none; margin-top: 1rem;">
+                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                <div class="form-label">重複方式</div>
+                                <div class="modal-tabs">
+                                    <button class="modal-tab-btn active" data-rule="yearly">每年</button>
+                                    <button class="modal-tab-btn" data-rule="monthly">每月</button>
+                                    <button class="modal-tab-btn" data-rule="weekly">每週</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                <div class="form-label">詳細規則</div>
+                                <!-- Yearly Details -->
+                                <div id="rule-detail-yearly" class="rule-detail-group"
+                                    style="display: flex; gap: 0.5rem;">
+                                    <select class="form-control" id="select-rule-month"></select>
+                                    <select class="form-control" id="select-rule-day-yearly"></select>
+                                </div>
+
+                                <!-- Monthly Details -->
+                                <div id="rule-detail-monthly" class="rule-detail-group" style="display: none;">
+                                    <select class="form-control" id="select-rule-day-monthly"></select>
+                                </div>
+
+                                <!-- Weekly Details -->
+                                <div id="rule-detail-weekly" class="rule-detail-group" style="display: none;">
+                                    <select class="form-control" id="select-rule-weekday">
+                                        <option value="1">星期一</option>
+                                        <option value="2">星期二</option>
+                                        <option value="3">星期三</option>
+                                        <option value="4">星期四</option>
+                                        <option value="5">星期五</option>
+                                        <option value="6">星期六</option>
+                                        <option value="0">星期日</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <div class="form-label">大類</div>
+                                <select class="form-control" id="select-major-cat"></select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <div class="form-label">小類</div>
+                                <select class="form-control" id="select-sub-cat"></select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <div class="form-label">對象</div>
+                                <select class="form-control" id="select-target"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-label">地點</div>
+                            <div style="display: flex; gap: 8px; align-items: stretch;">
+                                <div style="position: relative; flex: 1;">
+                                    <input type="text" class="form-control" id="input-location" placeholder="輸入地址或店名"
+                                        style="width: 100%; padding-right: 36px;">
+                                    <span class="material-icons" id="btn-clear-location"
+                                        style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted); font-size: 18px; padding: 4px; display: none; z-index: 2;">close</span>
+                                </div>
+                                <button type="button" class="btn btn-outline" id="btn-map-location"
+                                    style="padding: 0 12px; display: flex; align-items: center; justify-content: center;"
+                                    title="在地圖中開啟">
+                                    <span class="material-icons">location_on</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-label">照片</div>
+                            <div class="photo-upload-box">
+                                <span class="material-icons" style="font-size: 2rem;">camera_alt</span>
+                                <span>拍照或上傳照片</span>
+                                <input type="file" id="input-photo" accept="image/*" capture="environment">
+                                <img id="photo-preview" class="photo-preview" src="" alt="預覽圖">
+                                <canvas id="photo-canvas" style="display: none;"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-label">備註</div>
+                            <textarea class="form-control" id="input-note" placeholder="備註..." rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="justify-content: space-between; display: flex;">
+                        <div style="display: flex; gap: 16px;">
+                            <button class="btn btn-danger" id="btn-delete-record" style="display:none;">刪除</button>
+                            <button class="btn btn-secondary" id="btn-copy-record" style="display:none;">複製</button>
+                        </div>
+                        <div style="display: flex; gap: 16px;">
+                            <button class="btn btn-primary" id="btn-save-record">儲存</button>
+                            <button class="btn btn-outline" id="btn-cancel-record">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div> <!-- end app-container -->
+
+    <script type="module" src="js/app.js?v=13"></script>
+    <script>
+        // Remove preload class to enable transitions after initial load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.body.classList.remove('preload');
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
