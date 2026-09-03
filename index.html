@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小小計帳本 (TinyLedger)</title>
+    <!-- Prevent favicon 404 error -->
+    <link rel="icon" href="data:,">
+    <!-- Google Fonts (Local) -->
+    <link href="libs/fonts/inter.css" rel="stylesheet">
+    <!-- Material Icons (Local) -->
+    <link href="libs/icons/material-icons.css" rel="stylesheet">
+    <!-- Tailwind CSS (For utils components) -->
+    <!-- Tailwind CSS (For utils components) -->
+    <script src="libs/tailwind/tailwindcss.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ['class', '[data-theme="dark"]'],
+            corePlugins: {
+                preflight: false, // Disable preflight to avoid breaking TinyLedger's custom CSS
+            }
+        }
+    </script>
+    <!-- JSZip (For Backup Compression) -->
+    <script src="libs/jszip/jszip.min.js"></script>
+    <!-- 引入通用錯誤處理器 (攔截未預期異常) -->
+    <script src="utils/js/errorHandler.js"></script>
+    <!-- Prevent flash of unstyled theme -->
+    <script>
+            (function () {
+                try {
+                    const savedTheme = localStorage.getItem('tinyledger-theme');
+                    if (savedTheme === 'dark') {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    } else if (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                } catch (e) { }
+            })();
+    </script>
+    <!-- Custom CSS -->
+    <!-- Base UI Styles -->
+    <link rel="stylesheet" href="utils/css/modern-ui.css?v=1.0.1">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
+    
+    <!-- Cropper.js -->
+    <link rel="stylesheet" href="libs/cropper/cropper.min.css">
+    <style>
+        /* 確保背景色填滿，避免在內容過少時下方出現瀏覽器預設白邊 */
+        html,
+        body {
+            min-height: 100vh;
+            background-color: var(--bg-color, #f4f6f9);
+            /* 確保 sticky 能夠正常運作，使用 clip 代替 hidden 來防止破壞 sticky */
+            overflow-x: clip !important;
+            overflow-y: visible !important;
+        }
+
+        /* 恢復 sticky-top-panel 的基礎 sticky 設定 */
+        .sticky-top-panel {
+            position: sticky;
+            top: var(--app-header-height);
+            z-index: 50;
+        }
+
+        /* 確保 Google Maps Autocomplete 的選單不會被 Modal 遮蓋 */
+        .pac-container {
+            z-index: 99999 !important;
+        }
+
+        /* 恢復：將頁尾固定在畫面最下方 */
+        #global-footer-element {
+            position: fixed !important;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+    </style>
+    <style>
+        :root {
+            --app-header-height: 74px;
+        }
+
+        /* 確保頁首完全固定在畫面頂端 */
+        .app-header {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--app-header-height) !important;
+            z-index: 1000 !important;
+        }
+
+        /* 為內容區域保留頁首的空間，避免被固定的頁首遮擋 */
+        .app-main {
+            margin-top: var(--app-header-height);
+        }
+
+        /* 電腦版：面板樣式 */
+        @media (min-width: 769px) {
+            .sticky-top-panel {
+                margin: -2rem -2rem 0 -2rem !important; /* 抵銷 app-main 桌面版的 2rem padding */
+                background-color: var(--bg-color, #f8fafc);
+                padding: 0.25rem 2rem 0.25rem 2rem !important; /* 桌面版 padding，維持左右內縮 */
+                border-bottom: 1px solid var(--border-color); /* 加底線以區分內容 */
+            }
+        }
+
+        .mobile-text {
+            display: none;
+        }
+
+        .desktop-text {
+            display: inline;
+        }
+
+        /* 佈局 (電腦版)：直列 (Tabs 在上，Summary 居中，Budget 在下) */
+        .dashboard-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .dashboard-grid .tabs-container {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .dashboard-grid .summary-bar {
+            background: var(--surface-color);
+            border-radius: var(--border-radius-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-grid .budget-container {
+            background: var(--surface-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 0.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 針對手機版進行大幅度的空間壓縮 (Compact UI) */
+        @media (max-width: 768px) {
+            :root {
+                --app-header-height: 54px;
+                /* Header 變矮 */
+            }
+
+            /* 縮小 Header */
+            .app-header {
+                padding: 0.5rem 0.25rem !important;
+            }
+            
+            /* 縮小左右全域邊界與上方邊界 */
+            .app-main {
+                padding: 0.5rem 0.25rem !important;
+                /* 確保不會被固定的 header 蓋住 */
+                margin-top: var(--app-header-height) !important;
+            }
+
+            .icon-btn {
+                padding: 6px !important;
+            }
+
+            /* 縮小 Sticky Panel 邊距 */
+            .sticky-top-panel {
+                background-color: var(--bg-color);
+                margin: -0.5rem -0.25rem 0 -0.25rem !important; /* 抵銷 app-main 手機版的 0.5rem 0.25rem padding */
+                /* 向上與向左右拉伸，完全貼齊 */
+                padding: 0.5rem 0.25rem 0.25rem 0.25rem !important;
+                border-bottom: 1px solid var(--border-color); /* 加底線以區分內容 */
+            }
+
+            /* 手機版：Tabs 與 Summary 同行，Budget 在下一行 */
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                grid-template-areas: 
+                    "tabs summary"
+                    "budget budget";
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .dashboard-grid .tabs-container {
+                grid-area: tabs;
+                padding: 2px;
+                gap: 2px;
+                margin: 0 !important;
+                height: 100% !important;
+            }
+            
+            .dashboard-grid .summary-bar {
+                grid-area: summary;
+                padding: 0.4rem 0.5rem !important;
+                border-radius: 8px !important;
+                border: 1px solid var(--border-color) !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                height: 100% !important;
+            }
+            
+            .dashboard-grid .budget-container {
+                grid-area: budget;
+                padding: 0.4rem 0.5rem !important;
+                border-radius: 8px !important;
+            }
+
+            .tab-btn {
+                padding: 4px 6px !important;
+                line-height: 1.1 !important;
+                font-size: 0.75rem !important;
+            }
+
+            .dashboard-grid .summary-item {
+                border-right: none !important;
+            }
+
+            .dashboard-grid .summary-label {
+                font-size: 0.65rem !important;
+                opacity: 0.9;
+            }
+
+            .dashboard-grid .summary-item .amount {
+                font-size: 1rem !important;
+            }
+
+            /* 縮小預算卡片文字 */
+            #budget-text-left,
+            #budget-text-right {
+                font-size: 0.75rem !important;
+            }
+
+            .budget-progress-bar {
+                height: 6px !important;
+                margin-bottom: 0 !important;
+                /* 消除進度條下方的空隙 */
+            }
+
+            /* 讓篩選器變成單行橫向滑動 (避免折行佔用高度) */
+            .filter-row {
+                padding: 0.25rem 0.25rem !important; /* 再進一步縮減左右 padding */
+                gap: 0.25rem !important; /* 縮減元素之間的間距 */
+                margin-bottom: 0 !important;
+                /* 移除與下方清單標題的間距 */
+                flex-wrap: nowrap !important;
+                overflow-x: auto;
+                scrollbar-width: none;
+                /* Firefox */
+                -ms-overflow-style: none;
+                /* IE/Edge */
+            }
+
+            .filter-row::-webkit-scrollbar,
+            #account-tabs-container::-webkit-scrollbar {
+                display: none;
+                /* Chrome/Safari */
+            }
+
+            .filter-group label {
+                font-size: 0.75rem !important;
+                white-space: nowrap;
+            }
+
+            .filter-group label.hide-on-mobile {
+                display: none !important;
+            }
+
+            .mobile-text {
+                display: inline !important;
+            }
+
+            .desktop-text {
+                display: none !important;
+            }
+
+            .filter-group .form-control,
+            #select-major-cat,
+            #select-sub-cat,
+            #select-target {
+                padding: 4px 8px !important;
+                font-size: 0.85rem !important;
+                height: auto !important;
+                min-height: 28px !important;
+                line-height: 1.2 !important;
+            }
+
+            /* 限制篩選列的下拉選單最大寬度，避免因選項字數太多撐開版面導致後面元素被擠掉 */
+            .filter-group select.form-control {
+                max-width: 70px !important;
+                text-overflow: ellipsis;
+            }
+
+            /* 縮小新增紀錄對話框內的標籤與間距 */
+            #select-major-cat, #select-sub-cat, #select-target {
+                width: 100% !important; /* 確保維持原本的寬度比例 */
+            }
+
+            .form-row .form-group {
+                margin-bottom: 0.5rem !important;
+            }
+            .form-row .form-label {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.2rem !important;
+            }
+
+            /* 強制修正 iOS 手機版日期與金額欄位高度不一致的問題 */
+            #input-date-single, #input-amount,
+            #input-date-start, #input-date-end {
+                -webkit-appearance: none !important;
+                appearance: none !important;
+                height: 40px !important;
+                min-height: 40px !important;
+                max-height: 40px !important;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                line-height: 40px !important;
+                box-sizing: border-box !important;
+                margin: 0 !important;
+            }
+
+            /* 縮小紀錄清單邊距與間距 (相容 list-row 與 record-item) */
+            .record-item,
+            .list-row {
+                padding: 0.4rem 0.25rem !important;
+                /* 上下邊距由 0.75rem 縮小至 0.4rem，左右維持 0.25rem */
+            }
+
+            .list-header-row {
+                padding: 0.25rem 0.5rem !important;
+                /* 藍色標題列的內邊距縮小 */
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/calendar.css?v=1.0.1">
+    <script type="module">
+        import { ThemeSwitcher } from './utils/js/themeSwitcher.js';
+        window.themeSwitcher = new ThemeSwitcher('tinyledger-theme', 'auto');
+        window.addEventListener('load', () => document.body.classList.remove('preload'));
+    </script>
+</head>
+
+<body class="preload">
+
+
+    <div id="app-container" class="app-container">
+        <header class="app-header">
+            <div class="header-left">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <h1
+                        style="font-size: 1.25rem; font-weight: 700; color: #2563eb; letter-spacing: -0.025em; white-space: nowrap; margin: 0;">
+                        小小計帳本</h1>
+                </div>
+            </div>
+            
+            <!-- Account Filter Button -->
+            <div style="flex: 1; display: flex; align-items: center; justify-content: flex-start; margin: 0 16px;">
+                <button id="btn-account-filter" style="display: flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--surface-color); font-size: 0.9rem; font-weight: 500; color: var(--text-main); cursor: pointer; transition: background-color 0.2s;">
+                    <span class="material-icons" style="font-size: 16px;">filter_list</span>
+                    <span id="account-filter-text">全部帳戶</span>
+                </button>
+            </div>
+
+            <nav class="header-right">
+                <button class="icon-btn action-add" title="新增交易紀錄" id="btn-add-record"><span
+                        class="material-icons">add</span></button>
+                <button class="icon-btn" title="返回清單" id="btn-nav-list" style="display: none;"><span
+                        class="material-icons">format_list_bulleted</span></button>
+                <button class="icon-btn" title="統計圖" id="btn-nav-stats"><span
+                        class="material-icons">pie_chart</span></button>
+                <button class="icon-btn" id="btn-nav-calendar" title="萬年曆"><span
+                        class="material-icons">calendar_today</span></button>
+                <button class="icon-btn" title="設定" id="btn-nav-settings"><span
+                        class="material-icons">settings</span></button>
+            </nav>
+        </header>
+
+        <main class="app-main">
+            <div id="sticky-top-panel" class="sticky-top-panel">
+                <!-- 頂部控制區：響應式 Grid 排版 -->
+                <div class="dashboard-grid">
+                    <div class="tabs-container">
+                        <button class="tab-btn active" data-target="tab-general">
+                            <span class="desktop-text">一般紀錄</span>
+                            <span class="mobile-text">一般<br>紀錄</span>
+                        </button>
+                        <button class="tab-btn" data-target="tab-fixed">
+                            <span class="desktop-text">固定紀錄</span>
+                            <span class="mobile-text">固定<br>紀錄</span>
+                        </button>
+                    </div>
+
+                    <div class="summary-bar" id="summary-bar-container">
+                        <div id="summary-content" style="display: flex; width: 100%; justify-content: space-between; transition: opacity 0.3s;">
+                            <div class="summary-item text-green">
+                                <span class="summary-label">收入</span>
+                                <span class="amount" id="total-income">0</span>
+                            </div>
+                            <div class="summary-item text-red">
+                                <span class="summary-label">支出</span>
+                                <span class="amount" id="total-expense">0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">結餘</span>
+                                <span class="amount" id="total-balance">0</span>
+                            </div>
+                        </div>
+                        <!-- Delete overlay -->
+                        <div id="summary-delete-overlay"
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fee2e2; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--accent-red); opacity: 0; pointer-events: none; transition: opacity 0.3s; user-select: none;">
+                            <span class="material-icons" style="margin-right: 8px; font-size: 20px;">delete</span>
+                            <span id="summary-delete-text" style="font-weight: 500; font-size: 1rem;">刪除所選 (0)</span>
+                        </div>
+                    </div>
+
+                    <div class="budget-container">
+                        <div
+                            style="display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--text-muted); font-size: 0.85rem;">
+                            <span id="budget-text-left">本月總預算 0 · 總支出已用 0%</span>
+                            <span id="budget-text-right" class="text-green">剩餘 0</span>
+                        </div>
+                        <div class="budget-progress-bar"
+                            style="background: var(--border-color); border-radius: 4px; height: 8px; overflow: hidden; margin-bottom: 0;">
+                            <div id="budget-progress" class="progress"
+                                style="background: #fbbf24; height: 100%; width: 0%; transition: width 0.3s, background-color 0.3s;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Row -->
+                <div class="filter-row"
+                    style="display: flex; gap: 1rem; margin-bottom: 0.25rem; background: var(--surface-color); padding: 0.5rem 1.5rem; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-sm); align-items: center; flex-wrap: wrap;">
+
+                    <div id="filter-group-month" class="filter-group"
+                        style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="month" id="month-selector" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;" onclick="this.showPicker()" />
+                    </div>
+                    <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;"><span
+                                class="desktop-text">大類</span><span class="mobile-text">類別</span></label>
+                        <select id="filter-major" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label class="hide-on-mobile"
+                            style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">小類</label>
+                        <select id="filter-minor" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">對象</label>
+                        <select id="filter-target" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- 列表固定標題欄位 (金額標題欄位) -->
+                <div class="list-row list-header-row" id="global-list-header" style="margin-top: 0.25rem; border-top: 1px solid var(--border-color); padding-top: 0.5rem; background: var(--bg-color); position: relative; z-index: 10;">
+                    <div class="col-check"><input type="checkbox" id="cb-select-all-global"></div>
+                    <div class="col-main" style="display: flex; align-items: center; gap: 12px; overflow: visible;">
+                        <span id="global-list-title" style="white-space: nowrap;">類別 / 明細</span>
+                    </div>
+                    <div class="col-amount">金額</div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="main-content">
+
+                <div id="summary-section" class="summary-section">
+                    <div id="tab-general" class="tab-content active">
+                        <ul class="record-list" id="general-record-list">
+                            <!-- General records will be injected here -->
+                        </ul>
+                    </div>
+                    <div id="tab-fixed" class="tab-content">
+                        <ul class="record-list" id="fixed-record-list">
+                            <!-- Fixed records list will be rendered here -->
+                        </ul>
+                    </div>
+                    <div id="tab-stats" class="tab-content" style="padding: 4px 6px 0 6px;">
+                        <!-- Chart Type Tabs -->
+                        <div style="display:flex; gap:6px; margin-bottom:16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; overflow-x: auto; white-space: nowrap;"
+                            class="custom-scrollbar">
+                            <button class="btn btn-outline stats-tab-btn active" data-type="pie"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;">圓餅圖</button>
+                            <button class="btn btn-outline stats-tab-btn" data-type="bar"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;">長條圖</button>
+                            <button class="btn btn-outline stats-tab-btn" data-type="line"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;">折線圖</button>
+                            <button class="btn btn-outline stats-tab-btn" data-type="annual"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;">年度圖</button>
+                        </div>
+
+                        <!-- Filters container -->
+                        <div id="stats-filters">
+                            <!-- Primary Filters Row: Period & Group By -->
+                            <div id="stats-primary-filters"
+                                style="display:flex; gap:16px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
+                                <!-- Period (except for annual) -->
+                                <div id="stats-filter-period"
+                                    style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+                                    <span
+                                        style="font-size:0.85rem; color:var(--primary-color); font-weight:600; margin-right:2px; display:inline-block; min-width:3.5em; text-align:right;">區間：</span>
+                                    <button class="btn btn-outline stats-offset-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-dir="-1">↑</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="week">週</button>
+                                    <button class="btn btn-outline stats-period-btn active"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="month">月</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="year">年</button>
+                                    <button class="btn btn-outline stats-offset-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-dir="1">↓</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="all">全部</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="custom">自訂</button>
+
+                                    <!-- Custom Range -->
+                                    <div id="stats-custom-range"
+                                        style="display:none; gap:8px; align-items:center; margin-left:4px;">
+                                        <input type="date" id="stats-start-date" class="form-control"
+                                            style="flex:1; cursor: pointer; font-size:0.85rem;"
+                                            onclick="this.showPicker()">
+                                        <span style="color:var(--text-muted); font-size:0.85rem;">~</span>
+                                        <input type="date" id="stats-end-date" class="form-control"
+                                            style="flex:1; cursor: pointer; font-size:0.85rem;"
+                                            onclick="this.showPicker()">
+                                    </div>
+
+                                    <!-- Range Display -->
+                                    <div id="stats-range-display"
+                                        style="font-size:0.8rem; color:var(--primary-color); font-weight:600; background:rgba(37,99,235,0.1); padding:2px 8px; border-radius:4px; margin-left:4px;">
+                                    </div>
+                                </div>
+                                <!-- Group By (except for annual) -->
+                                <div id="stats-filter-groupby" style="display:flex; gap:6px; align-items:center;">
+                                    <span
+                                        style="font-size:0.85rem; color:var(--primary-color); font-weight:600; margin-right:2px; display:inline-block; min-width:3.5em; text-align:right;">分類：</span>
+                                    <button class="btn btn-outline stats-group-btn active"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-groupby="major">大類</button>
+                                    <button class="btn btn-outline stats-group-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-groupby="sub">小類</button>
+                                    <button class="btn btn-outline stats-group-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-groupby="payee">對象</button>
+                                    <div style="display:flex; gap:4px; margin-left:auto; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; padding: 2px;">
+                                        <button class="btn btn-primary stats-type-btn active"
+                                            style="padding:4px 12px; font-size:0.85rem; border:none; box-shadow:none; border-radius:4px;" data-type="expense">支出</button>
+                                        <button class="btn btn-outline stats-type-btn"
+                                            style="padding:4px 12px; font-size:0.85rem; border:none; box-shadow:none; border-radius:4px;" data-type="income">收入</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <!-- X Axis Granularity (only for bar/line) -->
+                            <div id="stats-filter-x-axis"
+                                style="display:none; gap:6px; margin-bottom:16px; align-items:center;">
+                                <span style="font-size:0.85rem; color:var(--primary-color); font-weight:600; margin-right:2px; display:inline-block; min-width:3.5em; text-align:right;">Ｘ軸：</span>
+                                <button class="btn btn-outline stats-x-btn active"
+                                    style="padding:4px 12px; font-size:0.85rem;" data-x="day">以日</button>
+                                <button class="btn btn-outline stats-x-btn" style="padding:4px 12px; font-size:0.85rem;"
+                                    data-x="month">以月</button>
+                            </div>
+
+                            <!-- Year Select (only for annual) -->
+                            <div id="stats-filter-year"
+                                style="display:none; gap:8px; margin-bottom:16px; align-items:center;">
+                                <span style="font-size:0.8rem; color:var(--text-muted);">年份：</span>
+                                <select id="stats-annual-year" class="form-control"
+                                    style="width: 120px; font-size:0.85rem; padding: 4px 8px;"></select>
+                            </div>
+                        </div>
+
+                        <!-- Views Content -->
+                        <div id="stats-view-content" style="padding-bottom: 0;">
+                            <!-- Will be populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- New Calendar Tab -->
+                    <div id="tab-calendar" class="tab-content" style="padding: 0 16px 16px 16px; max-width: 800px; margin: 0 auto;">
+                        <div class="modal-header" style="padding: 4px 0.5rem 8px 0.5rem; border-bottom: none;">
+                            <div style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+                                <select id="calendar-year-select" class="form-input"
+                                    style="width: auto; padding: 4px 8px; font-size: 0.85rem; font-weight: 500; background: var(--bg-color); color: var(--text-main); border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;"></select>
+                                <select id="calendar-month-select" class="form-input"
+                                    style="width: auto; padding: 4px 8px; font-size: 0.85rem; font-weight: 500; background: var(--bg-color); color: var(--text-main); border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;"></select>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <button class="icon-btn" id="btn-cal-prev"><span
+                                        class="material-icons">chevron_left</span></button>
+                                <button class="icon-btn" id="btn-cal-today"><span
+                                        class="material-icons">today</span></button>
+                                <button class="icon-btn" id="btn-cal-next"><span
+                                        class="material-icons">chevron_right</span></button>
+                            </div>
+                        </div>
+                        <div class="modal-body" style="padding: 0;">
+                            <div class="calendar-grid-header">
+                                <div>日</div>
+                                <div>一</div>
+                                <div>二</div>
+                                <div>三</div>
+                                <div>四</div>
+                                <div>五</div>
+                                <div>六</div>
+                            </div>
+                            <div class="calendar-grid" id="calendar-grid">
+                                <!-- Days will be rendered here -->
+                            </div>
+
+                            <div id="calendar-day-detail" class="calendar-day-detail" style="display: none;">
+                                <div style="flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 0;">
+                                    <div class="day-detail-header">
+                                        <h3 id="day-detail-date"></h3>
+                                        <button class="btn-close" id="btn-close-day-detail-top">&times;</button>
+                                    </div>
+                                    <div class="day-detail-bazi" id="day-detail-bazi">
+                                        <!-- Bazi blocks -->
+                                    </div>
+                                    <h4 style="margin-top: 16px; margin-bottom: 8px;">當日交易紀錄</h4>
+                                    <div id="day-detail-records" class="day-detail-records" style="margin-bottom: 16px;">
+                                        <!-- Records will be rendered here -->
+                                    </div>
+                                </div>
+                                <div
+                                    style="padding: 12px 16px; border-top: 1px solid var(--border-color); flex-shrink: 0; background-color: var(--surface-color);">
+                                    <button id="btn-close-day-detail" class="btn btn-secondary"
+                                        style="width: 100%; padding: 12px; font-weight: bold;">收起明細</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- New Settings Tab -->
+                    <div id="tab-settings" class="tab-content" style="padding: 16px; max-width: 800px; margin: 0 auto;">
+                        <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <h2 style="margin: 0;">系統設定</h2>
+                            <a href="https://ko-fi.com/A0R125NYMU" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-600 hover:bg-orange-100 dark:bg-orange-500/10 dark:text-orange-400 dark:hover:bg-orange-500/20 transition-colors border border-orange-200/50 dark:border-orange-500/20" style="text-decoration: none;">
+                                <span class="material-icons text-[16px]">local_cafe</span>
+                                <span class="text-sm font-medium">贊助作者</span>
+                            </a>
+                        </div>
+                        <div class="modal-body" style="padding: 0;">
+                            <div class="settings-section mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+                                <div class="flex items-center gap-3 mb-4 px-2">
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border" style="background: var(--active-bg); color: var(--primary-color); border-color: var(--border-color);">
+                                        <span class="material-icons text-[20px]">palette</span>
+                                    </div>
+                                    <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">外觀主題</h3>
+                                </div>
+                                <div class="rounded-2xl p-4 shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
+                                    <div id="theme-selector-container"></div>
+                                </div>
+                            </div>
+                            <!-- 預算設定已下放至個別帳戶 -->
+                            <div class="settings-section mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+                                <div class="flex items-center justify-between mb-4 px-2">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border" style="background: var(--active-bg); color: var(--primary-color); border-color: var(--border-color);">
+                                            <span class="material-icons text-[20px]">account_balance_wallet</span>
+                                        </div>
+                                        <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">帳戶參數設定</h3>
+                                    </div>
+                                    <button class="btn btn-outline" id="btn-add-account" style="font-size: 0.85rem; padding: 4px 12px; display: flex; align-items: center; gap: 4px;">
+                                        <span class="material-icons" style="font-size: 16px;">add</span> 新增帳戶
+                                    </button>
+                                </div>
+                                <div class="rounded-2xl p-4 shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
+                                    <div id="settings-accounts-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+                                        <!-- Account Cards will be injected here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="settings-section mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+                                <div class="flex items-center gap-3 mb-4 px-2">
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border" style="background: var(--active-bg); color: var(--primary-color); border-color: var(--border-color);">
+                                        <span class="material-icons text-[20px]">category</span>
+                                    </div>
+                                    <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">資料管理</h3>
+                                </div>
+                                <div class="rounded-2xl p-4 shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
+                                    <div style="display: flex; flex-direction: row; gap: 8px;">
+                                        <button id="btn-open-settings-expense" class="btn transition-colors hover:brightness-95"
+                                            style="flex: 1; display:flex; align-items:center; justify-content:center; gap:6px; padding: 12px 4px; font-size: 0.9rem; border-radius: 12px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-main);">
+                                            <span class="material-icons" style="font-size: 1.1rem; color: var(--text-muted);">shopping_bag</span>
+                                            支出類別
+                                        </button>
+                                        <button id="btn-open-settings-income" class="btn transition-colors hover:brightness-95"
+                                            style="flex: 1; display:flex; align-items:center; justify-content:center; gap:6px; padding: 12px 4px; font-size: 0.9rem; border-radius: 12px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-main);">
+                                            <span class="material-icons" style="font-size: 1.1rem; color: var(--text-muted);">account_balance_wallet</span>
+                                            收入類別
+                                        </button>
+                                        <button id="btn-open-settings-target" class="btn transition-colors hover:brightness-95"
+                                            style="flex: 1; display:flex; align-items:center; justify-content:center; gap:6px; padding: 12px 4px; font-size: 0.9rem; border-radius: 12px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-main);">
+                                            <span class="material-icons" style="font-size: 1.1rem; color: var(--text-muted);">person</span>
+                                            管理對象
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="settings-section mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+                                <div class="flex items-center gap-3 mb-4 px-2">
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border" style="background: var(--active-bg); color: var(--primary-color); border-color: var(--border-color);">
+                                        <span class="material-icons text-[20px]">calendar_month</span>
+                                    </div>
+                                    <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">萬年曆與顯示設定</h3>
+                                </div>
+                                <div class="rounded-2xl p-4 shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
+                                    <div class="settings-grid">
+                                <div class="setting-card card-red" style="flex-wrap: wrap;">
+                                    <div class="setting-info" style="flex: 1 1 50%; min-width: 200px;">
+                                        <h4>國定假日</h4>
+                                        <p>顯示人事行政總處公告之國定假日</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-national-holiday" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <div
+                                        style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">
+                                        <span id="label-holiday-updated">上次更新：無</span>
+                                        <button id="btn-update-holidays" class="btn btn-outline"
+                                            style="padding: 6px 12px; font-size: 0.85rem;">立即更新</button>
+                                    </div>
+                                </div>
+                                <div class="setting-card card-blue">
+                                    <div class="setting-info">
+                                        <h4>農曆日期</h4>
+                                        <p>顯示農曆初幾 (如：初一、十五)</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-lunar-date" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-card card-green">
+                                    <div class="setting-info">
+                                        <h4>天干地支</h4>
+                                        <p>顯示日干支 (如：甲子、乙丑)</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-lunar-stembranch" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-card card-yellow">
+                                    <div class="setting-info">
+                                        <h4>二十四節氣</h4>
+                                        <p>顯示當日節氣名稱 (如：立春、清明)</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-lunar-solarterm" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-card card-purple">
+                                    <div class="setting-info">
+                                        <h4>節慶假日</h4>
+                                        <p>顯示傳統節慶與紀念日 (春節、記者節等)</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-lunar-festival" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-card card-cyan">
+                                    <div class="setting-info">
+                                        <h4>八字完整排盤</h4>
+                                        <p>點選日期時顯示四柱、十神、藏干、納音</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-bazi-chart" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-card card-pink">
+                                    <div class="setting-info">
+                                        <h4>趣味情人節</h4>
+                                        <p>顯示每月 14 號的特色情人節 (如：白色、黑色情人節)</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-calendar-valentine">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                            
+                            <div class="settings-section mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+                                <div class="flex items-center gap-3 mb-4 px-2">
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border" style="background: var(--active-bg); color: var(--primary-color); border-color: var(--border-color);">
+                                        <span class="material-icons text-[20px]">notifications_active</span>
+                                    </div>
+                                    <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">重要節日提醒設定</h3>
+                                </div>
+                                <div class="rounded-2xl p-4 shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
+                                    <div class="settings-grid">
+                                <div class="setting-card card-orange">
+                                    <div class="setting-info">
+                                        <h4>啟用重要節日提醒</h4>
+                                        <p>在節日到達前，記帳時會自動跳出提示，並在日曆顯示專屬星形標記</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-important-festivals">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div id="important-festivals-container" style="display: none; grid-column: 1 / -1; background: var(--surface-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div id="important-festivals-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+                                    <button class="btn btn-outline" id="btn-add-important-festival" style="margin-top: 12px; width: 100%;">
+                                        <span class="material-icons" style="font-size:18px; vertical-align:middle; margin-right:4px;">add</span>新增節日 (最多 10 組)
+                                    </button>
+                                </div>
+                                </div>
+                                </div>
+                            </div>
+
+                            <div class="settings-section mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+                                <div class="flex items-center gap-3 mb-4 px-2">
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border" style="background: var(--active-bg); color: var(--primary-color); border-color: var(--border-color);">
+                                        <span class="material-icons text-[20px]">add_a_photo</span>
+                                    </div>
+                                    <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">照片上傳</h3>
+                                </div>
+                                <div class="rounded-2xl p-4 shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 6px; color: var(--text-main);">
+                                            照片拍照上傳功能
+                                            <svg class="cursor-pointer transition-colors" viewBox="0 0 24 24" fill="currentColor" 
+                                                style="width: 18px; height: 18px; color: var(--primary-color);" 
+                                                title="點擊查看建議說明" onclick="document.getElementById('modal-photo-settings-help').style.display='flex'">
+                                                <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+                                            </svg>
+                                        </h4>
+                                        <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">開啟後即可在記帳時附加照片</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="toggle-photo-upload">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div id="photo-settings-container" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border-color); display: none;">
+                                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                                        <div style="flex: 1; min-width: 150px;">
+                                            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: var(--text-main);">最大照片尺寸</label>
+                                            <select id="select-photo-size" class="form-control" style="padding: 6px;">
+                                                <option value="320">320 x 320</option>
+                                                <option value="480">480 x 480 (建議下限)</option>
+                                                <option value="640">640 x 640 (預設)</option>
+                                                <option value="800">800 x 800</option>
+                                                <option value="1024">1024 x 1024</option>
+                                            </select>
+                                        </div>
+                                        <div style="flex: 1; min-width: 150px;">
+                                            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: var(--text-main);">JPEG 壓縮品質</label>
+                                            <select id="select-photo-quality" class="form-control" style="padding: 6px;">
+                                                <option value="0.3">0.3 (高壓縮)</option>
+                                                <option value="0.5">0.5 (建議下限)</option>
+                                                <option value="0.7">0.7 (預設)</option>
+                                                <option value="0.9">0.9 (低壓縮)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+                                <div class="flex items-center gap-3 mb-4 px-2">
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border" style="background: var(--active-bg); color: var(--primary-color); border-color: var(--border-color);">
+                                        <span class="material-icons text-[20px]">pin_drop</span>
+                                    </div>
+                                    <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">Google Map 定位</h3>
+                                </div>
+                                <div class="rounded-2xl p-4 shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
+                                    <div id="google-api-module-container"></div>
+                                    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="margin: 0; font-size: 0.95rem; font-weight: 600; color: var(--text-main);">清單地點連結地圖</h4>
+                                    <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">允許在首頁紀錄清單中直接點擊地點來開啟地圖</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="toggle-list-map-link">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            </div>
+                            </div>
+
+                            <div class="settings-section mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+                                <div class="flex items-center gap-3 mb-4 px-2">
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border" style="background: var(--active-bg); color: var(--primary-color); border-color: var(--border-color);">
+                                        <span class="material-icons text-[20px]">backup</span>
+                                    </div>
+                                    <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">資料備份與還原</h3>
+                                </div>
+                                <div class="rounded-2xl p-4 flex flex-col shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
+                                    <!-- 進階備份設定 -->
+                                    <div style="padding-bottom: 20px; border-bottom: 1px dashed var(--border-color);">
+                                        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-bottom: 16px; color: var(--text-main);">
+                                            進階備份設定 (套用於本機與雲端)
+                                        </h4>
+                                        <div class="flex flex-col gap-4">
+                                            <!-- 備份模式 -->
+                                            <div class="flex flex-col gap-2">
+                                                <label class="text-sm text-main font-medium">備份模式</label>
+                                                <div class="flex flex-col sm:flex-row gap-3">
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="radio" name="backup_mode" value="daily" checked class="accent-indigo-500">
+                                                        <span class="text-sm text-muted">日常備份 (全部資料，適合覆蓋還原)</span>
+                                                    </label>
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="radio" name="backup_mode" value="yearly" class="accent-indigo-500">
+                                                        <span class="text-sm text-muted">年度備份 (按年份拆分，適合合併還原)</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- 年度備份選項 (預設隱藏) -->
+                                            <div id="backup-yearly-options" class="flex flex-col gap-2 pl-4 border-l-2 border-theme hidden">
+                                                <label class="text-sm text-main font-medium">年度備份範圍</label>
+                                                <div class="flex flex-col sm:flex-row gap-3">
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="radio" name="backup_yearly_range" value="all" checked class="accent-indigo-500">
+                                                        <span class="text-sm text-muted">逐年備份 (所有年份)</span>
+                                                    </label>
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="radio" name="backup_yearly_range" value="current" class="accent-indigo-500">
+                                                        <span class="text-sm text-muted">只備份最近1年內 (今年)</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- 照片備份 -->
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="text-sm text-main font-medium">包含照片資料</div>
+                                                    <div class="text-xs text-muted mt-0.5">取消勾選可大幅縮小備份檔體積</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" id="toggle-backup-photos" checked>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="pt-4 mt-2 border-t border-theme">
+                                                <label class="block text-xs font-medium text-muted mb-1">資料還原方式 (適用於地端與雲端)</label>
+                                                <select id="global-restore-mode" class="w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 transition-colors border" style="background: var(--surface-color); border-color: var(--border-color); color: var(--text-main);">
+                                                    <option value="merge">合併方式 (保留本機，跳過重複)</option>
+                                                    <option value="overwrite">覆蓋方式 (清空本機，完全覆蓋)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    <!-- 手動檔案備份 -->
+                                    <div style="padding: 20px 0; border-bottom: 1px dashed var(--border-color);">
+                                        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; color: var(--text-main);">
+                                            手動檔案備份 (Local JSON)
+                                        </h4>
+                                        <p class="text-muted text-[0.85rem] mb-4">
+                                            將目前的記帳紀錄匯出為 JSON 檔案下載至您的裝置中。您可於換機或資料遺失時透過此檔案手動還原。
+                                        </p>
+                                        <p id="backup-record-count" class="text-muted text-[0.85rem] mb-4 py-2 px-3 bg-black/5 dark:bg-white/5 rounded-lg text-left">
+                                        </p>
+                                        <div class="flex gap-2">
+                                            <button id="btn-export-json" class="btn btn-primary flex-1 flex items-center justify-center gap-1.5 py-2 px-4 rounded-lg">
+                                                <span class="material-icons text-xl">upload</span>
+                                                匯出備份
+                                            </button>
+                                            <label class="btn btn-outline hover-card flex-1 flex items-center justify-center gap-1.5 py-2 px-4 rounded-lg m-0 cursor-pointer">
+                                                <span class="material-icons text-xl">download</span>
+                                                匯入備份
+                                                <input type="file" id="input-import-json" accept=".zip, application/zip, application/x-zip-compressed, .json, application/json" class="hidden">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div id="gas-backup-module"></div>
+                                </div>
+                            </div>
+
+                            <div class="settings-section mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+                                <div class="flex items-center justify-between mb-4 px-2">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border" style="background: var(--active-bg); color: var(--primary-color); border-color: var(--border-color);">
+                                            <span class="material-icons text-[20px]">info</span>
+                                        </div>
+                                        <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">關於</h3>
+                                    </div>
+                                    <a href="https://ko-fi.com/A0R125NYMU" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-600 hover:bg-orange-100 dark:bg-orange-500/10 dark:text-orange-400 dark:hover:bg-orange-500/20 transition-colors border border-orange-200/50 dark:border-orange-500/20" style="text-decoration: none;">
+                                        <span class="material-icons text-[16px]">local_cafe</span>
+                                        <span class="text-sm font-medium">贊助作者</span>
+                                    </a>
+                                </div>
+                                <div class="rounded-2xl overflow-hidden shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
+                                <!-- 授權條款 -->
+                                <div class="flex items-center justify-between p-4 transition-colors cursor-pointer" id="btn-open-license" style="border-radius: 12px; background: var(--bg-color);">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-lg flex items-center justify-center border" style="background: var(--active-bg); color: var(--text-main); border-color: var(--border-color);">
+                                            <span class="material-icons text-[18px]">gavel</span>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-semibold" style="color: var(--text-main);">開放原始碼與開源協議</span>
+                                            <span class="text-xs" style="color: var(--text-muted);">檢視本專案使用之第三方開源套件</span>
+                                        </div>
+                                    </div>
+                                    <span class="material-icons text-slate-400 transition-transform duration-300" id="icon-license-arrow">expand_more</span>
+                                </div>
+                                <div id="license-content" class="hidden border-t p-5 sm:p-6 flex flex-col gap-6" style="background: var(--surface-color); border-color: var(--border-color);">
+                                    <!-- Header -->
+                                    <div class="flex flex-col gap-1 border-b border-theme pb-4">
+                                        <h3 class="text-xl font-bold text-main m-0">小小計帳本 (TinyLedger)</h3>
+                                        <p class="text-sm text-muted m-0 mt-1">版權所有 © 2023-2026 SSWorld</p>
+                                    </div>
+                                
+                                    <!-- License & Copyright row -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <!-- MIT License -->
+                                        <div>
+                                            <div class="flex items-center gap-2 mb-3">
+                                                <span class="material-icons text-indigo-500 text-[20px]">code</span>
+                                                <h4 class="font-bold text-main m-0">開源授權 (MIT License)</h4>
+                                            </div>
+                                            <div class="relative pl-4">
+                                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500/80 rounded-full"></div>
+                                                <div class="text-[11px] sm:text-xs text-muted font-mono leading-relaxed h-36 overflow-y-auto pr-2 custom-scrollbar whitespace-pre-wrap">Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                                
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                                
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</div>
+                                            </div>
+                                        </div>
+                                
+                                        <!-- Visual Assets -->
+                                        <div>
+                                            <div class="flex items-center gap-2 mb-3">
+                                                <span class="material-icons text-rose-500 text-[20px]">brush</span>
+                                                <h4 class="font-bold text-main m-0">品牌與視覺設計版權</h4>
+                                            </div>
+                                            <div class="relative pl-4">
+                                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-rose-500/80 rounded-full"></div>
+                                                <div class="text-xs sm:text-sm text-muted leading-relaxed">
+                                                    本專案之底層原始碼採用 MIT 授權條款釋出。<br><br>
+                                                    惟本軟體內所含之所有品牌識別、UI 介面設計、圖示 (Icons) 及相關視覺圖像資產，版權皆由原作者全權保留，<strong class="text-rose-600 dark:text-rose-400 font-semibold">不適用</strong>於前述之 MIT 授權。<br><br>
+                                                    未經作者明確之書面授權，嚴禁擅自挪用、重製、散布或將上述視覺資產用於其他專案或商業用途。
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                    <!-- Dependencies -->
+                                    <div class="mt-2 pt-6 border-t border-theme">
+                                        <div class="flex items-center gap-2 mb-4">
+                                            <span class="material-icons text-emerald-500 text-[20px]">extension</span>
+                                            <h4 class="font-bold text-main m-0">開源技術支援 (Powered By)</h4>
+                                        </div>
+                                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                            <a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer" class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all" style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                                                <span class="font-semibold text-sm flex justify-between items-center" style="color: var(--text-main);">Tailwind CSS <span class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                                                <span class="text-[11px] mt-1" style="color: var(--text-muted);">v3 Standalone · MIT</span>
+                                            </a>
+                                            <a href="https://stuk.github.io/jszip/" target="_blank" rel="noopener noreferrer" class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all group" style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                                                <span class="font-semibold text-sm flex justify-between items-center" style="color: var(--text-main);">JSZip <span class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                                                <span class="text-[11px] mt-1" style="color: var(--text-muted);">v3.10.1 · MIT</span>
+                                            </a>
+                                            <a href="https://fengyuanchen.github.io/cropperjs/" target="_blank" rel="noopener noreferrer" class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all group" style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                                                <span class="font-semibold text-sm flex justify-between items-center" style="color: var(--text-main);">Cropper.js <span class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                                                <span class="text-[11px] mt-1" style="color: var(--text-muted);">v1.6.1 · MIT</span>
+                                            </a>
+                                            <a href="https://fonts.google.com/" target="_blank" rel="noopener noreferrer" class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all group" style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                                                <span class="font-semibold text-sm flex justify-between items-center" style="color: var(--text-main);">Google Fonts <span class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                                                <span class="text-[11px] mt-1" style="color: var(--text-muted);">Inter · SIL OFL</span>
+                                            </a>
+                                            <a href="https://fonts.google.com/icons" target="_blank" rel="noopener noreferrer" class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all group" style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                                                <span class="font-semibold text-sm flex justify-between items-center" style="color: var(--text-main);">Material Icons <span class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                                                <span class="text-[11px] mt-1" style="color: var(--text-muted);">Rounded · Apache</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+
+
+
+                                <!-- 危險操作區掛載點 -->
+                                <div id="danger-zone-module"></div>
+
+                                <!-- System Logs 掛載點 -->
+                                <div id="system-logs-module"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+        </main>
+
+        <!-- Modals Container -->
+        <div id="modals-container">
+
+
+            <!-- Settings Manage Category Modal -->
+            <div class="modal-overlay" id="settings-manage-cat-modal">
+                <div class="modal-container">
+                    <div class="modal-header"
+                        style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="btn btn-outline" id="btn-back-settings-cat"
+                                style="display: none; padding: 4px 8px; font-size: 0.9rem;">
+                                <span class="material-icons" style="font-size: 16px;">arrow_back</span>
+                            </button>
+                            <h2 id="settings-cat-modal-title" style="margin: 0;">管理類別</h2>
+                        </div>
+                        <button class="btn-close" id="btn-close-settings-cat">&times;</button>
+                    </div>
+                    <div id="settings-cat-mode-toggles"
+                        style="display: flex; gap: 8px; padding: 0 16px 12px 16px; border-bottom: 1px solid var(--border-color); background: var(--card-bg);">
+                        <button class="btn btn-primary" id="btn-mode-cat-manage"
+                            style="flex: 1; padding: 6px 0; font-size: 0.9rem;">管理模式</button>
+                        <button class="btn btn-outline" id="btn-mode-cat-reorder-major"
+                            style="flex: 1; padding: 6px 0; font-size: 0.9rem;">排序大類</button>
+                        <button class="btn btn-outline" id="btn-mode-cat-reorder-minor"
+                            style="flex: 1; padding: 6px 0; font-size: 0.9rem;">排序小類</button>
+                    </div>
+                    <div class="modal-body" id="settings-cat-list-container">
+                        <!-- Categories will be rendered here -->
+                    </div>
+                    <div class="modal-footer" style="display: flex; align-items: center; gap: 16px;">
+                        <label
+                            style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-right: auto; font-size: 0.9rem;">
+                            <input type="checkbox" id="cb-select-all-cats" autocomplete="off">
+                            <span>全選</span>
+                        </label>
+                        <button class="btn btn-outline" id="btn-delete-selected-cats"
+                            style="color: var(--accent-red); border-color: var(--accent-red); display: none;">🗑️
+                            刪除所選</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Manage Targets Modal -->
+            <div class="modal-overlay" id="settings-manage-target-modal">
+                <div class="modal-container">
+                    <div class="modal-header">
+                        <h2>管理對象</h2>
+                        <button class="btn-close" id="btn-close-settings-target">&times;</button>
+                    </div>
+                    <div id="settings-target-mode-toggles"
+                        style="display: flex; gap: 8px; padding: 0 16px 12px 16px; border-bottom: 1px solid var(--border-color); background: var(--card-bg);">
+                        <button class="btn btn-primary" id="btn-mode-target-manage"
+                            style="flex: 1; padding: 6px 0; font-size: 0.9rem;">管理模式</button>
+                        <button class="btn btn-outline" id="btn-mode-target-reorder"
+                            style="flex: 1; padding: 6px 0; font-size: 0.9rem;">排序對象</button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="manage-list" id="settings-target-list-container">
+                            <!-- Targets will be rendered here -->
+                        </ul>
+                        <button class="btn btn-outline" id="btn-settings-add-target"
+                            style="width: 100%; margin-top: 8px;">
+                            <span class="material-icons"
+                                style="font-size:18px; vertical-align:middle; margin-right:4px;">add</span>新增對象
+                        </button>
+                    </div>
+                    <div class="modal-footer" style="display: flex; align-items: center; gap: 16px;">
+                        <label
+                            style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-right: auto; font-size: 0.9rem;">
+                            <input type="checkbox" id="cb-select-all-targets" autocomplete="off">
+                            <span>全選</span>
+                        </label>
+                        <button class="btn btn-outline" id="btn-delete-selected-targets"
+                            style="color: var(--accent-red); border-color: var(--accent-red); display: none;">🗑️
+                            刪除所選</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Record Modal Overlay -->
+            <div class="modal-overlay" id="add-record-modal">
+                <div class="modal-container">
+                    <div class="modal-header" style="display: flex; justify-content: flex-start; align-items: center; gap: 12px; padding-right: 48px;">
+                        <h2 id="modal-title" style="margin: 0; white-space: nowrap;">新增紀錄</h2>
+                        <select id="modal-account-select" class="form-control" style="width: auto; padding: 4px 32px 4px 12px; font-weight: bold; color: var(--primary-color); border: 2px solid var(--primary-color); border-radius: 8px; font-size: 1.1rem; background-color: var(--bg-color);">
+                            <!-- Options will be populated via JS -->
+                        </select>
+                        <button class="btn-close" id="btn-close-record-modal" style="position: absolute; right: 16px; top: 16px;">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="read-only-notice"
+                            style="display: none; padding: 10px 16px; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 8px; margin-bottom: 16px; font-size: 0.95rem; align-items: center; justify-content: center; gap: 6px;">
+                            <span class="material-icons" style="font-size: 18px;">info</span>
+                            <span>此為系統自動產生的明細，僅供檢視，無法修改。</span>
+                        </div>
+                        <div class="modal-tabs">
+                            <button class="modal-tab-btn active" data-type="expense">支出</button>
+                            <button class="modal-tab-btn" data-type="income">收入</button>
+                        </div>
+                        <div class="modal-tabs">
+                            <button class="modal-tab-btn active" data-mode="single">單次</button>
+                            <button class="modal-tab-btn" data-mode="fixed">固定</button>
+                        </div>
+
+                        <div class="form-row" style="align-items: center;">
+                            <!-- Date Side -->
+                            <div style="flex: 1.5;">
+                                <div id="date-group-single" class="form-group" style="margin-bottom: 0;">
+                                    <div class="form-label">日期</div>
+                                    <input type="date" class="form-control" id="input-date-single" required
+                                        style="cursor: pointer;" onclick="this.showPicker()">
+                                </div>
+
+                                <div class="date-group-fixed" style="display: none;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <div class="form-label">起訖日期</div>
+                                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                                            <input type="date" class="form-control" id="input-date-start" required
+                                                placeholder="開始日期" style="position: relative; cursor: pointer;"
+                                                onclick="this.showPicker()">
+                                            <input type="date" class="form-control" id="input-date-end"
+                                                placeholder="結束日期" style="position: relative; cursor: pointer;"
+                                                onclick="this.showPicker()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Amount Side -->
+                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                <div class="form-label">金額</div>
+                                <input type="number" class="form-control" id="input-amount" placeholder="0">
+                            </div>
+                        </div>
+
+                        <div class="form-row date-group-fixed" style="display: none; margin-top: 1rem;">
+                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                <div class="form-label">重複方式</div>
+                                <div class="modal-tabs">
+                                    <button class="modal-tab-btn active" data-rule="yearly">每年</button>
+                                    <button class="modal-tab-btn" data-rule="monthly">每月</button>
+                                    <button class="modal-tab-btn" data-rule="weekly">每週</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                <div class="form-label">詳細規則</div>
+                                <!-- Yearly Details -->
+                                <div id="rule-detail-yearly" class="rule-detail-group"
+                                    style="display: flex; gap: 0.5rem;">
+                                    <select class="form-control" id="select-rule-month"></select>
+                                    <select class="form-control" id="select-rule-day-yearly"></select>
+                                </div>
+
+                                <!-- Monthly Details -->
+                                <div id="rule-detail-monthly" class="rule-detail-group" style="display: none;">
+                                    <select class="form-control" id="select-rule-day-monthly"></select>
+                                </div>
+
+                                <!-- Weekly Details -->
+                                <div id="rule-detail-weekly" class="rule-detail-group" style="display: none;">
+                                    <select class="form-control" id="select-rule-weekday">
+                                        <option value="1">星期一</option>
+                                        <option value="2">星期二</option>
+                                        <option value="3">星期三</option>
+                                        <option value="4">星期四</option>
+                                        <option value="5">星期五</option>
+                                        <option value="6">星期六</option>
+                                        <option value="0">星期日</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <div class="form-label">大類</div>
+                                <select class="form-control" id="select-major-cat"></select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <div class="form-label">小類</div>
+                                <select class="form-control" id="select-sub-cat"></select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <div class="form-label">對象</div>
+                                <select class="form-control" id="select-target"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-label">地點</div>
+                            <div style="display: flex; gap: 8px; align-items: stretch;">
+                                <div style="position: relative; flex: 1;">
+                                    <!-- Google Maps Web Component 升級 -->
+                                    <style>
+                                        /* 修正元件本身的白色背景 */
+                                        gmp-place-autocomplete {
+                                            background-color: transparent;
+                                            border: none;
+                                        }
+                                        /* 讓內部輸入框繼承 Tailwind CSS 與我們現有的外觀 */
+                                        gmp-place-autocomplete::part(input) {
+                                            width: 100%;
+                                            padding: 12px 36px 12px 16px;
+                                            border-radius: 12px;
+                                            border: 1px solid var(--border-color);
+                                            background-color: var(--surface-color);
+                                            color: var(--text-main);
+                                            font-size: 1rem;
+                                            box-sizing: border-box;
+                                            transition: all 0.2s ease;
+                                            outline: none;
+                                        }
+                                        /* 修正搜尋圖示的顏色 */
+                                        gmp-place-autocomplete::part(search-icon) {
+                                            fill: var(--text-muted);
+                                        }
+                                        gmp-place-autocomplete::part(input):focus {
+                                            border-color: var(--primary-color);
+                                            box-shadow: 0 0 0 3px rgba(6, 81, 237, 0.1);
+                                        }
+                                    </style>
+                                    <gmp-place-autocomplete id="input-location" placeholder="輸入地址或店名" style="width: 100%; display: block;" fields="displayName,formattedAddress,name,formatted_address"></gmp-place-autocomplete>
+                                    <span class="material-icons" id="btn-clear-location"
+                                        style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted); font-size: 18px; padding: 4px; display: none; z-index: 2;">close</span>
+                                </div>
+                                <button type="button" class="btn btn-outline" id="btn-map-location"
+                                    style="padding: 0 12px; display: flex; align-items: center; justify-content: center;"
+                                    title="在地圖中開啟">
+                                    <span class="material-icons">location_on</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-label">照片</div>
+                            <div class="photo-upload-box" id="photo-upload-box" style="padding: 1rem;">
+                                <div id="photo-placeholder" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 100%; position: relative;">
+                                    <span class="material-icons" style="font-size: 2rem;">camera_alt</span>
+                                    <span>拍照或上傳照片</span>
+                                    <input type="file" id="input-photo" accept="image/*" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                                </div>
+                                <div id="photo-preview-container" style="display: none; position: relative; width: 100%;">
+                                    <img id="photo-preview" class="photo-preview" src="" alt="預覽圖" style="display: block; margin: 0 auto; max-height: 200px; max-width: 100%; border-radius: var(--border-radius); cursor: pointer;" title="點擊重新裁切">
+                                    <button type="button" id="btn-delete-photo" class="btn btn-danger" style="position: absolute; top: 4px; right: 4px; padding: 4px; border-radius: 50%; min-width: auto; min-height: auto; line-height: 1; display: flex; align-items: center; justify-content: center;" title="刪除照片">
+                                        <span class="material-icons" style="font-size: 18px;">close</span>
+                                    </button>
+                                </div>
+                                <canvas id="photo-canvas" style="display: none;"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-label">備註</div>
+                            <textarea class="form-control" id="input-note" placeholder="備註..." rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="justify-content: space-between; display: flex;">
+                        <div style="display: flex; gap: 16px;">
+                            <button class="btn btn-danger" id="btn-delete-record" style="display:none;">刪除</button>
+                            <button class="btn btn-secondary" id="btn-copy-record" style="display:none;">複製</button>
+                        </div>
+                        <div style="display: flex; gap: 16px;">
+                            <button class="btn btn-primary" id="btn-save-record">儲存</button>
+                            <button class="btn btn-outline" id="btn-cancel-record">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    <!-- 裁切照片 Modal -->
+    <div id="crop-modal" class="modal-overlay">
+        <div class="modal-container" style="max-width: 500px;">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; padding-right: 8px;">
+                    <h2 style="margin: 0; white-space: nowrap;">裁切照片</h2>
+                    <div id="crop-warning-hint" style="display: none; background-color: rgba(254, 243, 199, 0.9); color: #b45309; padding: 4px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #fde68a; line-height: 1.2;">
+                        ⚠️ 重複裁切會造成畫質減損
+                    </div>
+                </div>
+                <button type="button" class="btn-close" id="btn-close-crop-modal" style="flex-shrink: 0;"><span class="material-icons">close</span></button>
+            </div>
+            <div class="modal-body" style="display: flex; justify-content: center; align-items: center; background-color: #f5f5f5; padding: 0; overflow: hidden;">
+                <div style="width: 100%; max-height: 60vh;">
+                    <img id="crop-image-target" src="" style="display: block; max-width: 100%; max-height: 60vh;">
+                </div>
+            </div>
+            <div class="modal-footer" style="justify-content: flex-end; display: flex; gap: 16px;">
+                <button type="button" class="btn btn-outline" id="btn-cancel-crop">取消</button>
+                <button type="button" class="btn btn-primary" id="btn-confirm-crop">確認裁切</button>
+            </div>
+        </div>
+    </div>
+    <!-- 帳戶過濾 Modal -->
+    <div id="account-filter-modal" class="modal-overlay">
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>過濾帳戶</h2>
+                <button type="button" class="btn-close" id="btn-close-account-filter"><span class="material-icons">close</span></button>
+            </div>
+            <div class="modal-body" style="max-height: 50vh; overflow-y: auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">選擇要顯示的帳戶</span>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" id="btn-account-filter-select-all" style="background: none; border: none; color: var(--primary-color); font-size: 0.85rem; cursor: pointer; padding: 4px;">全選</button>
+                        <button type="button" id="btn-account-filter-clear-all" style="background: none; border: none; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; padding: 4px;">全不選</button>
+                    </div>
+                </div>
+                <div id="account-filter-list" style="display: flex; flex-direction: column; gap: 8px;">
+                    <!-- 透過 JS 動態產生 Checkbox 清單 -->
+                </div>
+            </div>
+            <div class="modal-footer" style="justify-content: flex-end;">
+                <button type="button" class="btn btn-primary" id="btn-confirm-account-filter" style="width: 100%;">確認</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 建議說明 Modal (隱藏) -->
+    <div id="modal-photo-settings-help" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99999; align-items: center; justify-content: center;" onclick="if(event.target === this) this.style.display='none'">
+        <div style="max-width: 520px; width: 92%; background: var(--bg-color); border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border-color); background: var(--surface-color);">
+                <h2 style="margin: 0; font-size: 1.15rem; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                    <span class="material-icons" style="color: var(--primary-color);">lightbulb</span>
+                    照片品質建議設定
+                </h2>
+                <button onclick="document.getElementById('modal-photo-settings-help').style.display='none'" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+            </div>
+            <div style="padding: 20px; font-size: 0.9rem; line-height: 1.7; color: var(--text-main); overflow-y: auto; max-height: 70vh;">
+                <p style="margin: 0 0 12px 0;">
+                    320x320 與 0.3 品質確實會「非常模糊」。如果您只是想拍一張「這是一杯咖啡」的意象圖，那勉強夠用；但如果您拍的是「實體發票或收據」，上面的文字跟數字絕對會糊在一起看不清楚。
+                </p>
+                <p style="margin: 0 0 16px 0;">
+                    建議如果要保留收據數字的辨識度，最少要設定在 <strong style="color: var(--primary-color);">480x480 / 品質 0.5</strong> 以上。
+                </p>
+
+                <div style="margin-bottom: 8px;">
+                    <strong style="display: inline-block; background: var(--active-bg); color: var(--primary-color); padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 8px;">預估單張照片大小 (存入資料庫後)</strong>
+                    <ul style="margin: 4px 0 0 0; padding-left: 20px; color: var(--text-muted);">
+                        <li style="margin-bottom: 4px;">320x320 / 品質 0.3：約 10~20 KB <span style="font-size: 0.8rem;">(極小但極模糊)</span></li>
+                        <li style="margin-bottom: 4px;">480x480 / 品質 0.5：約 15~30 KB</li>
+                        <li style="margin-bottom: 4px;">640x640 / 品質 0.7：約 40~60 KB <strong style="color: var(--text-main); font-weight: 500;">(預設，清晰度佳)</strong></li>
+                        <li style="margin-bottom: 4px;">1024x1024 / 品質 0.9：約 150~250 KB <span style="font-size: 0.8rem;">(極清晰但佔用較大)</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; padding: 12px 20px; border-top: 1px solid var(--border-color); background: var(--surface-color);">
+                <button onclick="document.getElementById('modal-photo-settings-help').style.display='none'" style="padding: 8px 20px; font-weight: 600; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: filter 0.2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">了解</button>
+            </div>
+        </div>
+    </div>
+
+    </div> <!-- end app-container -->
+
+    <script src="libs/cropper/cropper.min.js"></script>
+    <script src="libs/jszip/jszip.min.js"></script>
+    <script type="module" src="js/app.js?v=21"></script>
+    <script>
+        // Remove preload class to enable transitions after initial load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.body.classList.remove('preload');
+            }, 100);
+            
+            // Photo settings help
+            const helpBtn = document.getElementById('btn-open-photo-settings-help');
+            if (helpBtn) {
+                helpBtn.addEventListener('click', () => {
+                    document.getElementById('modal-photo-settings-help').style.display = 'flex';
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
