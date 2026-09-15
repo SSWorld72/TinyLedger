@@ -1,0 +1,722 @@
+export default {
+    categories: {
+        expense: {
+            food: 'Food',
+            family: 'Family',
+            medical: 'Medical',
+            clothing: 'Clothing',
+            device: 'Electronics',
+            transport: 'Transport',
+            entertainment: 'Entertainment',
+            education: 'Education',
+            tax: 'Taxes',
+            other: 'Other'
+        },
+        income: {
+            salary: 'Salary',
+            investment: 'Investment',
+            other: 'Other'
+        }
+    },
+    targets: {
+        self: 'Self',
+        husband: 'Husband',
+        wife: 'Wife',
+        child: 'Child',
+        grandpa: 'Grandpa',
+        grandma: 'Grandma',
+        family: 'Family',
+        other: 'Other'
+    },
+    subcategories: {
+        expense: {
+            food: { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner', midnight: 'Midnight Snack', drink: 'Drink', noodle: 'Instant Noodles', snack: 'Snack', bread: 'Bread' },
+            family: { allowance: 'Allowance', water: 'Water Bill', electricity: 'Electric Bill', phone: 'Phone Bill', internet: 'Internet Bill', furniture: 'Furniture', appliance: 'Appliance', cleaning: 'Cleaning', mortgage: 'Mortgage', mall: 'Shopping Mall' },
+            medical: { insurance: 'Insurance', medical: 'Medical', supplement: 'Supplements' },
+            clothing: { coat: 'Coat', clothes: 'Clothes', pants: 'Pants', skirt: 'Skirt', shoes: 'Shoes', hat: 'Hat', scarf: 'Scarf', gloves: 'Gloves', underwear: 'Underwear', underpants: 'Underpants', socks: 'Socks', contacts: 'Contacts' },
+            device: { computer: 'Computer', phone: 'Phone', tablet: 'Tablet', console: 'Console', accessories: 'Accessories' },
+            transport: { train: 'Train', hsr: 'High Speed Rail', mrt: 'Metro', taxi: 'Taxi', accommodation: 'Accommodation', ticket: 'Tickets', parking: 'Parking', gas: 'Gas', maintenance: 'Maintenance' },
+            entertainment: { movie: 'Movie', pinball: 'Pinball', balloon: 'Balloon', claw: 'Claw Machine', karaoke: 'Karaoke', gacha: 'Gacha', game: 'Games' },
+            education: { books: 'Books', course: 'Course', exam: 'Exam', dine: 'Dine', gift: 'Gift', red_envelope: 'Red Envelope' },
+            tax: { nhi: 'Health Ins.', labor: 'Labor Ins.', national: 'National Pension', business: 'Business Tax', license: 'License Tax', income: 'Income Tax', house: 'House Tax', fuel: 'Fuel Tax', land: 'Land Tax' },
+            other: { misc: 'Misc.', lost: 'Lost', unclassified: 'Unclassified' }
+        },
+        income: {
+            salary: { base: 'Base Salary', bonus: 'Bonus', festival: 'Festival', overtime: 'Overtime', parttime: 'Part-time' },
+            investment: { stock: 'Stock', dividend: 'Dividend', interest: 'Interest', fund: 'Fund', crypto: 'Crypto' },
+            other: { gift: 'Gift', refund: 'Refund', lottery: 'Lottery', subsidy: 'Subsidy' }
+        }
+    },
+
+    logs: {
+        db: {
+            migrationStart: '[Database] Starting i18n category code migration...',
+            migrationSuccess: '[Database] i18n category code migration completed!',
+            migrationFail: '[Database] i18n category code migration failed: {error}',
+            error: '[Database] Error:',
+            saveCategorySuccess: '[Database] Save category settings (saveCategory) successful',
+            deleteCategorySuccess: '[Database] Delete category settings (deleteCategory) successful',
+            saveTargetSuccess: '[Database] Save target settings (saveTarget) successful',
+            deleteTargetSuccess: '[Database] Delete target settings (deleteTarget) successful',
+            saveTransactionSuccess: '[Database] Save transaction record (saveTransaction) successful',
+            batchSaveTransactionsSuccess: '[Database] Batch save transaction records (batchSaveTransactions) successful',
+            batchSaveTransactionsFail: '[Database] Batch save transaction records failed:',
+            deleteTransactionSuccess: '[Database] Delete transaction record (deleteTransaction) successful',
+            deleteTransactionsByFixedIdSuccess: '[Database] Batch delete associated transaction records (deleteTransactionsByFixedId) successful',
+            saveFixedRecordSuccess: '[Database] Save fixed record (saveFixedRecord) successful',
+            batchSaveFixedRecordsSuccess: '[Database] Batch save fixed records (batchSaveFixedRecords) successful',
+            batchSaveFixedRecordsFail: '[Database] Batch save fixed records failed:',
+            deleteFixedRecordSuccess: '[Database] Delete fixed record (deleteFixedRecord) successful'
+        },
+        calendar: {
+            holidayLoadError: 'Failed to load {year} national holiday data',
+            loadHolidaysFail: '[Calendar] Failed to load national holidays for the year...'
+        },
+        settings: {
+            accountUpdateSuccess: '[Settings] Account settings updated successfully (saveAccounts)',
+            checkAccountDataError: '[Settings] Error checking account data:',
+            backupUpdateSuccess: '[Settings] Private Cloud settings and sync state saved successfully',
+            saveAccountsSuccess: '[Settings] Update account settings (saveAccounts) success',
+            cloudBackupSuccess: '[Settings] Private Cloud settings and sync state saved successfully',
+            restoreError: 'Error during restore: ',
+            exportJsonSuccess: '[Backup] Manual export local backup (btn-export-json) success: ZIP size ',
+            fileReadError: 'File read failed',
+            importJsonSuccess: '[Backup] Import from local backup (input-import-json) success: added/updated ',
+            checkAccountError: '[Settings] Error checking account data:',
+            checkCategoryError: '[Settings] Error checking category data:',
+            checkCategoryBatchError: '[Settings] Error checking category data in batch:',
+            checkTargetError: '[Settings] Error checking target data:',
+            checkTargetBatchError: '[Settings] Error checking target data in batch:'
+        },
+        record: {
+            festivalReminderError: '[Important Festival Reminder] Error:',
+            saveFail: '[Record] Save failed:'
+        },
+        location: {
+            fetchPlaceInfoFail: '[LocationSearch] Failed to fetch complete place info:',
+            apiLoadFail: '[LocationSearch] Google Maps API load failed...'
+        },
+        app: {
+            alreadyInitialized: '[App] app.js already initialized, skipping duplicate execution...'
+        },
+        htmlLoader: {
+            loadFail: '[HTML Loader] Failed to load',
+            fetchFail: '[HTML Loader] Failed to fetch'
+        }
+    },
+    ui: {
+        common: {
+            unnamed: '(Unnamed)'
+        },
+        footer: {
+            unnamedProject: 'Unnamed Project',
+            githubProject: 'GitHub Project',
+            releaseDate: 'Release Date: {date}'
+        },
+        app: {
+            name: 'TinyLedger'
+        },
+        accounts: {
+            defaultName: 'Default Account',
+            colors: {
+                blue: 'Blue', green: 'Green', red: 'Red', yellow: 'Yellow', purple: 'Purple', gray: 'Gray'
+            },
+            filterAll: 'All Accounts',
+            filterPartial: 'Accounts ({selected}/{total})',
+            alertNoAccount: 'Please select at least one account!'
+        },
+        tabs: {
+            rules: 'Categories / Rules',
+            details: 'Categories / Details'
+        },
+        nav: {
+            addRecord: 'Add Record',
+            backToList: 'Back to List',
+            stats: 'Statistics',
+            calendar: 'Calendar',
+            settings: 'Settings',
+            tabGeneral: 'General',
+            tabGeneralMobile: 'Gen.<br>Rec.',
+            tabFixed: 'Fixed',
+            tabFixedMobile: 'Fix.<br>Rec.',
+            category: 'Category'
+        },
+        list: {
+            summary: '📊 Current Data: {txLen} records, {fixLen} fixed rules',
+            filterAll: 'All',
+            emptyFixed: 'No fixed records match the criteria',
+            emptyGeneral: 'No records for this month',
+            pageInfo: 'Page {current} of {total}',
+            prevPage: 'Prev',
+            nextPage: 'Next',
+            pageSizePre: '',
+            pageSizePost: '/ page'
+        },
+        budget: {
+            status: 'Monthly Budget {monthlyBudget} · Spent ${totalExpenseMonth} ({budgetPercent}%)',
+            over: 'Over budget {amount}',
+            left: 'Remaining {amount}'
+        },
+        record: {
+            typeIncome: 'Inc.',
+            typeExpense: 'Exp.',
+            ruleYearly: 'Every {month}/{day}',
+            ruleMonthly: 'Every {day}th',
+            ruleWeekly: 'Every {weekday}',
+            weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            ruleCount: '{count} records',
+            noDeadline: 'No deadline',
+            labelTarget: '👤 Target: ',
+            labelLocation: '📍 Location: ',
+            labelNote: '📝 Note: ',
+            labelPhoto: '📷 Photo attached',
+            noNote: 'No Note',
+            fixedGeneratedTip: 'Details generated by fixed records, for view only',
+            addTitle: 'Add Record',
+            copyTitle: 'Copy Record',
+            editFixedTitle: 'Edit Fixed Rule',
+            viewFixedTitle: 'View Fixed Rule Details',
+            addBtn: 'Add',
+            copyBtn: 'Copy',
+            promptLocation: 'Please enter or select a location',
+            importantFestivalPrefix: '⭐',
+            festivalJoin: ', ',
+            attachment: 'Attachment'
+        },
+        batch: {
+            typeNameFixed: 'Fixed Rules',
+            typeNameGeneral: 'Records',
+            unnamedRule: 'Unnamed Rule',
+            boundPreview: '- [{name}] ({count} records, e.g. {date})',
+            andOthers: '...and others',
+            confirmDeleteFixed: 'Are you sure you want to delete {count} fixed rules? This action cannot be undone.',
+            confirmDeleteFixedBound: '[SEVERE WARNING] The selected rules have auto-generated {totalBound} historical records:\n{boundLines}\n\Deleting the rules will ALSO delete these historical records!\nIf you only want to stop generating future records, we recommend canceling and modifying the "End Date".\n\nAre you sure you want to force delete and destroy historical records?',
+            confirmDeleteType: 'Are you sure you want to delete {count} {typeName}?',
+            btnDeleteSelected: 'Delete Selected ({count})'
+        },
+        stats: {
+            tabs: {
+                pie: 'Pie Chart',
+                bar: 'Bar Chart',
+                line: 'Line Chart',
+                annual: 'Annual Chart'
+            },
+            filters: {
+                period: 'Period:',
+                week: 'Week',
+                month: 'Month',
+                year: 'Year',
+                all: 'All',
+                custom: 'Custom',
+                groupby: 'Group by:',
+                major: 'Major',
+                sub: 'Minor',
+                payee: 'Payee',
+                xaxis: 'X Axis:',
+                byDay: 'By Day',
+                byMonth: 'By Month',
+                yearLabel: 'Year:'
+            },
+            noData: 'No Data',
+            unclassified: '(Unclassified)',
+            unspecified: '(Unspecified)',
+            tableMajor: 'Major',
+            tableSub: 'Minor',
+            tableTarget: 'Target',
+            tableAmount: 'Amount',
+            tablePercent: '%',
+            tableTotal: 'Total',
+            noAnnualRecord: 'No records in {year}',
+            annualTotalIncome: 'Total Income',
+            annualTotalExpense: 'Total Expense',
+            annualBalance: 'Balance',
+            monthlyDetails: 'Monthly Details',
+            month: 'Month',
+            monthSuffix: '',
+            year: 'Year',
+            income: 'Income',
+            expense: 'Expense',
+            top5Expenses: 'Top 5 Expenses'
+        },
+        settings: {
+            dangerZone: {
+                title: 'Danger Zone',
+                desc: 'Clear all local accounting records, fixed records, and category settings. If you want to start over, or clear abnormal data, click the button below. (This action cannot be undone)',
+                button: 'Force Clear All Local Data',
+                confirmTitle: 'Are you sure you want to clear?',
+                confirmMsg: 'This will completely delete all local data on your device.\nThis action cannot be undone. Please ensure you have backed up!',
+                doubleConfirmTitle: 'Final Confirmation',
+                doubleConfirmMsg: 'Are you absolutely sure?\nThis action will permanently destroy the local database.',
+                btnConfirm: 'Clear Data',
+                btnCancel: 'Cancel',
+                btnDoubleConfirm: 'Destroy Data',
+                btnDoubleCancel: 'Let me think',
+                busyTitle: 'Clearing Data',
+                busyDetail: 'Deleting...',
+                success: '✅ All local data has been completely cleared! The system will now reload.',
+                error: 'Error occurred while clearing data: {error}'
+            },
+            systemLogs: {
+                title: 'System Logs',
+                desc: 'Displays the latest 999 console logs to help troubleshoot connection or data synchronization issues.',
+                placeholderSearch: 'Search time or keyword...',
+                titleCopy: 'Copy filtered logs',
+                btnCopy: 'Copy',
+                btnExport: 'Export',
+                titleClear: 'Clear Logs',
+                btnClear: 'Clear',
+                confirmClear: 'Are you sure you want to clear all system logs? This action cannot be undone.',
+                emptyExport: 'No logs available to export',
+                emptyCopy: 'No logs available to copy',
+                copySuccess: 'Logs copied to clipboard',
+                copyError: 'Copy failed: {error}'
+            },
+            language: { title: 'Language' },
+            title: 'System Settings',
+            sponsor: 'Sponsor the Author',
+            theme: {
+                title: 'Appearance Theme'
+            },
+            backup: {
+                title: 'Manual & Auto Backup',
+                manualExport: 'Export ZIP',
+                manualImport: 'Import Backup',
+                importHint: 'Supports .zip or older .json formats',
+                autoExport: 'Auto Export Range',
+                daily: 'Daily (Current Month)',
+                yearly: 'Yearly (Full Year)',
+                yearlyAll: 'All Years',
+                yearlyCurrent: 'This Year Only',
+                yearlyLast: 'Last Year & This Year',
+                includePhotos: 'Include Photos (Increases file size significantly)',
+                exporting: 'Preparing ZIP backup...',
+                exportSuccess: '✅ Backup exported successfully!\n{txCount} records, {fixedCount} fixed rules\nIncluded {catCount} categories and {tgtCount} targets',
+                exportError: 'Export failed: {error}',
+                importing: 'Parsing backup file...',
+                importError: 'Error occurred during restore: {error}',
+                errorJsonParse: 'Cannot parse JSON. Invalid file format',
+                errorOldFormat: 'Unsupported legacy backup format. Please use the latest format',
+                errorUnsupportedFile: 'Unsupported file format. Please provide a .zip or .json file',
+                gasUrlConflictPrompt: '⚠️ The "Custom Backup GAS URL" in the backup file differs from the local one!\n\n[Backup] {newUrl}\n[Local] {oldUrl}\n\nDo you want to OVERWRITE the local URL with the backup URL?\n\n(Click OK to overwrite, Cancel to keep local)',
+                parsedTitle: 'Backup Parsed Successfully',
+                startImport: 'Start Import',
+                cancel: 'Cancel',
+                clearingData: 'Clearing local data',
+                deletingRecords: 'Deleting existing records...',
+                restoringLocal: 'Restoring locally',
+                writingDb: 'Writing data to database...',
+                progressFormat: {
+                    wait: 'Waiting to write {type}... ({current} / {total})',
+                    doing: 'Writing {type}... ({current} / {total})',
+                    done: 'Written {type}... ({current} / {total})',
+                    typeTx: 'records',
+                    typeFixed: 'fixed records',
+                    typeCat: 'categories',
+                    typeTgt: 'targets'
+                },
+                importComplete: '✅ Import completed!\n\n[Added]\n{adds}',
+                reloading: 'System is reloading...',
+                fullBackup: 'Full Backup: ',
+                fullBackupDesc: 'All your records, categories, and settings.',
+                overwriteWarning: 'Restoring from private cloud will completely overwrite local data',
+                exportingTitle: 'Exporting Data',
+                advancedTitle: 'Advanced Backup Settings (Local & Cloud)',
+                mode: {
+                    title: 'Backup Mode',
+                    daily: 'Daily (All data, good for overwrite)',
+                    yearly: 'Yearly (Split by year, good for merge)'
+                },
+                yearlyRange: {
+                    title: 'Yearly Backup Range',
+                    all: 'All Years',
+                    current: 'This Year Only'
+                },
+                includePhotos: {
+                    title: 'Include Photos',
+                    desc: 'Uncheck to reduce file size significantly'
+                },
+                restoreMode: {
+                    title: 'Restore Mode (Local & Cloud)',
+                    merge: 'Merge (Keep local, skip duplicates)',
+                    overwrite: 'Overwrite (Clear local, fully overwrite)'
+                },
+                localTitle: 'Manual Backup (Local ZIP)',
+                localDesc: 'Export current records as a ZIP backup to your device. You can manually restore from this file when changing devices.',
+                exportBtn: 'Export Backup',
+                importBtn: 'Import Backup',
+                generateSample: 'Generate Sample Data'
+            },
+            cloudBackup: {
+                title: 'Private Cloud Sync & Backup (Google Apps Script)',
+                syncing: 'Cloud Syncing...',
+                desc: 'Backup all your accounting records, fixed rules, categories, and calendar preferences.\n(*Restoring from private cloud will completely overwrite local data)',
+                successSummary: '✅ Backup exported successfully!\n{txCount} records, {fixedCount} fixed rules\nIncluded {catCount} categories and {tgtCount} targets',
+                restoreConfirmMerge: '[Merge Mode]\nAre you sure you want to merge this data into your local device?\n(Local records will be kept, duplicates skipped)',
+                restoreConfirmOverwrite: '[Overwrite Warning]\nAre you sure you want to OVERWRITE all local records with this data?\n(All existing local records will be deleted!)',
+                restoreConfirmEmpty: '[Restore Data]\nAre you sure you want to restore this cloud data to your local device?',
+                restoreSummary: 'This backup contains:\n- Records: {txCount}\n- Fixed Rules: {fixedCount}\n- Categories: {catCount}\n- Targets: {tgtCount}\n',
+                restoreFiltered: '\n(Duplicates filtered)\n',
+                restoreFilteredTx: '- Records: {txSkip}\n',
+                restoreFilteredFixed: '- Fixed Rules: {fixedSkip}\n',
+                restoreFilteredCat: '- Categories: {catSkip}\n',
+                restoreFilteredTgt: '- Targets: {tgtSkip}\n',
+                restoreCompleteEmpty: '✅ Cloud restore completed!\n\n[Added]\n{adds}\n\nSystem will reload shortly...',
+                restoreCompleteOverwrite: '✅ Cloud restore (Overwrite) completed!\n\n[Added]\n{adds}\n\nSystem will reload shortly...',
+                restoreCompleteMerge: '✅ Cloud restore (Merge) completed!\n\n[Added]\n{adds}',
+                restoreCompleteMergeSkipped: '\n\n(Duplicates skipped)\n',
+                addedTx: 'Records: {tx}',
+                addedFixed: 'Fixed Rules: {fixed}',
+                addedCat: 'Categories: {cat}',
+                addedTgt: 'Targets: {tgt}'
+            },
+            accounts: {
+                title: 'Account Settings',
+                add: 'Add Account',
+                edit: 'Edit Account',
+                defaultAccountName: 'Account A',
+                accountName: 'Account Name',
+                accountNamePh: 'e.g. Cash, Credit Card',
+                requireName: 'Please enter an account name',
+                tagColor: 'Tag Color',
+                monthlyBudget: 'Monthly Budget',
+                budgetPh: 'e.g. 25000',
+                save: 'Save',
+                budget: 'Budget: ${amount}',
+                isDefault: 'Default',
+                setDefault: 'Set as Default',
+                deleteConfirmTitle: 'Are you sure you want to delete this account?',
+                deleteErrorMsg: 'Cannot delete! This account contains:\n',
+                deleteErrorTxs: '- {count} records (e.g. {dates})\n',
+                deleteErrorFixed: '- {count} fixed rules\n',
+                deleteErrorEnd: '\nPlease transfer these records to another account or delete them first.'
+            },
+            dataManagement: {
+                title: 'Transaction Info Management',
+                expense: 'Expense Categories',
+                income: 'Income Categories',
+                target: 'Payees'
+            },
+            calendar: {
+                title: 'Calendar & Display Settings',
+                remindDaysBefore: 'Remind (Days Before):',
+                monthSuffix: '',
+                daySuffix: '',
+                month: '{m}',
+                day: '{d}',
+                monthPh: 'Month',
+                dayPh: 'Day',
+                festivalNamePh: 'Festival Name',
+                dayNumPh: 'Days {n}',
+                nationalHoliday: {
+                    title: 'National Holidays (Taiwan Only)',
+                    desc: 'Display national holidays announced by the government',
+                    lastUpdated: 'Last Updated:',
+                    neverUpdated: 'None',
+                    updateNow: 'Update Now',
+                    updating: 'Downloading...',
+                    updateSuccess: '✅ National holidays updated!\nDownloaded {count} records for {years}.',
+                    updateSuccessLog: '[System] Successfully updated national holidays for {years} ({count} records).',
+                    updateError: '❌ Download failed: {error}'
+                },
+                lunarDate: {
+                    title: 'Lunar Date (Chinese)',
+                    desc: 'Display lunar calendar dates'
+                },
+                stembranch: {
+                    title: 'Stem-Branch (Chinese)',
+                    desc: 'Display daily stem-branch (e.g. Jiazi)'
+                },
+                solarterm: {
+                    title: 'Solar Terms (Chinese)',
+                    desc: 'Display 24 solar terms (e.g. Lichun)'
+                },
+                festival: {
+                    title: 'Festivals (Chinese)',
+                    desc: 'Display traditional festivals and local holidays'
+                },
+                globalFestival: {
+                    title: 'Festivals (Global)',
+                    desc: 'Display global and Western holidays'
+                },
+                bazi: {
+                    title: 'Bazi Chart (Chinese)',
+                    desc: 'Display Four Pillars, Ten Gods, etc. when clicking a date'
+                },
+                valentine: {
+                    title: 'Valentine\'s Days',
+                    desc: 'Display special Valentine\'s Days on the 14th of each month (including 2/14 Western Valentine\'s Day)'
+                },
+                importantFestival: {
+                    title: 'Important Festival Reminders',
+                    enableTitle: 'Enable Important Festival Reminders',
+                    enableDesc: 'Automatically pop up a reminder before the festival and display a star mark on the calendar',
+                    addBtn: 'Add Festival (Max 10)'
+                }
+            },
+            photoUpload: {
+                title: 'Photo Upload',
+                enableTitle: 'Enable Photo Upload',
+                enableDesc: 'Allow attaching photos to records',
+                maxSize: 'Max Photo Size',
+                size320: '320 x 320',
+                size480: '480 x 480 (Min. Recommended)',
+                size640: '640 x 640 (Default)',
+                size800: '800 x 800',
+                size1024: '1024 x 1024',
+                quality: 'JPEG Compression Quality',
+                qual03: '0.3 (High Compression)',
+                qual05: '0.5 (Min. Recommended)',
+                qual07: '0.7 (Default)',
+                qual09: '0.9 (Low Compression)'
+            },
+            mapLink: {
+                title: 'Google Map Links',
+                enableTitle: 'Enable Location Links',
+                enableDesc: 'Click location in record list to open map'
+            },
+            about: {
+                title: 'About',
+                licenseTitle: 'Open Source Licenses',
+                licenseDesc: 'View open source libraries used in this project',
+                openSourceLicense: 'Open Source License (MIT License)',
+                visualAssetsCopyright: 'Visual Assets Copyright Statement',
+                visualAssetsDesc: 'The underlying source code of this project is released under the MIT License.<br><br>However, the copyright of all brand identity, UI interface design, icons, and related visual assets included in this software are entirely reserved by the original author, and <strong class="text-rose-600 dark:text-rose-400 font-semibold">are not</strong> subject to the aforementioned MIT License.<br><br>Without explicit written authorization from the author, it is strictly forbidden to misappropriate, reproduce, distribute, or use the above visual assets for other projects or commercial purposes.',
+                poweredBy: 'Powered By'
+            },
+
+            categories: {
+                title: 'Categories',
+                selectAll: 'Select All',
+                cascadeUpdateConfirm: 'This action will update all historical records using "{oldValue}"\nto "{newValue}". Are you sure you want to continue?',
+                cascadeUpdateTitle: 'Cascade Update Confirmation',
+                confirmUpdate: 'Confirm Update',
+                cancel: 'Cancel',
+                noData: 'No data, please add',
+                addExpenseMajor: 'Add Expense Major',
+                addIncomeMajor: 'Add Income Major',
+                promptNewMajor: 'Enter new major category name:',
+                deleteSelected: '🗑️ Delete Selected ({count})',
+                addMinor: 'Add Minor',
+                promptNewMinor: 'Enter new minor category name:',
+                deleteInUseMsg: 'Cannot delete! This category is currently used in:\n',
+                deleteInUseTx: '- {count} single transaction(s) (e.g., {dates}{more})\n',
+                deleteInUseFixed: '- {count} fixed rule(s) ({names}{more})\n',
+                deleteInUseTail: '\nPlease delete or reassign these records before trying again.',
+                editSub: 'Edit Minor Category',
+                deleteSub: 'Delete Minor Category',
+                moreDays: ' and {count} more days',
+                etc: ' etc.',
+                deleteConfirm: 'Are you sure you want to delete this category? This action cannot be undone.',
+                expenseTitle: 'Expense Categories',
+                incomeTitle: 'Income Categories',
+                deleteBatchConfirm: 'Are you sure you want to delete {majorCount} major and {minorCount} minor categories ({total} items in total)?\n(Note: Deleting a major category will also delete all its minor categories)',
+                deleteBatchConfirmMinorOnly: 'Are you sure you want to delete these {count} minor items?',
+                deleteBatchConfirmMajorOnly: 'Are you sure you want to delete these {count} major items?\n(Note: Deleting a major category will also delete all its minor categories)',
+                deleteBatchInUseMsg: 'Cannot delete! The following categories are in use:\n',
+                deleteBatchInUseMinorItem: '- Minor [{major} > {sub}] ({details})',
+                deleteBatchInUseMajorItem: '- Major [{major}] ({details})',
+                deleteBatchInUseTxDetail: '{count} records (e.g. {date})',
+                deleteBatchInUseFixedDetail: '{count} fixed rules',
+                deleteBatchInUseMore: '\n...and other items',
+                deleteBatchInUseTail: '\n\nPlease delete or reassign these records before trying again.'
+            },
+            targets: {
+                title: 'Payees',
+                addTarget: 'Add Payee',
+                selectAll: 'Select All',
+                noData: 'No data, please add',
+                noDataSimple: 'No data',
+                deleteSelected: '🗑️ Delete Selected ({count})',
+                deleteInUseMsg: 'Cannot delete! This target is currently used in:\n',
+                deleteInUseTx: '- {count} single transaction(s) (e.g., {dates}{more})\n',
+                deleteInUseFixed: '- {count} fixed rule(s) ({names}{more})\n',
+                deleteInUseTail: '\nPlease delete or reassign these records before trying again.',
+                moreDates: ' and {count} more dates',
+                deleteConfirm: 'Are you sure you want to delete this target? This action cannot be undone.',
+                promptNewTarget: 'Enter new target name:',
+                duplicateAlert: 'Target name "{name}" already exists!',
+                reorderTitle: 'Please select a sort number (smaller is higher priority)',
+                deleteBatchInUseMsg: 'Cannot delete! The following targets are in use:\n',
+                deleteBatchInUseItem: '- Target [{name}] ({details})',
+                deleteBatchInUseMore: '\n...and other items',
+                deleteBatchInUseTail: '\n\nPlease delete or reassign these records before trying again.',
+                deleteBatchConfirm: 'Are you sure you want to delete these {count} target(s)? This action cannot be undone.',
+                cascadeUpdateTitle: 'Cascade Update Confirmation',
+                cascadeUpdateConfirm: 'Update target "{oldValue}" to "{newValue}" in all historical records as well?',
+                confirmUpdate: 'Confirm Update'
+            },
+            accountA: 'Account A',
+            defaultBadge: 'Default',
+            monthlyBudget: 'Budget: ${amount}',
+            setDefault: 'Set Default',
+            deleteAccountError: 'Cannot delete! This account contains:\n{boundTxs}{boundFixed}\nPlease transfer or delete these records first.',
+            deleteAccountErrorTx: '- {count} records (e.g. {displayDates}{moreStr})\n',
+            deleteAccountErrorMoreDates: ' ...and {count} more days',
+            deleteAccountErrorFixed: '- {count} fixed rules\n',
+            confirmDeleteAccount: 'Are you sure you want to delete this account?',
+            editAccountError: 'Error editing account: {error}',
+            addAccountError: 'Error adding account: {error}',
+            modalAddAccount: 'Add Account',
+            modalEditAccount: 'Edit Account',
+            modalAccountName: 'Account Name',
+            modalLabelColor: 'Tag Color',
+            modalSave: 'Save',
+            festivalMonth: 'Month',
+            festivalDay: 'Day',
+            festivalName: 'Festival Name (e.g. Anniversary)',
+            festivalReminder: 'Reminder (Days ahead):',
+            festivalDays1: 'Days 1',
+            festivalDays2: 'Days 2',
+            festivalDays3: 'Days 3',
+            downloading: 'Downloading...',
+            lastUpdated: 'Last Updated: {date}',
+            lastUpdatedNever: 'Last Updated: Never',
+            holidayUpdateSuccess: '✅ Holidays updated!\nDownloaded {count} holidays for {years} years.',
+            holidayUpdateFail: '❌ Download failed: {error}',
+            holidayUpdateFailUnknown: 'Unknown error',
+            btnUpdateHoliday: 'Update Holidays',
+            backupSuccess: '✅ Backup exported successfully!\n{txCount} records, {fixedCount} fixed rules\nIncluded {catCount} categories and {tgtCount} targets',
+            restoreConfirmWarningLocalEmpty: '[Restore Data]\nAre you sure you want to restore this cloud data to your local device?',
+            restoreConfirmWarningOverwrite: '[Overwrite Warning]\nAre you sure you want to OVERWRITE all local records with this data?\n(All existing local records will be deleted!)',
+            restoreConfirmWarningMerge: '[Merge Mode]\nAre you sure you want to merge this data into your local device?\n(Local records will be kept, duplicates skipped)',
+            restoreConfirmMsg: 'This backup contains:\n- Records: {totalTx}\n- Fixed Rules: {totalFixed}\n- Categories: {totalCat}\n- Targets: {totalTgt}\n',
+            restoreConfirmMsgFilter: '\n(Duplicates filtered)\n',
+            restoreConfirmMsgFilterTx: '- Records: {count}\n',
+            restoreConfirmMsgFilterFixed: '- Fixed Rules: {count}\n',
+            restoreConfirmMsgFilterCat: '- Categories: {count}\n',
+            restoreConfirmMsgFilterTgt: '- Targets: {count}\n',
+            inputNamePlaceholder: 'e.g. Cash, Credit Card',
+            inputBudgetPlaceholder: 'e.g. 25000',
+            requireAccountName: 'Please enter account name'
+        },
+        modals: {
+            accountFilter: {
+                title: 'Filter Accounts',
+                selectLabel: 'Select accounts to display',
+                selectAll: 'Select All',
+                clearAll: 'Clear All',
+                confirm: 'Confirm'
+            },
+            crop: {
+                title: 'Crop Photo',
+                warning: '⚠️ Repeated cropping reduces quality',
+                cancel: 'Cancel',
+                confirm: 'Confirm Crop'
+            },
+            photoHelp: {
+                title: 'Photo Quality Settings Recommendation',
+                p1: 'A 320x320 size with 0.3 quality will indeed be "very blurry". If you just want to take an abstract picture like "this is a cup of coffee," it might barely suffice. However, if you are capturing a "physical invoice or receipt," the text and numbers on it will definitely blur together and become illegible.',
+                p2: 'To maintain the legibility of receipt numbers, we recommend setting it to at least <strong style="color: var(--primary-color);">480x480 / Quality 0.5</strong>.',
+                estimateTitle: 'Estimated Single Photo Size (After Saving)',
+                li1: '320x320 / Quality 0.3: Approx. 10~20 KB <span style="font-size: 0.8rem;">(Very small but extremely blurry)</span>',
+                li2: '480x480 / Quality 0.5: Approx. 15~30 KB',
+                li3: '640x640 / Quality 0.7: Approx. 40~60 KB <strong style="color: var(--text-main); font-weight: 500;">(Default, good clarity)</strong>',
+                li4: '1024x1024 / Quality 0.9: Approx. 150~250 KB <span style="font-size: 0.8rem;">(Extremely clear but larger size)</span>',
+                understand: 'Understood'
+            },
+            record: {
+                editTitle: 'Edit Record',
+                tabExpense: 'Expense',
+                tabIncome: 'Income',
+                tabSingle: 'Single',
+                tabFixed: 'Fixed',
+                date: 'Date',
+                dateRange: 'Date Range',
+                startDate: 'Start Date',
+                endDate: 'End Date',
+                amount: 'Amount',
+                repeatType: 'Repeat Type',
+                ruleYearly: 'Yearly',
+                ruleMonthly: 'Monthly',
+                ruleWeekly: 'Weekly',
+                ruleDetail: 'Details',
+                monday: 'Monday',
+                tuesday: 'Tuesday',
+                wednesday: 'Wednesday',
+                thursday: 'Thursday',
+                friday: 'Friday',
+                saturday: 'Saturday',
+                sunday: 'Sunday',
+                majorCat: 'Major',
+                subCat: 'Minor',
+                target: 'Target',
+                location: 'Location',
+                locationPlaceholder: 'Enter address or name',
+                mapTitle: 'Open in Maps',
+                photo: 'Photo',
+                photoUpload: 'Take or Upload Photo',
+                photoPreview: 'Preview',
+                photoRecrop: 'Click to recrop',
+                photoDelete: 'Delete Photo',
+                note: 'Note',
+                notePlaceholder: 'Note...',
+                btnDelete: 'Delete',
+                btnCopy: 'Copy',
+                btnSave: 'Save',
+                btnCancel: 'Cancel'
+            }
+        },
+        globalFestivals: {
+            newYear: "New Year's Day",
+            valentinesDay: "Valentine's Day",
+            womensDay: "Women's Day",
+            foolsDay: "April Fools' Day",
+            earthDay: "Earth Day",
+            laborDay: "Labor Day",
+            halloween: "Halloween",
+            christmas: "Christmas",
+            mothersDay: "Mother's Day",
+            thanksgiving: "Thanksgiving",
+            easter: "Easter",
+            internationalCoopDay: "Intl. Day of Cooperatives",
+            captiveNationsWeek: "Captive Nations Week",
+            diaryValentinesDay: "Diary Day",
+            westernValentinesDay: "Western Valentine's Day",
+            whiteValentinesDay: "White Day",
+            blackValentinesDay: "Black Day",
+            roseValentinesDay: "Rose Day",
+            kissValentinesDay: "Kiss Day",
+            silverValentinesDay: "Silver Day",
+            greenValentinesDay: "Green Day",
+            photoValentinesDay: "Photo Day",
+            wineValentinesDay: "Wine Day",
+            movieValentinesDay: "Movie Day",
+            hugValentinesDay: "Hug Day"
+        },
+        calendar: {
+            weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            lunarDays: ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th','16th','17th','18th','19th','20th','21st','22nd','23rd','24th','25th','26th','27th','28th','29th','30th'],
+            lunarMonths: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+            lunarLeap: 'Leap ',
+            lunarMonthSuffix: 'M',
+            dayDetail: {
+                txTitle: 'Daily Transaction Records',
+                closeBtn: 'Close Details'
+            },
+            recordOf: '\'s Records',
+            noRecord: 'No records for this day',
+            baziDayMaster: 'Day Master',
+            baziYearPillar: 'Year',
+            baziMonthPillar: 'Month',
+            baziDayPillar: 'Day',
+            baziNote: '* Lightweight Bazi chart (No Hour Pillar)'
+        }
+    },
+    systemLogs: {
+        taiwanHolidays: {
+            localStorageFormatError: '[Calendar] localStorage data format error ({func}), ignored',
+            loadPersistedError: '[Calendar] Failed to load local holiday data ({func}):',
+            noDataYet: '[Calendar] No national holiday data available for year {year} yet.',
+            fetchError: '[API] Failed to fetch government calendar ({func} - {year}):',
+            downloadError: '[API] Failed to download government calendar ({year}):',
+            saveLocalStorageError: '[Calendar] Failed to save to localStorage:',
+            updateUnexpectedError: '[API] Unexpected error occurred while updating national holidays manually:'
+        },
+        themeSwitcher: {
+            readCustomThemeError: '[ThemeSwitcher] Failed to read custom theme:',
+            containerNotFound: '[ThemeSwitcher] Theme container not found: {containerId}',
+            switchedTheme: '[ThemeSwitcher] Switched theme via menu to: {newTheme}'
+        }
+    }
+};

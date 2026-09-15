@@ -1,0 +1,571 @@
+/* =========================================================================
+   modern-ui.css - Shared UI Framework
+   =========================================================================
+   
+   【⚠️ CRITICAL INSTRUCTION FOR AI】:
+   1. This is a shared UI library for all projects! It defines buttons (btn-primary, btn-outline, etc.), cards, modals, and dark/light mode variables.
+   2. DO NOT re-invent UI components in local style.css.
+   3. Always prioritize using classes defined here when implementing buttons, states, or cards.
+   4. If a common style is missing (e.g., specific active states), add it here instead of project-specific stylesheets!
+   ========================================================================= */
+
+:root {
+    /* --------------------------------------
+       Light Theme (Default)
+       -------------------------------------- */
+    --primary-color: #4F46E5;
+    /* Indigo 600 */
+    --primary-hover: #4338CA;
+    /* Indigo 700 */
+    --secondary-color: #6366F1;
+    /* Indigo 500 */
+    --accent-green: #10B981;
+    /* Emerald 500 */
+    --accent-red: #EF4444;
+    /* Red 500 */
+    --accent-purple: #A855F7;
+    /* Purple 500 */
+
+    /* Chart Colors (Progress / Alerts) */
+    --chart-mint-green: #10B981;
+    /* Emerald 500 */
+    --chart-tangerine-orange: #F59E0B;
+    /* Amber 500 */
+    --chart-sunset-orange: #F97316;
+    /* Orange 500 */
+    --chart-cherry-red: #EF4444;
+    /* Red 500 */
+
+    /* Background & Surfaces */
+    --bg-color: #F8FAFC;
+    /* Slate 50 */
+    --surface-color: rgba(255, 255, 255, 0.75);
+    --surface-solid: #FFFFFF;
+    --modal-bg: rgba(255, 255, 255, 0.85);
+
+    /* Text & Typography */
+    --text-main: #0F172A;
+    /* Slate 900 */
+    --text-muted: #64748B;
+    /* Slate 500 */
+
+    /* Links */
+    --link-color: #2563EB;
+    /* Blue 600 */
+    --link-hover: #1D4ED8;
+    /* Blue 700 */
+
+    /* Active States */
+    --active-bg: #E0F2FE;
+    /* Pale powder blue */
+    --active-text: #0C4A6E;
+    /* Dark blue text */
+
+    /* Tags & Labels */
+    --label-bg: #E2E8F0;
+    /* Slate 200 */
+    --label-color: #334155;
+    /* Slate 700 */
+
+    /* Borders & Shadows */
+    --border-color: rgba(203, 213, 225, 0.6);
+    /* Slate 300 with opacity */
+    --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+    /* Glassmorphism settings */
+    --blur-radius: 12px;
+
+    /* Border Radius */
+    --border-radius-sm: 6px;
+    --border-radius: 10px;
+    --border-radius-lg: 16px;
+}
+
+html[data-theme="dark"] {
+    /* --------------------------------------
+       Dark Theme
+       -------------------------------------- */
+    --primary-color: #6366F1;
+    /* Indigo 500 */
+    --primary-hover: #818CF8;
+    /* Indigo 400 */
+    --secondary-color: #4F46E5;
+    /* Indigo 600 */
+    --accent-green: #34D399;
+    /* Emerald 400 */
+    --accent-red: #F87171;
+    /* Red 400 */
+    --accent-purple: #C084FC;
+    /* Purple 400 */
+
+    /* Chart Colors (Progress / Alerts) */
+    --chart-mint-green: #34D399;
+    /* Emerald 400 */
+    --chart-tangerine-orange: #FBBF24;
+    /* Amber 400 */
+    --chart-sunset-orange: #FB923C;
+    /* Orange 400 */
+    --chart-cherry-red: #F87171;
+    /* Red 400 */
+
+    /* Background & Surfaces */
+    --bg-color: #0F172A;
+    /* Slate 900 */
+    --surface-color: rgba(30, 41, 59, 0.75);
+    /* Slate 800 with opacity */
+    --surface-solid: #1E293B;
+    /* Slate 800 */
+    --modal-bg: rgba(15, 23, 42, 0.85);
+
+    /* Text & Typography */
+    --text-main: #F8FAFC;
+    /* Slate 50 */
+    --text-muted: #94A3B8;
+    /* Slate 400 */
+
+    /* Links */
+    --link-color: #60A5FA;
+    /* Blue 400 */
+    --link-hover: #93C5FD;
+    /* Blue 300 */
+
+    /* Active States */
+    --active-bg: rgba(56, 189, 248, 0.15);
+    /* Sky blue tinted background */
+    --active-text: #7DD3FC;
+    /* Sky 300 text for readability on dark */
+
+    /* Tags & Labels */
+    --label-bg: #334155;
+    /* Slate 700 */
+    --label-color: #E2E8F0;
+    /* Slate 200 */
+
+    /* Borders & Shadows */
+    --border-color: rgba(71, 85, 105, 0.6);
+    /* Slate 600 with opacity */
+    --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================================================================
+   TEXT & TYPOGRAPHY UTILITIES
+   ========================================================================= */
+.text-expense {
+    color: var(--accent-red) !important;
+}
+
+.text-income {
+    color: var(--link-color, #2563EB) !important;
+}
+
+.expense-icon {
+    background-color: var(--accent-red);
+}
+
+.income-icon {
+    background-color: var(--link-color, #2563EB);
+}
+
+/* --------------------------------------
+   Base Elements (Links, Tags, Glass)
+   -------------------------------------- */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+/* Glass Surface Utility */
+.glass-surface {
+    background: var(--surface-color);
+    backdrop-filter: blur(var(--blur-radius));
+    -webkit-backdrop-filter: blur(var(--blur-radius));
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Tags/Labels Utility */
+.tag-label {
+    display: inline-block;
+    background-color: var(--label-bg);
+    color: var(--label-color);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* Buttons Micro-animations */
+.mui-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: var(--surface-color);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.mui-btn:active {
+    transform: scale(0.97);
+}
+
+.mui-btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.mui-btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.mui-btn-danger {
+    background-color: var(--accent-red);
+    color: white;
+    border-color: var(--accent-red);
+}
+
+/* =========================================================================
+   UNIVERSAL BUTTON COMPONENTS (.btn)
+   =========================================================================
+   These buttons can be reused across all projects importing modern-ui.css.
+   Simply apply the class `btn` and a modifier class like `btn-primary`.
+*/
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn:active:not(:disabled) {
+    transform: scale(0.97);
+}
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: none;
+    pointer-events: none;
+}
+
+/* 1. Primary Action (Save, Submit, Next step) */
+.btn-primary {
+    background-color: #3b82f6;
+    /* Blue */
+    color: white;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.1);
+}
+
+/* 2. Secondary Action (Copy, Alternative option) */
+.btn-secondary {
+    background-color: #8b5cf6;
+    /* Purple */
+    color: white;
+}
+
+.btn-secondary:hover {
+    filter: brightness(1.1);
+}
+
+/* 3. Danger / Destructive (Delete, Clear) */
+.btn-danger {
+    background-color: #ef4444;
+    /* Red */
+    color: white;
+}
+
+.btn-danger:hover {
+    filter: brightness(1.1);
+}
+
+/* 4. Cancel / Default (Cancel, Go back) */
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+.btn-outline:hover {
+    background-color: var(--label-bg);
+}
+
+.btn-outline.active {
+    background-color: #e0f2fe;
+    /* Light Blue background */
+    border-color: #0284c7;
+    /* Blue Border */
+    color: #0369a1;
+    /* Dark Blue Text for contrast */
+    font-weight: bold;
+}
+
+/* Modal Tab Buttons */
+.modal-tab-btn {
+    flex: 1;
+    padding: 10px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.modal-tab-btn:hover {
+    background: var(--surface-color, #e2e8f0);
+}
+
+.modal-tab-btn.active {
+    background: #3b82f6;
+    /* btn-primary color */
+    color: white;
+    border-color: #3b82f6;
+}
+
+.modal-tab-btn[data-type="expense"].active {
+    background: #ef4444;
+    /* btn-danger color */
+    border-color: #ef4444;
+    color: white;
+}
+
+/* 5. Success / Completion (Import, Export success, Complete) */
+.btn-success {
+    background-color: #10b981;
+    /* Emerald Green */
+    color: white;
+}
+
+.btn-success:hover {
+    filter: brightness(1.1);
+}
+
+/* 6. Warning (Batch delete, Caution required) */
+.btn-warning {
+    background-color: #f59e0b;
+    /* Amber / Orange */
+    color: white;
+}
+
+.btn-warning:hover {
+    filter: brightness(1.1);
+}
+
+/* 7. Info (Help, Learn More, Details) */
+.btn-info {
+    background-color: #06b6d4;
+    /* Cyan */
+    color: white;
+}
+
+.btn-info:hover {
+    filter: brightness(1.1);
+}
+
+/* 8. Dark / Neutral (Settings, Sub-actions) */
+.btn-dark {
+    background-color: #334155;
+    /* Slate */
+    color: white;
+}
+
+.btn-dark:hover {
+    filter: brightness(1.1);
+}
+
+/* Card Module */
+.mui-card {
+    background: var(--surface-color);
+    backdrop-filter: blur(var(--blur-radius));
+    -webkit-backdrop-filter: blur(var(--blur-radius));
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-card-hoverable:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+/* Form Controls (Input, Select, Date) */
+.mui-form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text-main);
+    background-color: var(--surface-solid);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-form-control:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Specific overrides for select and date to ensure icon/picker visibility */
+select.mui-form-control,
+input[type="date"].mui-form-control {
+    cursor: pointer;
+    appearance: auto;
+}
+
+/* Text Colors Utilities */
+.text-green {
+    color: var(--accent-green) !important;
+}
+
+.text-red {
+    color: var(--accent-red) !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* ==========================================
+   StickyListHeader
+   ========================================== */
+.sticky-list-header {
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: var(--sticky-header-offset, 0px);
+    z-index: 10;
+    background: var(--active-tab-bg, #f8fafc);
+    /* Light blue in light mode, bright blue in dark mode to avoid pure white/black */
+    border-bottom: 2px solid var(--border-color, #e2e8f0);
+    padding: 0.5rem 1.5rem;
+    /* Matches record-item left/right padding */
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--active-tab-text, var(--primary-color, #4F46E5));
+    /* High contrast for both themes */
+    gap: 1rem;
+    /* Matches record-item */
+}
+
+.sticky-header-checkbox {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.sticky-header-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ==========================================
+   App Container & List Row (Mobile First)
+   ========================================== */
+
+/* --- 1. Background separation (for large screens) --- */
+html {
+    background-color: var(--surface-color, #FFFFFF); /* Normal white background */
+}
+
+/* --- 2. Core App Container --- */
+.app-container {
+    width: 100%;
+    /* Let desktop expand to full width */
+    min-height: 100vh;
+    background-color: var(--surface-color, #FFFFFF);
+    position: relative;
+    overflow-x: clip; /* Prevent horizontal scroll without breaking sticky */
+    padding-bottom: 80px; /* Leave space for Footer */
+}
+
+/* --- 3. Mobile tweaks (under 500px) --- */
+@media screen and (max-width: 500px) {
+    .app-container {
+        box-shadow: none; /* No shadow needed on mobile */
+    }
+}
+
+/* --- List Row Grid Alignment --- */
+/* Shared row settings (for header and data rows) */
+.list-row {
+    display: flex;
+    align-items: center; /* Vertical center */
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color, #E5E5EA);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Header row background */
+.list-header-row {
+    background-color: var(--active-bg, #E3F2FD); /* Light blue background */
+    font-weight: bold;
+    color: var(--active-text, #0056B3);
+}
+
+/* --- Strict Width Allocation --- */
+
+/* Left: Checkbox */
+.col-check {
+    width: 40px;
+    flex-shrink: 0; /* Do not shrink */
+    text-align: left;
+}
+
+/* Middle: Category & Description (auto expanding) */
+.col-main {
+    flex: 1; /* Take remaining width */
+    padding-right: 10px;
+    overflow: hidden; /* Truncate text */
+}
+
+/* Right: Amount */
+.col-amount {
+    width: 105px; /* Fixed width for amount plus padding */
+    flex-shrink: 0;
+    text-align: right; /* Right align amount */
+    font-size: 16px;
+    font-weight: bold;
+    padding-right: 12px; /* Margin to the edge */
+}

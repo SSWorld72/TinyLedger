@@ -1,0 +1,597 @@
+<div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="margin: 0;" data-i18n="ui.settings.title">System Settings</h2>
+    <a href="https://ko-fi.com/A0R125NYMU" target="_blank" rel="noopener noreferrer"
+        class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-600 hover:bg-orange-100 dark:bg-orange-500/10 dark:text-orange-400 dark:hover:bg-orange-500/20 transition-colors border border-orange-200/50 dark:border-orange-500/20"
+        style="text-decoration: none;">
+        <span class="material-icons text-[16px]">local_cafe</span>
+        <span class="text-sm font-medium" data-i18n="ui.settings.sponsor">Sponsor</span>
+    </a>
+</div>
+<!-- Display Language -->
+<div class="settings-section mb-8 rounded-3xl p-4 md:p-5 border"
+    style="background: var(--surface-color); border-color: var(--border-color);">
+    <div class="flex items-center gap-3 mb-4 px-2">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
+            style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
+            <span class="material-icons text-[20px]">language</span>
+        </div>
+        <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide" data-i18n="ui.settings.language.title">
+            Language</h3>
+    </div>
+    <div class="rounded-2xl p-4 shadow-sm border"
+        style="background: var(--bg-color); border-color: var(--border-color);">
+        <div id="language-selector-container"></div>
+    </div>
+</div>
+
+<div class="settings-section mb-8 rounded-3xl p-4 md:p-5 border"
+    style="background: var(--surface-color); border-color: var(--border-color);">
+    <div class="flex items-center gap-3 mb-4 px-2">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
+            style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
+            <span class="material-icons text-[20px]">palette</span>
+        </div>
+        <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide" data-i18n="ui.settings.theme.title">
+            Theme</h3>
+    </div>
+    <div class="rounded-2xl p-4 shadow-sm border"
+        style="background: var(--bg-color); border-color: var(--border-color);">
+        <div id="theme-selector-container"></div>
+    </div>
+</div>
+<!-- Budget settings moved to individual accounts -->
+<div class="settings-section mb-8 rounded-3xl p-4 md:p-5 border"
+    style="background: var(--surface-color); border-color: var(--border-color);">
+    <div class="flex items-center justify-between mb-4 px-2">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
+                style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
+                <span class="material-icons text-[20px]">account_balance_wallet</span>
+            </div>
+            <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide" data-i18n="ui.settings.accounts.title">
+                Accounts Setup</h3>
+        </div>
+        <button class="btn btn-outline" id="btn-add-account"
+            style="font-size: 0.85rem; padding: 4px 12px; display: flex; align-items: center; gap: 4px;">
+            <span class="material-icons" style="font-size: 16px;">add</span> <span
+                data-i18n="ui.settings.accounts.add">Add Account</span>
+        </button>
+    </div>
+    <div class="rounded-2xl p-4 shadow-sm border"
+        style="background: var(--bg-color); border-color: var(--border-color);">
+        <div id="settings-accounts-container"
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+            <!-- Account Cards will be injected here -->
+        </div>
+    </div>
+</div>
+
+<div class="settings-section mb-8 rounded-3xl p-4 md:p-5 border"
+    style="background: var(--surface-color); border-color: var(--border-color);">
+    <div class="flex items-center gap-3 mb-4 px-2">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
+            style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
+            <span class="material-icons text-[20px]">category</span>
+        </div>
+        <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide" data-i18n="ui.settings.dataManagement.title">
+            Data Management</h3>
+    </div>
+    <div class="rounded-2xl p-4 shadow-sm border"
+        style="background: var(--bg-color); border-color: var(--border-color);">
+        <div style="display: flex; flex-direction: row; gap: 8px; flex-wrap: wrap;">
+            <button id="btn-open-settings-expense" class="btn transition-colors hover:brightness-95"
+                style="flex: 1 1 120px; display:flex; align-items:center; justify-content:center; gap:6px; padding: 12px 4px; font-size: 0.9rem; border-radius: 12px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-main);">
+                <span class="material-icons" style="font-size: 1.1rem; color: var(--text-muted);">shopping_bag</span>
+                <span data-i18n="ui.settings.dataManagement.expense">Expense Categories</span>
+            </button>
+            <button id="btn-open-settings-income" class="btn transition-colors hover:brightness-95"
+                style="flex: 1 1 120px; display:flex; align-items:center; justify-content:center; gap:6px; padding: 12px 4px; font-size: 0.9rem; border-radius: 12px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-main);">
+                <span class="material-icons"
+                    style="font-size: 1.1rem; color: var(--text-muted);">account_balance_wallet</span>
+                <span data-i18n="ui.settings.dataManagement.income">Income Categories</span>
+            </button>
+            <button id="btn-open-settings-target" class="btn transition-colors hover:brightness-95"
+                style="flex: 1 1 120px; display:flex; align-items:center; justify-content:center; gap:6px; padding: 12px 4px; font-size: 0.9rem; border-radius: 12px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-main);">
+                <span class="material-icons" style="font-size: 1.1rem; color: var(--text-muted);">person</span>
+                <span data-i18n="ui.settings.dataManagement.target">Payees</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="settings-section mb-8 rounded-3xl p-4 md:p-5 border"
+    style="background: var(--surface-color); border-color: var(--border-color);">
+    <div class="flex items-center gap-3 mb-4 px-2">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
+            style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
+            <span class="material-icons text-[20px]">calendar_month</span>
+        </div>
+        <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide" data-i18n="ui.settings.calendar.title">
+            Calendar Settings</h3>
+    </div>
+    <div class="rounded-2xl p-4 shadow-sm border"
+        style="background: var(--bg-color); border-color: var(--border-color);">
+        <div class="settings-grid">
+            <div class="setting-card card-blue">
+                <div class="setting-info">
+                    <h4 data-i18n="ui.settings.calendar.lunarDate.title">Lunar Date</h4>
+                    <p data-i18n="ui.settings.calendar.lunarDate.desc">Show lunar dates</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-lunar-date" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-card card-green">
+                <div class="setting-info">
+                    <h4 data-i18n="ui.settings.calendar.solarterm.title">24 Solar Terms</h4>
+                    <p data-i18n="ui.settings.calendar.solarterm.desc">Show solar terms</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-lunar-solarterm" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-card card-orange">
+                <div class="setting-info">
+                    <h4 data-i18n="ui.settings.calendar.stembranch.title">Stem-Branch</h4>
+                    <p data-i18n="ui.settings.calendar.stembranch.desc">Show stem-branch</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-lunar-stembranch" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-card card-cyan">
+                <div class="setting-info">
+                    <h4 data-i18n="ui.settings.calendar.bazi.title">Bazi Chart</h4>
+                    <p data-i18n="ui.settings.calendar.bazi.desc">Show Bazi on date click</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-bazi-chart" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-card card-purple">
+                <div class="setting-info">
+                    <h4 data-i18n="ui.settings.calendar.festival.title">Festivals (Chinese)</h4>
+                    <p data-i18n="ui.settings.calendar.festival.desc">Show traditional festivals</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-lunar-festival" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-card card-red" style="flex-wrap: wrap;">
+                <div class="setting-info" style="flex: 1 1 50%; min-width: 200px;">
+                    <h4 data-i18n="ui.settings.calendar.nationalHoliday.title">National Holidays</h4>
+                    <p data-i18n="ui.settings.calendar.nationalHoliday.desc">Show national holidays</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-national-holiday" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+                <div
+                    style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">
+                    <span id="label-holiday-updated"
+                        data-i18n="ui.settings.calendar.nationalHoliday.lastUpdated">Last Updated: None</span>
+                    <button id="btn-update-holidays" class="btn btn-outline"
+                        style="padding: 6px 12px; font-size: 0.85rem;"
+                        data-i18n="ui.settings.calendar.nationalHoliday.updateNow">Update Now</button>
+                </div>
+            </div>
+            <div class="setting-card card-yellow">
+                <div class="setting-info">
+                    <h4 data-i18n="ui.settings.calendar.globalFestival.title">Festivals (Global)</h4>
+                    <p data-i18n="ui.settings.calendar.globalFestival.desc">Show global holidays</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-global-festival" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-card card-pink">
+                <div class="setting-info">
+                    <h4 data-i18n="ui.settings.calendar.valentine.title">Valentine's Days</h4>
+                    <p data-i18n="ui.settings.calendar.valentine.desc">Show monthly Valentine's</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-calendar-valentine">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="settings-section mb-8 rounded-3xl p-4 md:p-5 border"
+    style="background: var(--surface-color); border-color: var(--border-color);">
+    <div class="flex items-center gap-3 mb-4 px-2">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
+            style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
+            <span class="material-icons text-[20px]">notifications_active</span>
+        </div>
+        <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide"
+            data-i18n="ui.settings.calendar.importantFestival.title">Important Festivals</h3>
+    </div>
+    <div class="rounded-2xl p-4 shadow-sm border"
+        style="background: var(--bg-color); border-color: var(--border-color);">
+        <div class="settings-grid">
+            <div class="setting-card card-orange">
+                <div class="setting-info">
+                    <h4 data-i18n="ui.settings.calendar.importantFestival.enableTitle">Enable Reminders</h4>
+                    <p data-i18n="ui.settings.calendar.importantFestival.enableDesc">Show star icons and reminders</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-important-festivals">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div id="important-festivals-container"
+                style="display: none; grid-column: 1 / -1; background: var(--surface-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div id="important-festivals-list" style="display: flex; flex-direction: column; gap: 12px;">
+                </div>
+                <button class="btn btn-outline" id="btn-add-important-festival" style="margin-top: 12px; width: 100%;">
+                    <span class="material-icons" style="font-size:18px; vertical-align:middle; margin-right:4px;">add</span>
+                    <span data-i18n="ui.settings.calendar.importantFestival.addBtn">Add Festival (Max 10)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="settings-section mb-8 rounded-3xl p-4 md:p-5 border"
+    style="background: var(--surface-color); border-color: var(--border-color);">
+    <div class="flex items-center gap-3 mb-4 px-2">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
+            style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
+            <span class="material-icons text-[20px]">add_a_photo</span>
+        </div>
+        <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide" data-i18n="ui.settings.photoUpload.title">Photo Upload
+        </h3>
+    </div>
+    <div class="rounded-2xl p-4 shadow-sm border"
+        style="background: var(--bg-color); border-color: var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h4
+                    style="margin: 0; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 6px; color: var(--text-main);">
+                    <span data-i18n="ui.settings.photoUpload.enableTitle">Enable Photo Upload</span>
+                    <svg class="cursor-pointer transition-colors" viewBox="0 0 24 24" fill="currentColor"
+                        style="width: 18px; height: 18px; color: var(--accent-blue);" title="Help"
+                        onclick="document.getElementById('modal-photo-settings-help').style.display='flex'">
+                        <path
+                            d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
+                    </svg>
+                </h4>
+                <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-muted);"
+                    data-i18n="ui.settings.photoUpload.enableDesc">Allow attaching photos to records</p>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="toggle-photo-upload">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div id="photo-settings-container"
+            style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border-color); display: none;">
+            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 150px;">
+                    <label
+                        style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: var(--text-main);"
+                        data-i18n="ui.settings.photoUpload.maxSize">Max Image Size</label>
+                    <select id="select-photo-size" class="form-control" style="padding: 6px;">
+                        <option value="320" data-i18n="ui.settings.photoUpload.size320">320 x 320</option>
+                        <option value="480" data-i18n="ui.settings.photoUpload.size480">480 x 480 (Min Rec)</option>
+                        <option value="640" data-i18n="ui.settings.photoUpload.size640">640 x 640 (Default)</option>
+                        <option value="800" data-i18n="ui.settings.photoUpload.size800">800 x 800</option>
+                        <option value="1024" data-i18n="ui.settings.photoUpload.size1024">1024 x 1024</option>
+                    </select>
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <label
+                        style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: var(--text-main);"
+                        data-i18n="ui.settings.photoUpload.quality">JPEG Compression Quality</label>
+                    <select id="select-photo-quality" class="form-control" style="padding: 6px;">
+                        <option value="0.3" data-i18n="ui.settings.photoUpload.qual03">0.3 (High Compression)</option>
+                        <option value="0.5" data-i18n="ui.settings.photoUpload.qual05">0.5 (Min Rec)</option>
+                        <option value="0.7" data-i18n="ui.settings.photoUpload.qual07">0.7 (Default)</option>
+                        <option value="0.9" data-i18n="ui.settings.photoUpload.qual09">0.9 (Low Compression)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="settings-section mb-8 rounded-3xl p-4 md:p-5 border"
+    style="background: var(--surface-color); border-color: var(--border-color);">
+    <div class="flex items-center gap-3 mb-4 px-2">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
+            style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
+            <span class="material-icons text-[20px]">pin_drop</span>
+        </div>
+        <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide" data-i18n="ui.settings.mapLink.title">
+            Google Map Link</h3>
+    </div>
+    <div class="rounded-2xl p-4 shadow-sm border"
+        style="background: var(--bg-color); border-color: var(--border-color);">
+        <div id="google-api-module-container"></div>
+        <div
+            style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h4 style="margin: 0; font-size: 0.95rem; font-weight: 600; color: var(--text-main);"
+                    data-i18n="ui.settings.mapLink.enableTitle">Link Places to Map</h4>
+                <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-muted);"
+                    data-i18n="ui.settings.mapLink.enableDesc">Allow opening map by clicking place names</p>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="toggle-list-map-link">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="settings-section mb-8 rounded-3xl p-4 md:p-5 border"
+    style="background: var(--surface-color); border-color: var(--border-color);">
+    <div class="flex items-center justify-between mb-4 px-2">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
+                style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
+                <span class="material-icons text-[20px]">backup</span>
+            </div>
+            <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide" data-i18n="ui.settings.backup.title">
+                Backup and Restore</h3>
+        </div>
+        <a href="generate_sample.html" target="_blank" class="text-[0.85rem] font-medium transition-colors hover:opacity-80" style="color: var(--accent-blue, #1e90ff); text-decoration: underline;" data-i18n="ui.settings.backup.generateSample">
+            Generate Sample Data</a>
+    </div>
+    <div class="rounded-2xl p-4 flex flex-col shadow-sm border"
+        style="background: var(--bg-color); border-color: var(--border-color);">
+        <!-- Advanced Backup Settings -->
+        <div style="padding-bottom: 20px; border-bottom: 1px dashed var(--border-color);">
+            <h4
+                style="margin: 0; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-bottom: 16px; color: var(--text-main);">
+                <span data-i18n="ui.settings.backup.advancedTitle">Advanced Backup Settings</span>
+            </h4>
+            <div class="flex flex-col gap-4">
+
+                <!-- Backup Mode -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm text-main font-medium" data-i18n="ui.settings.backup.mode.title">Backup Mode</label>
+                    <div class="flex flex-col md:flex-row gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="backup_mode" value="daily" checked class="accent-indigo-500">
+                            <span class="text-sm text-muted" data-i18n="ui.settings.backup.mode.daily">Daily Backup</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="backup_mode" value="yearly" class="accent-indigo-500">
+                            <span class="text-sm text-muted" data-i18n="ui.settings.backup.mode.yearly">Yearly Backup</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Yearly backup options (hidden by default) -->
+                <div id="backup-yearly-options" class="flex flex-col gap-2 pl-4 border-l-2 border-theme hidden">
+                    <label class="text-sm text-main font-medium"
+                        data-i18n="ui.settings.backup.yearlyRange.title">Yearly Backup Range</label>
+                    <div class="flex flex-col md:flex-row gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="backup_yearly_range" value="all" checked
+                                class="accent-indigo-500">
+                            <span class="text-sm text-muted" data-i18n="ui.settings.backup.yearlyRange.all">All Years</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="backup_yearly_range" value="current" class="accent-indigo-500">
+                            <span class="text-sm text-muted" data-i18n="ui.settings.backup.yearlyRange.current">Current Year Only</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Photo Backup -->
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-sm text-main font-medium" data-i18n="ui.settings.backup.includePhotos.title">
+                            Include Photos</div>
+                        <div class="text-xs text-muted mt-0.5" data-i18n="ui.settings.backup.includePhotos.desc">
+                            Uncheck to reduce file size</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-backup-photos" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="pt-4 mt-2 border-t border-theme">
+                    <label class="block text-xs font-medium text-muted mb-1"
+                        data-i18n="ui.settings.backup.restoreMode.title">Restore Mode</label>
+                    <select id="global-restore-mode"
+                        class="w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 transition-colors border"
+                        style="background: var(--surface-color); border-color: var(--border-color); color: var(--text-main);">
+                        <option value="merge" data-i18n="ui.settings.backup.restoreMode.merge">Merge</option>
+                        <option value="overwrite" data-i18n="ui.settings.backup.restoreMode.overwrite">Overwrite</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Manual File Backup -->
+            <div style="padding: 20px 0; border-bottom: 1px dashed var(--border-color);">
+                <h4
+                    style="margin: 0; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; color: var(--text-main);">
+                    <span data-i18n="ui.settings.backup.localTitle">Local JSON Backup</span>
+                </h4>
+                <p class="text-muted text-[0.85rem] mb-4" data-i18n="ui.settings.backup.localDesc">
+                    Export records to a local JSON file.
+                </p>
+                <p id="backup-record-count"
+                    class="text-muted text-[0.85rem] mb-4 py-2 px-3 bg-black/5 dark:bg-white/5 rounded-lg text-left">
+                </p>
+                <div class="flex gap-2">
+                    <button id="btn-export-json"
+                        class="btn btn-primary flex-1 flex items-center justify-center gap-1.5 py-2 px-4 rounded-lg">
+                        <span class="material-icons text-xl">upload</span>
+                        <span data-i18n="ui.settings.backup.exportBtn">Export Backup</span>
+                    </button>
+                    <label
+                        class="btn btn-outline hover-card flex-1 flex items-center justify-center gap-1.5 py-2 px-4 rounded-lg m-0 cursor-pointer">
+                        <span class="material-icons text-xl">download</span>
+                        <span data-i18n="ui.settings.backup.importBtn">Import Backup</span>
+                        <input type="file" id="input-import-json"
+                            accept=".zip, application/zip, application/x-zip-compressed, .json, application/json"
+                            class="hidden">
+                    </label>
+                </div>
+            </div>
+            <div id="gas-backup-module"></div>
+        </div>
+    </div>
+</div>
+<div class="settings-section mb-8 rounded-3xl p-4 md:p-5 border"
+    style="background: var(--surface-color); border-color: var(--border-color);">
+    <div class="flex items-center justify-between mb-4 px-2">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
+                style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
+                <span class="material-icons text-[20px]">info</span>
+            </div>
+            <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide" data-i18n="ui.settings.about.title">About
+            </h3>
+        </div>
+        <a href="https://ko-fi.com/A0R125NYMU" target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-600 hover:bg-orange-100 dark:bg-orange-500/10 dark:text-orange-400 dark:hover:bg-orange-500/20 transition-colors border border-orange-200/50 dark:border-orange-500/20"
+            style="text-decoration: none;">
+            <span class="material-icons text-[16px]">local_cafe</span>
+            <span class="text-sm font-medium" data-i18n="ui.settings.sponsor">Sponsor</span>
+        </a>
+    </div>
+    <div class="rounded-2xl overflow-hidden shadow-sm border"
+        style="background: var(--bg-color); border-color: var(--border-color);">
+        <!-- License -->
+        <div class="flex items-center justify-between p-4 transition-colors cursor-pointer" id="btn-open-license"
+            style="border-radius: 12px; background: var(--bg-color);">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center border"
+                    style="background: var(--active-bg); color: var(--text-main); border-color: var(--border-color);">
+                    <span class="material-icons text-[18px]">gavel</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-sm font-semibold" style="color: var(--text-main);"
+                        data-i18n="ui.settings.about.licenseTitle">Open Source License</span>
+                    <span class="text-xs" style="color: var(--text-muted);"
+                        data-i18n="ui.settings.about.licenseDesc">View third-party open source packages used in this project</span>
+                </div>
+            </div>
+            <span class="material-icons text-slate-400 transition-transform duration-300"
+                id="icon-license-arrow">expand_more</span>
+        </div>
+        <div id="license-content" class="hidden border-t p-5 md:p-6 flex flex-col gap-6"
+            style="background: var(--surface-color); border-color: var(--border-color);">
+            <!-- Header -->
+            <div class="flex flex-col gap-1 border-b border-theme pb-4">
+                <h3 class="text-xl font-bold text-main m-0">TinyLedger</h3>
+                <p class="text-sm text-muted m-0 mt-1">Copyright © 2023-2026 SSWorld</p>
+            </div>
+
+            <!-- License & Copyright row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- MIT License -->
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-2 mb-3 shrink-0">
+                        <span class="material-icons text-indigo-500 text-[20px]">code</span>
+                        <h4 class="font-bold text-main m-0" data-i18n="ui.settings.about.openSourceLicense">Open Source License (MIT License)</h4>
+                    </div>
+                    <div class="flex flex-1 min-h-0">
+                        <div class="w-1 bg-indigo-500/80 rounded-full shrink-0"></div>
+                        <div class="pl-3 text-[11px] md:text-xs text-muted font-mono leading-relaxed flex-1 whitespace-pre-wrap">Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</div>
+                    </div>
+                </div>
+
+                <!-- Visual Assets -->
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-2 mb-3 shrink-0">
+                        <span class="material-icons text-rose-500 text-[20px]">brush</span>
+                        <h4 class="font-bold text-main m-0" data-i18n="ui.settings.about.visualAssetsCopyright">Visual Assets Copyright Statement</h4>
+                    </div>
+                    <div class="flex flex-1 min-h-0">
+                        <div class="w-1 bg-rose-500/80 rounded-full shrink-0"></div>
+                        <div class="pl-3 text-xs md:text-sm text-muted leading-relaxed flex-1" data-i18n-html="ui.settings.about.visualAssetsDesc">
+                            The underlying source code of this project is released under the MIT License.<br><br>
+                            However, the copyright of all brand identity, UI interface design, icons, and related visual assets included in this software are entirely reserved by the original author, and <strong
+                                class="text-rose-600 dark:text-rose-400 font-semibold">are not</strong> subject to the aforementioned MIT License.<br><br>
+                            Without explicit written authorization from the author, it is strictly forbidden to misappropriate, reproduce, distribute, or use the above visual assets for other projects or commercial purposes.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dependencies -->
+            <div class="mt-2 pt-6 border-t border-theme">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="material-icons text-emerald-500 text-[20px]">extension</span>
+                    <h4 class="font-bold text-main m-0" data-i18n="ui.settings.about.poweredBy">Powered By</h4>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer"
+                        class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all"
+                        style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                        <span class="font-semibold text-sm flex justify-between items-center"
+                            style="color: var(--text-main);">Tailwind CSS <span
+                                class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                        <span class="text-[11px] mt-1" style="color: var(--text-muted);">v3 Standalone ·
+                            MIT</span>
+                    </a>
+                    <a href="https://stuk.github.io/jszip/" target="_blank" rel="noopener noreferrer"
+                        class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all group"
+                        style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                        <span class="font-semibold text-sm flex justify-between items-center"
+                            style="color: var(--text-main);">JSZip <span
+                                class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                        <span class="text-[11px] mt-1" style="color: var(--text-muted);">v3.10.1 · MIT</span>
+                    </a>
+                    <a href="https://fengyuanchen.github.io/cropperjs/" target="_blank" rel="noopener noreferrer"
+                        class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all group"
+                        style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                        <span class="font-semibold text-sm flex justify-between items-center"
+                            style="color: var(--text-main);">Cropper.js <span
+                                class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                        <span class="text-[11px] mt-1" style="color: var(--text-muted);">v1.6.1 · MIT</span>
+                    </a>
+                    <a href="https://fonts.google.com/" target="_blank" rel="noopener noreferrer"
+                        class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all group"
+                        style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                        <span class="font-semibold text-sm flex justify-between items-center"
+                            style="color: var(--text-main);">Google Fonts <span
+                                class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                        <span class="text-[11px] mt-1" style="color: var(--text-muted);">Inter · SIL OFL</span>
+                    </a>
+                    <a href="https://fonts.google.com/icons" target="_blank" rel="noopener noreferrer"
+                        class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all group"
+                        style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                        <span class="font-semibold text-sm flex justify-between items-center"
+                            style="color: var(--text-main);">Material Icons <span
+                                class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                        <span class="text-[11px] mt-1" style="color: var(--text-muted);">Rounded · Apache</span>
+                    </a>
+                    <a href="https://github.com/ruyut/TaiwanCalendar" target="_blank" rel="noopener noreferrer"
+                        class="flex flex-col p-3 rounded-lg border hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:shadow-sm transition-all group"
+                        style="text-decoration: none; background: var(--surface-color); border-color: var(--border-color);">
+                        <span class="font-semibold text-sm flex justify-between items-center"
+                            style="color: var(--text-main);">TaiwanCalendar <span
+                                class="material-icons text-[14px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span></span>
+                        <span class="text-[11px] mt-1" style="color: var(--text-muted);">Holidays JSON · MIT</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Danger Zone Module -->
+<div id="danger-zone-module"></div>
+
+<!-- System Logs Module -->
+<div id="system-logs-module"></div>

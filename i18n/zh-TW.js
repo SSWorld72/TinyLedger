@@ -1,0 +1,722 @@
+export default {
+    categories: {
+        expense: {
+            food: '餐　飲',
+            family: '家庭開銷',
+            medical: '醫療保健',
+            clothing: '服　飾',
+            device: '３Ｃ設備',
+            transport: '交通門票',
+            entertainment: '娛　樂',
+            education: '進修交際',
+            tax: '稅　金',
+            other: '其　他'
+        },
+        income: {
+            salary: '薪　資',
+            investment: '投　資',
+            other: '其　他'
+        }
+    },
+    targets: {
+        self: '自　己',
+        husband: '老　公',
+        wife: '老　婆',
+        child: '小　孩',
+        grandpa: '爺　爺',
+        grandma: '奶　奶',
+        family: '全　家',
+        other: '其　他'
+    },
+    subcategories: {
+        expense: {
+            food: { breakfast: '早餐', lunch: '午餐', dinner: '晚餐', midnight: '宵夜', drink: '飲料', noodle: '泡麵', snack: '餅乾', bread: '麵包' },
+            family: { allowance: '零用錢', water: '水費', electricity: '電費', phone: '電話費', internet: '網路費', furniture: '傢俱', appliance: '家電', cleaning: '清潔品', mortgage: '房貸', mall: '購物廣場' },
+            medical: { insurance: '保險費', medical: '醫藥費', supplement: '保健食品' },
+            clothing: { coat: '外套', clothes: '衣服', pants: '褲子', skirt: '裙子', shoes: '鞋子', hat: '帽子', scarf: '圍巾', gloves: '手套', underwear: '內衣', underpants: '內褲', socks: '襪子', contacts: '隱形眼鏡' },
+            device: { computer: '電腦', phone: '手機', tablet: '平板', console: '遊戲機', accessories: '手機配件' },
+            transport: { train: '火車票', hsr: '高鐵票', mrt: '捷運票', taxi: '計程車', accommodation: '住宿費', ticket: '門票', parking: '停車費', gas: '加油費', maintenance: '車輛保養' },
+            entertainment: { movie: '看電影', pinball: '打彈珠', balloon: '打氣球', claw: '娃娃機', karaoke: '唱歌', gacha: '抽卡', game: '遊戲課金' },
+            education: { books: '書籍', course: '課程', exam: '考試', dine: '聚餐', gift: '送禮', red_envelope: '紅包' },
+            tax: { nhi: '健保費', labor: '勞保費', national: '國民年金', business: '營業稅', license: '牌照稅', income: '綜合所得稅', house: '房屋稅', fuel: '燃料稅', land: '地價稅' },
+            other: { misc: '雜支', lost: '遺失', unclassified: '未分類' }
+        },
+        income: {
+            salary: { base: '本薪', bonus: '績效', festival: '節日', overtime: '加班', parttime: '兼職' },
+            investment: { stock: '股票', dividend: '股息', interest: '存款利息', fund: '基金回報', crypto: '外匯/加密貨幣' },
+            other: { gift: '禮金', refund: '退款', lottery: '發票中獎', subsidy: '補助金' }
+        }
+    },
+
+    logs: {
+        db: {
+            migrationStart: '[資料庫] 開始進行 i18n 分類代碼化遷移...',
+            migrationSuccess: '[資料庫] i18n 分類代碼化遷移完成！',
+            migrationFail: '[資料庫] i18n 分類代碼化遷移失敗: {error}',
+            error: '[資料庫] 錯誤:',
+            saveCategorySuccess: '[資料庫] 儲存類別設定 (saveCategory) 成功',
+            deleteCategorySuccess: '[資料庫] 刪除類別設定 (deleteCategory) 成功',
+            saveTargetSuccess: '[資料庫] 儲存目標設定 (saveTarget) 成功',
+            deleteTargetSuccess: '[資料庫] 刪除目標設定 (deleteTarget) 成功',
+            saveTransactionSuccess: '[資料庫] 儲存記帳紀錄 (saveTransaction) 成功',
+            batchSaveTransactionsSuccess: '[資料庫] 批次儲存記帳紀錄 (batchSaveTransactions) 成功',
+            batchSaveTransactionsFail: '[資料庫] 批次儲存記帳紀錄失敗:',
+            deleteTransactionSuccess: '[資料庫] 刪除記帳紀錄 (deleteTransaction) 成功',
+            deleteTransactionsByFixedIdSuccess: '[資料庫] 批次刪除固定紀錄關聯記帳 (deleteTransactionsByFixedId) 成功',
+            saveFixedRecordSuccess: '[資料庫] 儲存固定紀錄 (saveFixedRecord) 成功',
+            batchSaveFixedRecordsSuccess: '[資料庫] 批次儲存固定紀錄 (batchSaveFixedRecords) 成功',
+            batchSaveFixedRecordsFail: '[資料庫] 批次儲存固定紀錄失敗:',
+            deleteFixedRecordSuccess: '[資料庫] 刪除固定紀錄 (deleteFixedRecord) 成功'
+        },
+        calendar: {
+            holidayLoadError: '無法載入 {year} 年度國定假日資料',
+            loadHolidaysFail: '[萬年曆] 無法載入該年度的國定假日資料...'
+        },
+        settings: {
+            accountUpdateSuccess: '[設定] 更新帳戶設定（saveAccounts）成功',
+            checkAccountDataError: '[設定] 檢查帳戶資料發生錯誤:',
+            backupUpdateSuccess: '[設定] 私有雲設定與同步狀態存檔成功',
+            saveAccountsSuccess: '[設定] 更新帳戶設定（saveAccounts）成功',
+            cloudBackupSuccess: '[設定] 私有雲設定與同步狀態存檔成功',
+            restoreError: '還原過程中發生錯誤：',
+            exportJsonSuccess: '[備份] 手動匯出地端備份成功: ZIP大小 ',
+            fileReadError: '檔案讀取失敗',
+            importJsonSuccess: '[備份] 從地端備份匯入成功: 新增/更新 ',
+            checkAccountError: '[設定] 檢查帳戶資料發生錯誤:',
+            checkCategoryError: '[設定] 檢查類別資料發生錯誤:',
+            checkCategoryBatchError: '[設定] 批次檢查類別資料發生錯誤:',
+            checkTargetError: '[設定] 檢查目標資料發生錯誤:',
+            checkTargetBatchError: '[設定] 批次檢查目標資料發生錯誤:'
+        },
+        record: {
+            festivalReminderError: '[重要節日提醒] 錯誤:',
+            saveFail: '[記帳] 儲存失敗:'
+        },
+        location: {
+            fetchPlaceInfoFail: '[地點搜尋] 無法取得完整的地點資訊:',
+            apiLoadFail: '[地點搜尋] Google Maps API 載入失敗...'
+        },
+        app: {
+            alreadyInitialized: '[主程式] app.js 已被初始化，跳過重複執行...'
+        },
+        htmlLoader: {
+            loadFail: '[HTML 載入器] 載入失敗',
+            fetchFail: '[HTML 載入器] 無法獲取'
+        }
+    },
+    ui: {
+        common: {
+            unnamed: '(未命名)'
+        },
+        footer: {
+            unnamedProject: '未命名專案',
+            githubProject: 'GitHub 專案',
+            releaseDate: '發布日期: {date}'
+        },
+        app: {
+            name: '小小計帳本 (TinyLedger)'
+        },
+        accounts: {
+            defaultName: '預設帳戶',
+            colors: {
+                blue: '藍色', green: '綠色', red: '紅色', yellow: '黃色', purple: '紫色', gray: '灰色'
+            },
+            filterAll: '全部帳戶',
+            filterPartial: '帳戶 ({selected}/{total})',
+            alertNoAccount: '請至少選擇一個帳戶！'
+        },
+        tabs: {
+            rules: '類別 / 規則',
+            details: '類別 / 明細'
+        },
+        nav: {
+            addRecord: '新增交易紀錄',
+            backToList: '返回清單',
+            stats: '統計圖',
+            calendar: '萬年曆',
+            settings: '設定',
+            tabGeneral: '一般紀錄',
+            tabGeneralMobile: '一般<br>紀錄',
+            tabFixed: '固定紀錄',
+            tabFixedMobile: '固定<br>紀錄',
+            category: '類別'
+        },
+        list: {
+            summary: '📊 目前資料：手動紀錄 {txLen} 筆、固定紀錄 {fixLen} 筆',
+            filterAll: '全部',
+            emptyFixed: '目前尚無符合條件的固定紀錄',
+            emptyGeneral: '該月尚無紀錄',
+            pageInfo: '第 {current} 頁，共 {total} 頁',
+            prevPage: '上一頁',
+            nextPage: '下一頁',
+            pageSizePre: '每頁',
+            pageSizePost: '筆'
+        },
+        budget: {
+            status: '本月總預算 {monthlyBudget} · 總支出已用 ${totalExpenseMonth} ({budgetPercent}%)',
+            over: '超支 {amount}',
+            left: '剩餘 {amount}'
+        },
+        record: {
+            typeIncome: '收',
+            typeExpense: '支',
+            ruleYearly: '每年 {month}月{day}日',
+            ruleMonthly: '每月 {day}日',
+            ruleWeekly: '每週{weekday}',
+            weekdays: ['日', '一', '二', '三', '四', '五', '六'],
+            ruleCount: '共 {count} 筆',
+            noDeadline: '無期限',
+            labelTarget: '👤 對象：',
+            labelLocation: '📍 地點：',
+            labelNote: '📝 備註：',
+            labelPhoto: '📷 已附照片',
+            noNote: '無備註',
+            fixedGeneratedTip: '固定紀錄產生的明細，僅供檢視',
+            addTitle: '新增紀錄',
+            copyTitle: '複製紀錄',
+            editFixedTitle: '編輯固定規則',
+            viewFixedTitle: '檢視固定規則明細',
+            addBtn: '新增',
+            copyBtn: '複製',
+            promptLocation: '請先輸入或選擇一個地點',
+            importantFestivalPrefix: '⭐',
+            festivalJoin: '、',
+            attachment: '附件'
+        },
+        batch: {
+            typeNameFixed: '固定規則',
+            typeNameGeneral: '一般紀錄',
+            unnamedRule: '未命名規則',
+            boundPreview: '- [{name}] ({count}筆紀錄, 如 {date})',
+            andOthers: '...及其他',
+            confirmDeleteFixed: '確定要刪除這 {count} 筆固定規則嗎？此動作無法復原。',
+            confirmDeleteFixedBound: '【嚴重警告】您選取的規則共自動產生了 {totalBound} 筆歷史紀錄：\n{boundLines}\n\n刪除規則將會「一併刪除」這些歷史紀錄！\n若只想停止產生未來紀錄，建議取消刪除並修改「結束日期」。\n\n確定要強制刪除並銷毀歷史紀錄嗎？',
+            confirmDeleteType: '確定要刪除這 {count} 筆{typeName}嗎？',
+            btnDeleteSelected: '刪除所選 ({count})'
+        },
+        stats: {
+            tabs: {
+                pie: '圓餅圖',
+                bar: '長條圖',
+                line: '折線圖',
+                annual: '年度圖'
+            },
+            filters: {
+                period: '區間：',
+                week: '週',
+                month: '月',
+                year: '年',
+                all: '全部',
+                custom: '自訂',
+                groupby: '分類：',
+                major: '大類',
+                sub: '小類',
+                payee: '對象',
+                xaxis: 'Ｘ軸：',
+                byDay: '以日',
+                byMonth: '以月',
+                yearLabel: '年份：'
+            },
+            noData: '尚無資料',
+            unclassified: '(未分類)',
+            unspecified: '(未指定)',
+            tableMajor: '大類',
+            tableSub: '小類',
+            tableTarget: '對象',
+            tableAmount: '金額',
+            tablePercent: '佔比',
+            tableTotal: '合計',
+            noAnnualRecord: '{year} 年尚無記錄',
+            annualTotalIncome: '總收入',
+            annualTotalExpense: '總支出',
+            annualBalance: '結餘',
+            monthlyDetails: '各月明細',
+            month: '月份',
+            monthSuffix: '月',
+            year: '年',
+            income: '收入',
+            expense: '支出',
+            top5Expenses: '前五大支出類別'
+        },
+        settings: {
+            dangerZone: {
+                title: '危險區域',
+                desc: '清空本機的所有記帳紀錄、固定紀錄與類別設定。如果您想重新開始，或清除異常資料，可點擊下方按鈕。(此操作無法復原)',
+                button: '強制清空本機所有資料',
+                confirmTitle: '確定要清空嗎？',
+                confirmMsg: '這將會徹底刪除您手機/電腦內所有的本地資料。\n此操作無法復原，請確認您已經備份！',
+                doubleConfirmTitle: '最後確認',
+                doubleConfirmMsg: '真的要清空嗎？\n此操作將永久銷毀本地資料庫。',
+                btnConfirm: '我要清空',
+                btnCancel: '取消',
+                btnDoubleConfirm: '確定銷毀資料',
+                btnDoubleCancel: '再想一下',
+                busyTitle: '正在清空資料',
+                busyDetail: '刪除中...',
+                success: '✅ 本機所有資料已徹底清空！系統將自動重新載入。',
+                error: '清空資料時發生錯誤: {error}'
+            },
+            systemLogs: {
+                title: '系統日誌 (System Logs)',
+                desc: '顯示最近 999 筆主控台日誌，方便排解連線或資料同步問題。',
+                placeholderSearch: '搜尋時間或關鍵字...',
+                titleCopy: '複製過濾後的日誌',
+                btnCopy: '複製',
+                btnExport: '匯出',
+                titleClear: '清空日誌',
+                btnClear: '清除',
+                confirmClear: '確定要清空所有系統日誌嗎？此操作無法復原。',
+                emptyExport: '目前沒有可匯出的日誌',
+                emptyCopy: '目前沒有可複製的日誌',
+                copySuccess: '日誌已複製到剪貼簿',
+                copyError: '複製失敗: {error}'
+            },
+            language: { title: '顯示語言 (Language)' },
+            title: '系統設定',
+            sponsor: '贊助作者',
+            theme: {
+                title: '外觀主題'
+            },
+            backup: {
+                title: '手動與自動備份',
+                manualExport: '匯出 ZIP',
+                manualImport: '匯入備份',
+                importHint: '支援 .zip 或舊版 .json 格式',
+                autoExport: '自動匯出範圍',
+                daily: '每日 (當月資料)',
+                yearly: '依年份 (整年度資料)',
+                yearlyAll: '全部年份',
+                yearlyCurrent: '僅今年',
+                yearlyLast: '去年與今年',
+                includePhotos: '包含照片 (將大幅增加檔案大小)',
+                exporting: '準備下載 ZIP 備份檔...',
+                exportSuccess: '✅ 備份匯出成功！\n共匯出 {txCount} 筆一般紀錄、{fixedCount} 筆固定紀錄\n包含 {catCount} 個大類與 {tgtCount} 個對象設定',
+                exportError: '匯出失敗：{error}',
+                importing: '解析備份檔中...',
+                importError: '還原過程中發生錯誤：{error}',
+                errorJsonParse: '無法解析 JSON，檔案格式錯誤',
+                errorOldFormat: '不支援的舊版備份格式，請使用最新版本的備份檔',
+                errorUnsupportedFile: '不支援的檔案格式，請提供 .zip 或 .json 備份檔',
+                gasUrlConflictPrompt: '⚠️ 發現備份檔中的「專屬備份 GAS 網址」與本機不同！\n\n[備份] {newUrl}\n[本機] {oldUrl}\n\n是否要使用備份的網址「覆蓋」本機網址？\n\n(按「確定」覆蓋，按「取消」保留本機網址)',
+                parsedTitle: '備份檔解析完成',
+                startImport: '開始匯入',
+                cancel: '取消',
+                clearingData: '正在清除本地資料',
+                deletingRecords: '刪除既有紀錄中...',
+                restoringLocal: '正在還原到本地',
+                writingDb: '寫入資料庫中...',
+                progressFormat: {
+                    wait: '等待寫入{type}... ({current} / {total})',
+                    doing: '寫入{type}中... ({current} / {total})',
+                    done: '已寫入{type}... ({current} / {total})',
+                    typeTx: '一般紀錄',
+                    typeFixed: '固定紀錄',
+                    typeCat: '類別設定',
+                    typeTgt: '對象設定'
+                },
+                importComplete: '✅ 匯入完成！\n\n[本次新增]\n{adds}',
+                reloading: '系統即將重新載入...',
+                fullBackup: '完整備份：',
+                fullBackupDesc: '您的所有記帳紀錄、固定紀錄、類別設定、萬年曆偏好設定。',
+                overwriteWarning: '從私有雲端還原時，將會完全覆蓋目前的本地資料',
+                exportingTitle: '正在匯出資料',
+                advancedTitle: '進階備份設定 (套用於本機與雲端)',
+                mode: {
+                    title: '備份模式',
+                    daily: '日常備份 (全部資料，適合覆蓋還原)',
+                    yearly: '年度備份 (按年份拆分，適合合併還原)'
+                },
+                yearlyRange: {
+                    title: '年度備份範圍',
+                    all: '逐年備份 (所有年份)',
+                    current: '只備份最近1年內 (今年)'
+                },
+                includePhotos: {
+                    title: '包含照片資料',
+                    desc: '取消勾選可大幅縮小備份檔體積'
+                },
+                restoreMode: {
+                    title: '資料還原方式 (適用於地端與雲端)',
+                    merge: '合併方式 (保留本機，跳過重複)',
+                    overwrite: '覆蓋方式 (清空本機，完全覆蓋)'
+                },
+                localTitle: '手動檔案備份 (Local ZIP)',
+                localDesc: '將目前的記帳紀錄匯出為 ZIP 備份檔下載至您的裝置中。您可於換機或資料遺失時透過此檔案手動還原。',
+                exportBtn: '匯出備份',
+                importBtn: '匯入備份',
+                generateSample: '產生測試資料'
+            },
+            cloudBackup: {
+                title: '私有雲端同步與備份 (Google Apps Script)',
+                syncing: '雲端同步處理中...',
+                desc: '備份您的所有記帳紀錄、固定紀錄、類別設定、萬年曆偏好設定。\n(*從私有雲端還原時，將會完全覆蓋目前的本地資料)',
+                successSummary: '✅ 備份匯出成功！\n共匯出 {txCount} 筆一般紀錄、{fixedCount} 筆固定紀錄\n包含 {catCount} 個大類與 {tgtCount} 個對象設定',
+                restoreConfirmMerge: '【合併模式】\n確定要將這份資料合併至本機嗎？\n(會保留本機紀錄，並自動跳過重複項目)',
+                restoreConfirmOverwrite: '【覆蓋模式警告】\n確定要使用這份資料完全覆蓋本機所有紀錄嗎？\n(本機現有的紀錄將被全數刪除！)',
+                restoreConfirmEmpty: '【資料還原】\n確定要將這份雲端資料還原至本機嗎？',
+                restoreSummary: '此備份共包含：\n- 一般紀錄：{txCount} 筆\n- 固定紀錄：{fixedCount} 筆\n- 類別設定：{catCount} 個\n- 對象設定：{tgtCount} 個\n',
+                restoreFiltered: '\n(已自動過濾重複)\n',
+                restoreFilteredTx: '- 一般紀錄：{txSkip} 筆\n',
+                restoreFilteredFixed: '- 固定紀錄：{fixedSkip} 筆\n',
+                restoreFilteredCat: '- 類別設定：{catSkip} 個\n',
+                restoreFilteredTgt: '- 對象設定：{tgtSkip} 個\n',
+                restoreCompleteEmpty: '✅ 雲端還原完成！\n\n【新增】\n{adds}\n\n系統即將重新載入...',
+                restoreCompleteOverwrite: '✅ 雲端還原完成 (覆蓋模式)！\n\n【新增】\n{adds}\n\n系統即將重新載入...',
+                restoreCompleteMerge: '✅ 雲端還原完成 (合併模式)！\n\n【新增】\n{adds}',
+                restoreCompleteMergeSkipped: '\n\n(自動略過重複)\n',
+                addedTx: '一般紀錄 {tx} 筆',
+                addedFixed: '固定紀錄 {fixed} 筆',
+                addedCat: '類別設定 {cat} 個',
+                addedTgt: '對象設定 {tgt} 個'
+            },
+            accounts: {
+                title: '帳戶參數設定',
+                add: '新增帳戶',
+                edit: '編輯帳戶',
+                defaultAccountName: '帳戶 A',
+                accountName: '帳戶名稱',
+                accountNamePh: '例如: 現金、信用卡',
+                requireName: '請輸入帳戶名稱',
+                tagColor: '標籤顏色',
+                monthlyBudget: '本月預算',
+                budgetPh: '例如: 25000',
+                save: '儲存',
+                budget: '本月預算: ${amount}',
+                isDefault: '預設',
+                setDefault: '設為預設',
+                deleteConfirmTitle: '確定要刪除這個帳戶嗎？',
+                deleteErrorMsg: '無法刪除！此帳戶內還有：\n',
+                deleteErrorTxs: '- {count} 筆單次交易紀錄 (存在於 {dates})\n',
+                deleteErrorFixed: '- {count} 筆固定支出/收入規則\n',
+                deleteErrorEnd: '\n請先將這些紀錄轉移至其他帳戶，或將其刪除後再試。'
+            },
+            dataManagement: {
+                title: '交易資訊管理',
+                expense: '支出類別',
+                income: '收入類別',
+                target: '記帳對象'
+            },
+            calendar: {
+                title: '萬年曆與顯示設定',
+                remindDaysBefore: '提前幾天提醒：',
+                monthSuffix: '月',
+                daySuffix: '日',
+                month: '{m} 月',
+                day: '{d} 日',
+                monthPh: '月',
+                dayPh: '日',
+                festivalNamePh: '請輸入節日名稱',
+                dayNumPh: '天數 {n}',
+                nationalHoliday: {
+                    title: '國定假日 (僅適用於台灣)',
+                    desc: '顯示人事行政總處公告之國定假日',
+                    lastUpdated: '上次更新：',
+                    neverUpdated: '無',
+                    updateNow: '立即更新',
+                    updating: '下載中...',
+                    updateSuccess: '✅ 國定假日更新完成！\n已下載 {years} 年度共 {count} 筆假日資料。',
+                    updateSuccessLog: '[系統設定] 成功更新國定假日資料 ({years})，共 {count} 筆。',
+                    updateError: '❌ 下載失敗：{error}'
+                },
+                lunarDate: {
+                    title: '農曆日期 (中國傳統)',
+                    desc: '顯示農曆初幾 (如：初一、十五)'
+                },
+                stembranch: {
+                    title: '天干地支 (中國傳統)',
+                    desc: '顯示日干支 (如：甲子、乙丑)'
+                },
+                solarterm: {
+                    title: '二十四節氣 (中國傳統)',
+                    desc: '顯示當日節氣名稱 (如：立春、清明)'
+                },
+                festival: {
+                    title: '節日 (中國傳統)',
+                    desc: '顯示傳統節慶與在地紀念日 (春節、端午等)'
+                },
+                globalFestival: {
+                    title: '節日 (全球)',
+                    desc: '顯示全球性與西方節日 (元旦、聖誕等)'
+                },
+                bazi: {
+                    title: '八字完整排盤 (中國傳統)',
+                    desc: '點選日期時顯示四柱、十神、藏干、納音'
+                },
+                valentine: {
+                    title: '趣味情人節',
+                    desc: '顯示每月 14 號的特色情人節 (包含 2/14 西洋、白色、黑色情人節等)'
+                },
+                importantFestival: {
+                    title: '重要節日提醒設定',
+                    enableTitle: '啟用重要節日提醒',
+                    enableDesc: '在節日到達前，記帳時會自動跳出提示，並在日曆顯示專屬星形標記',
+                    addBtn: '新增節日 (最多 10 組)'
+                }
+            },
+            photoUpload: {
+                title: '照片上傳',
+                enableTitle: '照片拍照上傳功能',
+                enableDesc: '開啟後即可在記帳時附加照片',
+                maxSize: '最大照片尺寸',
+                size320: '320 x 320',
+                size480: '480 x 480 (建議下限)',
+                size640: '640 x 640 (預設)',
+                size800: '800 x 800',
+                size1024: '1024 x 1024',
+                quality: 'JPEG 壓縮品質',
+                qual03: '0.3 (高壓縮)',
+                qual05: '0.5 (建議下限)',
+                qual07: '0.7 (預設)',
+                qual09: '0.9 (低壓縮)'
+            },
+            mapLink: {
+                title: 'Google Map 定位',
+                enableTitle: '清單地點連結地圖',
+                enableDesc: '允許在首頁紀錄清單中直接點擊地點來開啟地圖'
+            },
+            about: {
+                title: '關於',
+                licenseTitle: '開放原始碼與開源協議',
+                licenseDesc: '檢視本專案使用之第三方開源套件',
+                openSourceLicense: '開放原始碼協議 (MIT License)',
+                visualAssetsCopyright: '視覺資產版權聲明',
+                visualAssetsDesc: '本專案的底層原始碼採用 MIT 授權條款釋出。<br><br>但本軟體內包含的所有的品牌識別、UI 介面設計、圖示以及相關視覺資產，版權皆由原作者完全保留，<strong class="text-rose-600 dark:text-rose-400 font-semibold">並不適用</strong> 上述 MIT 授權條款。<br><br>未經作者明確的書面授權，嚴禁挪用、重製、散佈或將上述視覺資產用於其他專案或商業用途。',
+                poweredBy: '技術與開源套件'
+            },
+
+            categories: {
+                title: '管理類別',
+                selectAll: '全選',
+                cascadeUpdateConfirm: '這個動作會將所有使用「{oldValue}」的歷史紀錄\n一併修改為「{newValue}」，確定要繼續嗎？',
+                cascadeUpdateTitle: '連動更新確認',
+                confirmUpdate: '確定修改',
+                cancel: '取消',
+                noData: '沒有資料，請新增',
+                addExpenseMajor: '新增支出大類',
+                addIncomeMajor: '新增收入大類',
+                promptNewMajor: '輸入新大類名稱:',
+                deleteSelected: '🗑️ 刪除所選 ({count})',
+                addMinor: '新增小類',
+                promptNewMinor: '輸入新的小類名稱:',
+                deleteInUseMsg: '無法刪除！此類別已被使用於：\n',
+                deleteInUseTx: '- {count} 筆單次交易紀錄 (發生於 {dates}{more})\n',
+                deleteInUseFixed: '- {count} 筆固定支出/收入規則 ({names}{more})\n',
+                deleteInUseTail: '\n請先將這些紀錄刪除或修改為其他類別後再試。',
+                editSub: '編輯小類',
+                deleteSub: '刪除小類',
+                moreDays: ' 等共 {count} 天',
+                etc: ' 等',
+                deleteConfirm: '確定要刪除這筆類別嗎？此動作無法復原。',
+                expenseTitle: '支出類別管理',
+                incomeTitle: '收入類別管理',
+                deleteBatchConfirm: '確定要刪除這 {majorCount} 個大類、{minorCount} 個小類，共計 {total} 個項目嗎？\n(注意：刪除大類會一併刪除其下的所有小類)',
+                deleteBatchConfirmMinorOnly: '確定要刪除這 {count} 個小類項目嗎？',
+                deleteBatchConfirmMajorOnly: '確定要刪除這 {count} 個大類項目嗎？\n(注意：刪除大類會一併刪除其下的所有小類)',
+                deleteBatchInUseMsg: '無法刪除！以下類別已被使用：\n',
+                deleteBatchInUseMinorItem: '- 小類 [{major} > {sub}] ({details})',
+                deleteBatchInUseMajorItem: '- 大類 [{major}] ({details})',
+                deleteBatchInUseTxDetail: '{count}筆紀錄(如{date})',
+                deleteBatchInUseFixedDetail: '{count}筆規則',
+                deleteBatchInUseMore: '\n...及其他項目',
+                deleteBatchInUseTail: '\n\n請先將這些紀錄刪除或修改為其他類別後再試。'
+            },
+            targets: {
+                title: '記帳對象',
+                addTarget: '新增對象',
+                selectAll: '全選',
+                noData: '沒有資料，請新增',
+                noDataSimple: '沒有資料',
+                deleteSelected: '🗑️ 刪除所選 ({count})',
+                deleteInUseMsg: '無法刪除！此對象已被使用於：\n',
+                deleteInUseTx: '- {count} 筆單次交易紀錄 (發生於 {dates}{more})\n',
+                deleteInUseFixed: '- {count} 筆固定支出/收入規則 ({names}{more})\n',
+                deleteInUseTail: '\n請先將這些紀錄刪除或修改為其他對象後再試。',
+                moreDates: ' 等共 {count} 個日期',
+                deleteConfirm: '確定要刪除這個對象嗎？此動作無法復原。',
+                promptNewTarget: '輸入新對象名稱:',
+                duplicateAlert: '對象名稱「{name}」已存在！',
+                reorderTitle: '請選擇排序號碼 (數字越小越優先)',
+                deleteBatchInUseMsg: '無法刪除！以下對象已被使用：\n',
+                deleteBatchInUseItem: '- 對象 [{name}] ({details})',
+                deleteBatchInUseMore: '\n...及其他項目',
+                deleteBatchInUseTail: '\n\n請先將這些紀錄刪除或修改為其他對象後再試。',
+                deleteBatchConfirm: '確定要刪除這 {count} 個對象嗎？此動作無法復原。',
+                cascadeUpdateTitle: '連動更新確認',
+                cascadeUpdateConfirm: '是否將歷史紀錄中的對象「{oldValue}」一併更新為「{newValue}」？',
+                confirmUpdate: '連動更新'
+            },
+            accountA: '帳戶 A',
+            defaultBadge: '預設',
+            monthlyBudget: '本月預算: ${amount}',
+            setDefault: '設為預設',
+            deleteAccountError: '無法刪除！此帳戶內還有：\n{boundTxs}{boundFixed}\n請先將這些紀錄轉移至其他帳戶，或將其刪除後再試。',
+            deleteAccountErrorTx: '- {count} 筆單次交易紀錄 (存在於 {displayDates}{moreStr})\n',
+            deleteAccountErrorMoreDates: ' 等共 {count} 個日期',
+            deleteAccountErrorFixed: '- {count} 筆固定支出/收入規則\n',
+            confirmDeleteAccount: '確定要刪除這個帳戶嗎？',
+            editAccountError: '編輯帳戶發生錯誤: {error}',
+            addAccountError: '新增帳戶發生錯誤: {error}',
+            modalAddAccount: '新增帳戶',
+            modalEditAccount: '編輯帳戶',
+            modalAccountName: '帳戶名稱',
+            modalLabelColor: '標籤顏色',
+            modalSave: '儲存',
+            festivalMonth: '月',
+            festivalDay: '日',
+            festivalName: '節日名稱 (如: 紀念日)',
+            festivalReminder: '提醒(天前):',
+            festivalDays1: '天數1',
+            festivalDays2: '天數2',
+            festivalDays3: '天數3',
+            downloading: '下載中...',
+            lastUpdated: '上次更新：{date}',
+            lastUpdatedNever: '上次更新：無',
+            holidayUpdateSuccess: '✅ 國定假日更新完成！\n已下載 {years} 年度共 {count} 筆假日資料。',
+            holidayUpdateFail: '❌ 下載失敗：{error}',
+            holidayUpdateFailUnknown: '未知錯誤',
+            btnUpdateHoliday: '更新國定假日',
+            backupSuccess: '✅ 備份匯出成功！\n共匯出 {txCount} 筆一般紀錄、{fixedCount} 筆固定紀錄\n包含 {catCount} 個大類與 {tgtCount} 個對象設定',
+            restoreConfirmWarningLocalEmpty: '【資料還原】\n確定要將這份雲端資料還原至本機嗎？',
+            restoreConfirmWarningOverwrite: '【覆蓋模式警告】\n確定要使用這份資料完全覆蓋本機所有紀錄嗎？\n(本機現有的紀錄將被全數刪除！)',
+            restoreConfirmWarningMerge: '【合併模式】\n確定要將這份資料合併至本機嗎？\n(會保留本機紀錄，並自動跳過重複項目)',
+            restoreConfirmMsg: '此備份共包含：\n- 一般紀錄：{totalTx} 筆\n- 固定紀錄：{totalFixed} 筆\n- 類別設定：{totalCat} 個\n- 對象設定：{totalTgt} 個\n',
+            restoreConfirmMsgFilter: '\n(已自動過濾重複)\n',
+            restoreConfirmMsgFilterTx: '- 一般紀錄：{count} 筆\n',
+            restoreConfirmMsgFilterFixed: '- 固定紀錄：{count} 筆\n',
+            restoreConfirmMsgFilterCat: '- 類別設定：{count} 個\n',
+            restoreConfirmMsgFilterTgt: '- 對象設定：{count} 個\n',
+            inputNamePlaceholder: '例如: 現金、信用卡',
+            inputBudgetPlaceholder: '例如 25000',
+            requireAccountName: '請輸入帳戶名稱'
+        },
+        modals: {
+            accountFilter: {
+                title: '過濾帳戶',
+                selectLabel: '選擇要顯示的帳戶',
+                selectAll: '全選',
+                clearAll: '全不選',
+                confirm: '確認'
+            },
+            crop: {
+                title: '裁切照片',
+                warning: '⚠️ 重複裁切會造成畫質減損',
+                cancel: '取消',
+                confirm: '確認裁切'
+            },
+            photoHelp: {
+                title: '照片品質建議設定',
+                p1: '320x320 與 0.3 品質確實會「非常模糊」。如果您只是想拍一張「這是一杯咖啡」的意象圖，那勉強夠用；但如果您拍的是「實體發票或收據」，上面的文字跟數字絕對會糊在一起看不清楚。',
+                p2: '建議如果要保留收據數字的辨識度，最少要設定在 <strong style="color: var(--primary-color);">480x480 / 品質 0.5</strong> 以上。',
+                estimateTitle: '預估單張照片大小 (存入資料庫後)',
+                li1: '320x320 / 品質 0.3：約 10~20 KB <span style="font-size: 0.8rem;">(極小但極模糊)</span>',
+                li2: '480x480 / 品質 0.5：約 15~30 KB',
+                li3: '640x640 / 品質 0.7：約 40~60 KB <strong style="color: var(--text-main); font-weight: 500;">(預設，清晰度佳)</strong>',
+                li4: '1024x1024 / 品質 0.9：約 150~250 KB <span style="font-size: 0.8rem;">(極清晰但佔用較大)</span>',
+                understand: '了解'
+            },
+            record: {
+                editTitle: '編輯紀錄',
+                tabExpense: '支出',
+                tabIncome: '收入',
+                tabSingle: '單次',
+                tabFixed: '固定',
+                date: '日期',
+                dateRange: '起訖日期',
+                startDate: '開始日期',
+                endDate: '結束日期',
+                amount: '金額',
+                repeatType: '重複方式',
+                ruleYearly: '每年',
+                ruleMonthly: '每月',
+                ruleWeekly: '每週',
+                ruleDetail: '詳細規則',
+                monday: '星期一',
+                tuesday: '星期二',
+                wednesday: '星期三',
+                thursday: '星期四',
+                friday: '星期五',
+                saturday: '星期六',
+                sunday: '星期日',
+                majorCat: '大類',
+                subCat: '小類',
+                target: '對象',
+                location: '地點',
+                locationPlaceholder: '輸入地址或店名',
+                mapTitle: '在地圖中開啟',
+                photo: '照片',
+                photoUpload: '拍照或上傳照片',
+                photoPreview: '預覽圖',
+                photoRecrop: '點擊重新裁切',
+                photoDelete: '刪除照片',
+                note: '備註',
+                notePlaceholder: '備註...',
+                btnDelete: '刪除',
+                btnCopy: '複製',
+                btnSave: '儲存',
+                btnCancel: '取消'
+            }
+        },
+        globalFestivals: {
+            newYear: '元旦',
+            valentinesDay: '西洋情人節',
+            womensDay: '國際婦女節',
+            foolsDay: '愚人節',
+            earthDay: '世界地球日',
+            laborDay: '勞動節',
+            halloween: '萬聖節',
+            christmas: '聖誕節',
+            mothersDay: '母親節',
+            thanksgiving: '感恩節',
+            easter: '復活節',
+            internationalCoopDay: '國際合作節',
+            captiveNationsWeek: '被奴役國家週',
+            diaryValentinesDay: '日記情人節',
+            westernValentinesDay: '西洋情人節',
+            whiteValentinesDay: '白色情人節',
+            blackValentinesDay: '黑色情人節',
+            roseValentinesDay: '玫瑰情人節',
+            kissValentinesDay: '親吻情人節',
+            silverValentinesDay: '銀色情人節',
+            greenValentinesDay: '綠色情人節',
+            photoValentinesDay: '相片情人節',
+            wineValentinesDay: '葡萄酒情人節',
+            movieValentinesDay: '電影情人節',
+            hugValentinesDay: '擁抱情人節'
+        },
+        calendar: {
+            weekdays: ['日', '一', '二', '三', '四', '五', '六'],
+            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            lunarDays: ['初一','初二','初三','初四','初五','初六','初七','初八','初九','初十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十','廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十'],
+            lunarMonths: ['正','二','三','四','五','六','七','八','九','十','十一','十二'],
+            lunarLeap: '閏',
+            lunarMonthSuffix: '月',
+            dayDetail: {
+                txTitle: '當日交易紀錄',
+                closeBtn: '關閉詳細資訊'
+            },
+            recordOf: '的紀錄',
+            noRecord: '當日尚無紀錄',
+            baziDayMaster: '日主',
+            baziYearPillar: '年柱',
+            baziMonthPillar: '月柱',
+            baziDayPillar: '日柱',
+            baziNote: '* 輕量級排盤不含時柱'
+        }
+    },
+    systemLogs: {
+        taiwanHolidays: {
+            localStorageFormatError: '[萬年曆] localStorage 資料格式錯誤 ({func})，已忽略',
+            loadPersistedError: '[萬年曆] 載入本地假日資料失敗 ({func}):',
+            noDataYet: '[萬年曆] 尚未提供 {year} 年度的國定假日資料。',
+            fetchError: '[API] 獲取政府行事曆失敗 ({func} - {year}):',
+            downloadError: '[API] 下載政府行事曆失敗 ({year}):',
+            saveLocalStorageError: '[萬年曆] 儲存 localStorage 失敗:',
+            updateUnexpectedError: '[API] 手動更新國定假日資料時發生未預期錯誤:'
+        },
+        themeSwitcher: {
+            readCustomThemeError: '[外觀主題] 無法讀取自訂主題:',
+            containerNotFound: '[外觀主題] 找不到主題容器: {containerId}',
+            switchedTheme: '[外觀主題] 透過選單切換主題至: {newTheme}'
+        }
+    }
+};

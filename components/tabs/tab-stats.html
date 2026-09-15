@@ -1,0 +1,103 @@
+                    <div>
+                        <div class="sticky-top-panel" style="padding-top: 10px; margin-bottom: 1rem; z-index: 40;">
+                        <!-- Chart Type Tabs -->
+                        <div style="display:flex; gap:6px; margin-bottom:16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; overflow-x: auto; white-space: nowrap;"
+                            class="custom-scrollbar">
+                            <button class="btn btn-outline stats-tab-btn active" data-type="pie"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;" data-i18n="ui.stats.tabs.pie">Pie Chart</button>
+                            <button class="btn btn-outline stats-tab-btn" data-type="bar"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;" data-i18n="ui.stats.tabs.bar">Bar Chart</button>
+                            <button class="btn btn-outline stats-tab-btn" data-type="line"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;" data-i18n="ui.stats.tabs.line">Line Chart</button>
+                            <button class="btn btn-outline stats-tab-btn" data-type="annual"
+                                style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;" data-i18n="ui.stats.tabs.annual">Annual Chart</button>
+                        </div>
+
+                        <!-- Filters container -->
+                        <div id="stats-filters">
+                            <!-- Primary Filters Row: Period & Group By -->
+                            <div id="stats-primary-filters"
+                                style="display:flex; gap:16px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
+                                <!-- Period (except for annual) -->
+                                <div id="stats-filter-period"
+                                    style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+                                    <span
+                                        style="font-size:0.85rem; color:var(--primary-color); font-weight:600; margin-right:2px; display:inline-block; min-width:3.5em; text-align:right;" data-i18n="ui.stats.filters.period">Period:</span>
+                                    <button class="btn btn-outline stats-offset-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-dir="-1">↑</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="week" data-i18n="ui.stats.filters.week">Week</button>
+                                    <button class="btn btn-outline stats-period-btn active"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="month" data-i18n="ui.stats.filters.month">Month</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="year" data-i18n="ui.stats.filters.year">Year</button>
+                                    <button class="btn btn-outline stats-offset-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-dir="1">↓</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="all" data-i18n="ui.stats.filters.all">All</button>
+                                    <button class="btn btn-outline stats-period-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-period="custom" data-i18n="ui.stats.filters.custom">Custom</button>
+
+                                    <!-- Custom Range -->
+                                    <div id="stats-custom-range"
+                                        style="display:none; gap:8px; align-items:center; margin-left:4px;">
+                                        <input type="date" id="stats-start-date" class="form-control"
+                                            style="flex:1; cursor: pointer; font-size:0.85rem;"
+                                            onclick="this.showPicker()">
+                                        <span style="color:var(--text-muted); font-size:0.85rem;">~</span>
+                                        <input type="date" id="stats-end-date" class="form-control"
+                                            style="flex:1; cursor: pointer; font-size:0.85rem;"
+                                            onclick="this.showPicker()">
+                                    </div>
+
+                                    <!-- Range Display -->
+                                    <div id="stats-range-display"
+                                        style="font-size:0.8rem; color:var(--active-text, var(--primary-color)); font-weight:600; background:var(--active-bg, rgba(37,99,235,0.1)); padding:2px 8px; border-radius:4px; margin-left:4px;">
+                                    </div>
+                                </div>
+                                <!-- Group By (except for annual) -->
+                                <div id="stats-filter-groupby" style="display:flex; gap:6px; align-items:center;">
+                                    <span
+                                        style="font-size:0.85rem; color:var(--primary-color); font-weight:600; margin-right:2px; display:inline-block; min-width:3.5em; text-align:right;" data-i18n="ui.stats.filters.groupby">Group by:</span>
+                                    <button class="btn btn-outline stats-group-btn active"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-groupby="major" data-i18n="ui.stats.filters.major">Major</button>
+                                    <button class="btn btn-outline stats-group-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-groupby="sub" data-i18n="ui.stats.filters.sub">Minor</button>
+                                    <button class="btn btn-outline stats-group-btn"
+                                        style="padding:4px 12px; font-size:0.85rem;" data-groupby="payee" data-i18n="ui.stats.filters.payee">Payee</button>
+                                    <div style="display:flex; gap:4px; margin-left:auto; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; padding: 2px;">
+                                        <button class="btn btn-primary stats-type-btn active"
+                                            style="padding:4px 12px; font-size:0.85rem; border:none; box-shadow:none; border-radius:4px;" data-type="expense" data-i18n="ui.stats.expense">Expense</button>
+                                        <button class="btn btn-outline stats-type-btn"
+                                            style="padding:4px 12px; font-size:0.85rem; border:none; box-shadow:none; border-radius:4px;" data-type="income" data-i18n="ui.stats.income">Income</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <!-- X Axis Granularity (only for bar/line) -->
+                            <div id="stats-filter-x-axis"
+                                style="display:none; gap:6px; margin-bottom:16px; align-items:center;">
+                                <span style="font-size:0.85rem; color:var(--primary-color); font-weight:600; margin-right:2px; display:inline-block; min-width:3.5em; text-align:right;" data-i18n="ui.stats.filters.xaxis">X Axis:</span>
+                                <button class="btn btn-outline stats-x-btn active"
+                                    style="padding:4px 12px; font-size:0.85rem;" data-x="day" data-i18n="ui.stats.filters.byDay">By Day</button>
+                                <button class="btn btn-outline stats-x-btn" style="padding:4px 12px; font-size:0.85rem;"
+                                    data-x="month" data-i18n="ui.stats.filters.byMonth">By Month</button>
+                            </div>
+
+                            <!-- Year Select (only for annual) -->
+                            <div id="stats-filter-year"
+                                style="display:none; gap:8px; margin-bottom:16px; align-items:center;">
+                                <span style="font-size:0.8rem; color:var(--text-muted);" data-i18n="ui.stats.filters.yearLabel">Year:</span>
+                                <select id="stats-annual-year" class="form-control"
+                                    style="width: 120px; font-size:0.85rem; padding: 4px 8px;"></select>
+                            </div>
+                        </div>
+                        </div>
+
+                        <!-- Views Content -->
+                        <div id="stats-view-content" style="padding: 1rem 4px 0 4px;">
+                            <!-- Will be populated by JS -->
+                        </div>
+                    </div>

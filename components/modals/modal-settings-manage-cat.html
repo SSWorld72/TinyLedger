@@ -1,0 +1,37 @@
+            <!-- Settings Manage Category Modal -->
+            <div class="modal-overlay" id="settings-manage-cat-modal">
+                <div class="modal-container">
+                    <div class="modal-header"
+                        style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="btn btn-outline" id="btn-back-settings-cat"
+                                style="display: none; padding: 4px 8px; font-size: 0.9rem;">
+                                <span class="material-icons" style="font-size: 16px;">arrow_back</span>
+                            </button>
+                            <h2 id="settings-cat-modal-title" style="margin: 0;" data-i18n="ui.settings.categories.title">Categories</h2>
+                        </div>
+                        <button class="btn-close" id="btn-close-settings-cat">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="settings-cat-list-container">
+                            <!-- Categories will be rendered here -->
+                        </div>
+                        <button class="btn btn-outline" id="btn-settings-add-cat"
+                            style="width: 100%; margin-top: 12px;">
+                            <span class="material-icons"
+                                style="font-size:18px; vertical-align:middle; margin-right:4px;">add</span><span id="txt-settings-add-cat"></span>
+                        </button>
+                    </div>
+                    <div class="modal-footer" style="display: flex; align-items: center; gap: 16px;">
+                        <label
+                            style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-right: auto; font-size: 0.9rem;">
+                            <input type="checkbox" id="cb-select-all-cats" autocomplete="off">
+                            <span data-i18n="ui.settings.categories.selectAll">Select All</span>
+                        </label>
+                        <button class="btn btn-outline" id="btn-delete-selected-cats"
+                            style="color: var(--accent-red); border-color: var(--accent-red); display: none;" data-i18n="ui.settings.categories.deleteSelected">🗑️
+                            Delete Selected</button>
+                    </div>
+                </div>
+            </div>

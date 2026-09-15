@@ -1,0 +1,51 @@
+                        <div class="modal-header" style="padding: 4px 0.5rem 8px 0.5rem; border-bottom: none;">
+                            <div style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+                                <select id="calendar-year-select" class="form-input"
+                                    style="width: auto; padding: 4px 8px; font-size: 0.85rem; font-weight: 500; background: var(--bg-color); color: var(--text-main); border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;"></select>
+                                <select id="calendar-month-select" class="form-input"
+                                    style="width: auto; padding: 4px 8px; font-size: 0.85rem; font-weight: 500; background: var(--bg-color); color: var(--text-main); border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;"></select>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <button class="icon-btn" id="btn-cal-prev"><span
+                                        class="material-icons">chevron_left</span></button>
+                                <button class="icon-btn" id="btn-cal-today"><span
+                                        class="material-icons">today</span></button>
+                                <button class="icon-btn" id="btn-cal-next"><span
+                                        class="material-icons">chevron_right</span></button>
+                            </div>
+                        </div>
+                        <div class="modal-body" style="padding: 0;">
+                            <div class="calendar-grid-header">
+                                <div data-i18n="ui.calendar.weekdays.0">Sun</div>
+                                <div data-i18n="ui.calendar.weekdays.1">Mon</div>
+                                <div data-i18n="ui.calendar.weekdays.2">Tue</div>
+                                <div data-i18n="ui.calendar.weekdays.3">Wed</div>
+                                <div data-i18n="ui.calendar.weekdays.4">Thu</div>
+                                <div data-i18n="ui.calendar.weekdays.5">Fri</div>
+                                <div data-i18n="ui.calendar.weekdays.6">Sat</div>
+                            </div>
+                            <div class="calendar-grid" id="calendar-grid">
+                                <!-- Days will be rendered here -->
+                            </div>
+
+                            <div id="calendar-day-detail" class="calendar-day-detail" style="display: none;">
+                                <div style="flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 0;">
+                                    <div class="day-detail-header">
+                                        <h3 id="day-detail-date"></h3>
+                                        <button class="btn-close" id="btn-close-day-detail-top">&times;</button>
+                                    </div>
+                                    <div class="day-detail-bazi" id="day-detail-bazi">
+                                        <!-- Bazi blocks -->
+                                    </div>
+                                    <h4 style="margin-top: 16px; margin-bottom: 8px;" data-i18n="ui.calendar.dayDetail.txTitle">Transactions</h4>
+                                    <div id="day-detail-records" class="day-detail-records" style="margin-bottom: 16px;">
+                                        <!-- Records will be rendered here -->
+                                    </div>
+                                </div>
+                                <div
+                                    style="padding: 12px 16px; border-top: 1px solid var(--border-color); flex-shrink: 0; background-color: var(--surface-color);">
+                                    <button id="btn-close-day-detail" class="btn btn-secondary"
+                                        style="width: 100%; padding: 12px; font-weight: bold;" data-i18n="ui.calendar.dayDetail.closeBtn">Close Details</button>
+                                </div>
+                            </div>
+                        </div>

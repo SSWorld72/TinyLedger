@@ -1,0 +1,33 @@
+    <!-- Suggestion Modal (hidden) -->
+    <div id="modal-photo-settings-help" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99999; align-items: center; justify-content: center;" onclick="if(event.target === this) this.style.display='none'">
+        <div style="max-width: 520px; width: 92%; background: var(--bg-color); border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border-color); background: var(--surface-color);">
+                <h2 style="margin: 0; font-size: 1.15rem; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                    <span class="material-icons" style="color: var(--primary-color);">lightbulb</span>
+                    <span data-i18n="ui.modals.photoHelp.title">Photo Quality Settings Recommendation</span>
+                </h2>
+                <button onclick="document.getElementById('modal-photo-settings-help').style.display='none'" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+            </div>
+            <div style="padding: 20px; font-size: 0.9rem; line-height: 1.7; color: var(--text-main); overflow-y: auto; max-height: 70vh;">
+                <p style="margin: 0 0 12px 0;" data-i18n="ui.modals.photoHelp.p1">
+                    A 320x320 size with 0.3 quality will indeed be "very blurry". If you just want to take an abstract picture like "this is a cup of coffee," it might barely suffice. However, if you are capturing a "physical invoice or receipt," the text and numbers on it will definitely blur together and become illegible.
+                </p>
+                <p style="margin: 0 0 16px 0;" data-i18n-html="ui.modals.photoHelp.p2">
+                    To maintain the legibility of receipt numbers, we recommend setting it to at least <strong style="color: var(--primary-color);">480x480 / Quality 0.5</strong>.
+                </p>
+
+                <div style="margin-bottom: 8px;">
+                    <strong style="display: inline-block; background: var(--active-bg); color: var(--primary-color); padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 8px;" data-i18n="ui.modals.photoHelp.estimateTitle">Estimated Single Photo Size (After Saving)</strong>
+                    <ul style="margin: 4px 0 0 0; padding-left: 20px; color: var(--text-muted);">
+                        <li style="margin-bottom: 4px;" data-i18n-html="ui.modals.photoHelp.li1">320x320 / Quality 0.3: Approx. 10~20 KB <span style="font-size: 0.8rem;">(Very small but extremely blurry)</span></li>
+                        <li style="margin-bottom: 4px;" data-i18n="ui.modals.photoHelp.li2">480x480 / Quality 0.5: Approx. 15~30 KB</li>
+                        <li style="margin-bottom: 4px;" data-i18n-html="ui.modals.photoHelp.li3">640x640 / Quality 0.7: Approx. 40~60 KB <strong style="color: var(--text-main); font-weight: 500;">(Default, good clarity)</strong></li>
+                        <li style="margin-bottom: 4px;" data-i18n-html="ui.modals.photoHelp.li4">1024x1024 / Quality 0.9: Approx. 150~250 KB <span style="font-size: 0.8rem;">(Extremely clear but larger size)</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; padding: 12px 20px; border-top: 1px solid var(--border-color); background: var(--surface-color);">
+                <button onclick="document.getElementById('modal-photo-settings-help').style.display='none'" style="padding: 8px 20px; font-weight: 600; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: filter 0.2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'" data-i18n="ui.modals.photoHelp.understand">Understood</button>
+            </div>
+        </div>
+    </div>

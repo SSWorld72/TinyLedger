@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>產生測試資料 / Generate Sample Data (TinyLedger)</title>
+    <script src="libs/jszip/jszip.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #f8fafc;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #0f172a;
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .lang-switch {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .lang-switch select {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            font-family: inherit;
+        }
+
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        #status {
+            margin-top: 1rem;
+            color: #10b981;
+            font-weight: 500;
+            display: none;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            font-size: 0.875rem;
+            color: #475569;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            padding: 0.6rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .range-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .range-group input {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="lang-switch">
+            <select id="lang-select">
+                <option value="zh-TW">繁體中文</option>
+                <option value="en-US">English</option>
+            </select>
+        </div>
+
+        <h1 id="ui-title">產生測試資料</h1>
+
+        <div class="form-group">
+            <label for="startDate" id="ui-start">開始日期</label>
+            <input type="date" id="startDate" value="2020-01-01">
+        </div>
+
+        <div class="form-group">
+            <label for="endDate" id="ui-end">結束日期</label>
+            <input type="date" id="endDate" value="2026-12-31">
+        </div>
+
+        <div class="form-group">
+            <label id="ui-range">每月隨機產生筆數區間</label>
+            <div class="range-group">
+                <input type="number" id="minRecords" value="100" min="1" placeholder="最少">
+                <span style="color: #94a3b8;">~</span>
+                <input type="number" id="maxRecords" value="300" min="1" placeholder="最多">
+            </div>
+        </div>
+
+        <div class="form-group" style="flex-direction: row; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+            <input type="checkbox" id="useMultiAccount" style="width: auto;">
+            <label for="useMultiAccount" id="ui-multi-acc" style="margin-bottom: 0; cursor: pointer;">產生多帳戶測試資料
+                (現金、銀行、信用卡)</label>
+        </div>
+
+        <div class="form-group">
+            <label id="ui-format">匯出格式</label>
+            <select id="exportFormat">
+                <option value="zip" id="opt-zip">ZIP 格式 (推薦：與正式系統預設備份格式相同)</option>
+                <option value="json" id="opt-json">純 JSON 格式 (舊版相容與進階編輯用)</option>
+            </select>
+        </div>
+
+        <button id="btn-generate">產生並下載 sample.zip</button>
+        <div id="status">✅ 產生完成！</div>
+    </div>
+
+    <script>
+        const i18n = {
+            'zh-TW': {
+                title: '產生測試資料',
+                start: '開始日期',
+                end: '結束日期',
+                range: '每月隨機產生筆數區間',
+                minPH: '最少',
+                maxPH: '最多',
+                format: '匯出格式',
+                optZip: 'ZIP 格式 (推薦：與正式系統預設備份格式相同)',
+                optJson: '純 JSON 格式 (舊版相容與進階編輯用)',
+                btnGenZip: '產生並下載 sample.zip',
+                btnGenJson: '產生並下載 sample.json',
+                btnLoad: '產生中...',
+                btnDone: '下載完成！',
+                status: '✅ 產生完成！',
+                multiAcc: '產生多帳戶測試資料 (現金、銀行、信用卡)',
+                accCash: '現金',
+                accBank: '銀行帳戶',
+                accCredit: '信用卡',
+                fixedNote1: '中華電信光世代',
+                fixedNote2: '公司發薪',
+                randNote: '系統自動產生測試資料',
+                subs: {
+                    food: ['早餐', '午餐', '晚餐', '宵夜', '飲料', '泡麵', '餅乾', '麵包'],
+                    family: ['零用錢', '水費', '電費', '電話費', '網路費', '傢俱', '家電', '清潔品', '房貸', '購物廣場'],
+                    medical: ['保險費', '醫藥費', '保健食品'],
+                    clothing: ['外套', '衣服', '褲子', '裙子', '鞋子', '帽子', '圍巾', '手套', '內衣', '內褲', '襪子', '隱形眼鏡'],
+                    device: ['電腦', '手機', '平板', '遊戲機', '手機配件'],
+                    transport: ['火車票', '高鐵票', '捷運票', '計程車', '住宿費', '門票', '停車費', '加油費', '車輛保養'],
+                    entertainment: ['看電影', '打彈珠', '打氣球', '娃娃機', '唱歌', '抽卡', '遊戲課金'],
+                    education: ['書籍', '課程', '考試', '聚餐', '送禮', '紅包'],
+                    tax: ['健保費', '勞保費', '國民年金', '營業稅', '牌照稅', '綜合所得稅', '房屋稅', '燃料稅', '地價稅'],
+                    otherExp: ['雜支', '遺失', '未分類'],
+                    salary: ['本薪', '績效', '節日', '加班', '兼職'],
+                    investment: ['股票', '股息', '存款利息', '基金回報', '外匯/加密貨幣'],
+                    otherInc: ['禮金', '退款', '發票中獎', '補助金']
+                }
+            },
+            'en-US': {
+                title: 'Generate Sample Data',
+                start: 'Start Date',
+                end: 'End Date',
+                range: 'Random Records Per Month',
+                minPH: 'Min',
+                maxPH: 'Max',
+                format: 'Export Format',
+                optZip: 'ZIP Format (Recommended: Matches system default)',
+                optJson: 'Pure JSON Format (Legacy & Advanced Editing)',
+                btnGenZip: 'Generate & Download sample.zip',
+                btnGenJson: 'Generate & Download sample.json',
+                btnLoad: 'Generating...',
+                btnDone: 'Download Complete!',
+                status: '✅ Generation complete!',
+                multiAcc: 'Generate Multi-Account Data (Cash, Bank, Credit Card)',
+                accCash: 'Cash',
+                accBank: 'Bank Account',
+                accCredit: 'Credit Card',
+                fixedNote1: 'Internet Bill',
+                fixedNote2: 'Monthly Salary',
+                randNote: 'System generated sample data',
+                subs: {
+                    food: ['Breakfast', 'Lunch', 'Dinner', 'Midnight Snack', 'Drink', 'Noodles', 'Snack', 'Bread'],
+                    family: ['Allowance', 'Water', 'Electricity', 'Phone', 'Internet', 'Furniture', 'Appliance', 'Cleaning', 'Mortgage', 'Mall'],
+                    medical: ['Insurance', 'Medical', 'Supplement'],
+                    clothing: ['Coat', 'Clothes', 'Pants', 'Skirt', 'Shoes', 'Hat', 'Scarf', 'Gloves', 'Underwear', 'Socks', 'Contacts'],
+                    device: ['Computer', 'Phone', 'Tablet', 'Console', 'Accessories'],
+                    transport: ['Train', 'HSR', 'MRT', 'Taxi', 'Hotel', 'Ticket', 'Parking', 'Gas', 'Maintenance'],
+                    entertainment: ['Movie', 'Arcade', 'Balloon', 'Claw Machine', 'Karaoke', 'Gacha', 'Games'],
+                    education: ['Books', 'Course', 'Exam', 'Dining', 'Gift', 'Red Envelope'],
+                    tax: ['Health Ins', 'Labor Ins', 'National Pension', 'Business Tax', 'License Tax', 'Income Tax', 'House Tax', 'Fuel Tax', 'Land Tax'],
+                    otherExp: ['Misc', 'Lost', 'Uncategorized'],
+                    salary: ['Base Salary', 'Performance', 'Holiday', 'Overtime', 'Part-time'],
+                    investment: ['Stocks', 'Dividends', 'Interest', 'Fund', 'Crypto'],
+                    otherInc: ['Cash Gift', 'Refund', 'Lottery', 'Subsidy']
+                }
+            }
+        };
+
+        let currentLang = 'zh-TW';
+
+        const updateBtnText = () => {
+            const format = document.getElementById('exportFormat').value;
+            const t = i18n[currentLang];
+            document.getElementById('btn-generate').textContent = format === 'zip' ? t.btnGenZip : t.btnGenJson;
+        };
+
+        document.getElementById('lang-select').addEventListener('change', (e) => {
+            currentLang = e.target.value;
+            const t = i18n[currentLang];
+            document.getElementById('ui-title').textContent = t.title;
+            document.getElementById('ui-start').textContent = t.start;
+            document.getElementById('ui-end').textContent = t.end;
+            document.getElementById('ui-range').textContent = t.range;
+            document.getElementById('ui-multi-acc').textContent = t.multiAcc;
+            document.getElementById('ui-format').textContent = t.format;
+            document.getElementById('opt-zip').textContent = t.optZip;
+            document.getElementById('opt-json').textContent = t.optJson;
+            document.getElementById('minRecords').placeholder = t.minPH;
+            document.getElementById('maxRecords').placeholder = t.maxPH;
+            document.getElementById('status').textContent = t.status;
+            document.documentElement.lang = currentLang;
+            updateBtnText();
+        });
+
+        document.getElementById('exportFormat').addEventListener('change', updateBtnText);
+
+        // Initialize dates to current year
+        const currentYear = new Date().getFullYear();
+        document.getElementById('startDate').value = `${currentYear}-01-01`;
+        document.getElementById('endDate').value = `${currentYear}-12-31`;
+        document.getElementById('btn-generate').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-generate');
+            const status = document.getElementById('status');
+            const t = i18n[currentLang];
+            btn.disabled = true;
+            btn.textContent = t.btnLoad;
+            status.style.display = 'none';
+
+            try {
+                const startDateStr = document.getElementById('startDate').value || '2020-01-01';
+                const endDateStr = document.getElementById('endDate').value || '2026-12-31';
+                const minRec = parseInt(document.getElementById('minRecords').value, 10) || 50;
+                const maxRec = parseInt(document.getElementById('maxRecords').value, 10) || 65;
+
+                const startDate = new Date(startDateStr);
+                const endDate = new Date(endDateStr);
+                const records = [];
+                const fixedRecords = [];
+                let currentId = 1600000000000;
+
+                const selectedLang = document.getElementById('lang-select').value;
+
+                const sampleLocations = selectedLang === 'zh-TW'
+                    ? ['台北車站', '全聯福利中心', '7-ELEVEN', '鼎泰豐', '好市多 Costco', '家樂福', '麥當勞', '星巴克', '新光三越', '松山機場']
+                    : ['Main Station', 'Supermarket', '7-ELEVEN', 'Restaurant', 'Costco', 'Department Store', 'McDonald\'s', 'Starbucks', 'Shopping Mall', 'Airport'];
+
+                const sampleNotes = selectedLang === 'zh-TW'
+                    ? ['買了些日用品', '晚餐聚餐', '這個月有點花太多', '特價買到的', '忘記帶會員卡', '好貴...', '慶祝一下', '發薪水了！', '幫朋友先代墊', '網購到貨']
+                    : ['Bought daily necessities', 'Dinner gathering', 'Spent a bit too much this month', 'Bought on sale', 'Forgot membership card', 'Quite expensive...', 'Celebrating!', 'Payday!', 'Paid for a friend', 'Online order arrived'];
+                const samplePhotos = [
+                    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0ODAiIGhlaWdodD0iMzIwIj48cmVjdCB3aWR0aD0iNDgwIiBoZWlnaHQ9IjMyMCIgZmlsbD0iI0ZGNkI2QiIvPjx0ZXh0IHg9IjI0MCIgeT0iMTYwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UmVjZWlwdCBBPC90ZXh0Pjwvc3ZnPg==',
+                    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0ODAiIGhlaWdodD0iMzIwIj48cmVjdCB3aWR0aD0iNDgwIiBoZWlnaHQ9IjMyMCIgZmlsbD0iIzRFQ0RDNCIvPjx0ZXh0IHg9IjI0MCIgeT0iMTYwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UmVjZWlwdCBCPC90ZXh0Pjwvc3ZnPg==',
+                    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0ODAiIGhlaWdodD0iMzIwIj48cmVjdCB3aWR0aD0iNDgwIiBoZWlnaHQ9IjMyMCIgZmlsbD0iIzQ1QjdEMSIvPjx0ZXh0IHg9IjI0MCIgeT0iMTYwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UmVjZWlwdCBDPC90ZXh0Pjwvc3ZnPg==',
+                    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0ODAiIGhlaWdodD0iMzIwIj48cmVjdCB3aWR0aD0iNDgwIiBoZWlnaHQ9IjMyMCIgZmlsbD0iIzk2Q0VCNCIvPjx0ZXh0IHg9IjI0MCIgeT0iMTYwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UmVjZWlwdCBEPC90ZXh0Pjwvc3ZnPg==',
+                    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0ODAiIGhlaWdodD0iMzIwIj48cmVjdCB3aWR0aD0iNDgwIiBoZWlnaHQ9IjMyMCIgZmlsbD0iI0Y3RDA2QiIvPjx0ZXh0IHg9IjI0MCIgeT0iMTYwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UmVjZWlwdCBFPC90ZXh0Pjwvc3ZnPg=='
+                ];
+
+                const defaultExpenseCategories = [
+                    { catId: 'cat_expense_food', i18nKey: 'categories.expense.food', type: 'expense', order: 1, sub: t.subs.food },
+                    { catId: 'cat_expense_family', i18nKey: 'categories.expense.family', type: 'expense', order: 2, sub: t.subs.family },
+                    { catId: 'cat_expense_medical', i18nKey: 'categories.expense.medical', type: 'expense', order: 3, sub: t.subs.medical },
+                    { catId: 'cat_expense_clothing', i18nKey: 'categories.expense.clothing', type: 'expense', order: 4, sub: t.subs.clothing },
+                    { catId: 'cat_expense_device', i18nKey: 'categories.expense.device', type: 'expense', order: 5, sub: t.subs.device },
+                    { catId: 'cat_expense_transport', i18nKey: 'categories.expense.transport', type: 'expense', order: 6, sub: t.subs.transport },
+                    { catId: 'cat_expense_entertainment', i18nKey: 'categories.expense.entertainment', type: 'expense', order: 7, sub: t.subs.entertainment },
+                    { catId: 'cat_expense_education', i18nKey: 'categories.expense.education', type: 'expense', order: 8, sub: t.subs.education },
+                    { catId: 'cat_expense_tax', i18nKey: 'categories.expense.tax', type: 'expense', order: 9, sub: t.subs.tax },
+                    { catId: 'cat_expense_other', i18nKey: 'categories.expense.other', type: 'expense', order: 10, sub: t.subs.otherExp }
+                ];
+
+                const defaultIncomeCategories = [
+                    { catId: 'cat_income_salary', i18nKey: 'categories.income.salary', type: 'income', order: 1, sub: t.subs.salary },
+                    { catId: 'cat_income_investment', i18nKey: 'categories.income.investment', type: 'income', order: 2, sub: t.subs.investment },
+                    { catId: 'cat_income_other', i18nKey: 'categories.income.other', type: 'income', order: 3, sub: t.subs.otherInc }
+                ];
+
+                const defaultTargets = [
+                    { tgtId: 'tgt_self', i18nKey: 'targets.self', order: 1 },
+                    { tgtId: 'tgt_husband', i18nKey: 'targets.husband', order: 2 },
+                    { tgtId: 'tgt_wife', i18nKey: 'targets.wife', order: 3 },
+                    { tgtId: 'tgt_child', i18nKey: 'targets.child', order: 4 },
+                    { tgtId: 'tgt_grandpa', i18nKey: 'targets.grandpa', order: 5 },
+                    { tgtId: 'tgt_grandma', i18nKey: 'targets.grandma', order: 6 },
+                    { tgtId: 'tgt_family', i18nKey: 'targets.family', order: 7 },
+                    { tgtId: 'tgt_other', i18nKey: 'targets.other', order: 8 }
+                ];
+
+                const allCategories = [...defaultExpenseCategories, ...defaultIncomeCategories];
+
+                const useMultiAccount = document.getElementById('useMultiAccount').checked;
+                let generatedAccounts = [];
+                let accountIds = [];
+
+                if (useMultiAccount) {
+                    generatedAccounts = [
+                        { id: 'account_cash', name: t.accCash, color: 'green', isDefault: true },
+                        { id: 'account_bank', name: t.accBank, color: 'blue', isDefault: false },
+                        { id: 'account_credit', name: t.accCredit, color: 'purple', isDefault: false }
+                    ];
+                } else {
+                    generatedAccounts = [
+                        { id: 'account_default', name: '預設帳戶 / Default Account', color: 'blue', isDefault: true }
+                    ];
+                }
+                accountIds = generatedAccounts.map(a => a.id);
+                const getRandomAccount = () => accountIds[Math.floor(Math.random() * accountIds.length)];
+
+                fixedRecords.push({
+                    id: (currentId++).toString(),
+                    type: "expense",
+                    majorCategory: "cat_expense_family",
+                    subCategory: t.subs.family[4],
+                    amount: 5000,
+                    accountId: accountIds[0],
+                    payee: "tgt_family",
+                    rule: "monthly",
+                    ruleDetail: "15",
+                    startDate: "2020-01-01",
+                    endDate: "2026-12-31",
+                    note: t.fixedNote1,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+
+                fixedRecords.push({
+                    id: (currentId++).toString(),
+                    type: "income",
+                    majorCategory: "cat_income_salary",
+                    subCategory: t.subs.salary[0],
+                    amount: 66666,
+                    accountId: accountIds[0],
+                    payee: "tgt_self",
+                    rule: "monthly",
+                    ruleDetail: "5",
+                    startDate: "2020-01-01",
+                    endDate: "2026-12-31",
+                    note: t.fixedNote2,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+
+                let d = new Date(startDate);
+                while (d <= endDate) {
+                    const year = d.getFullYear();
+                    const month = d.getMonth();
+                    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                    const safeMin = Math.min(minRec, maxRec);
+                    const safeMax = Math.max(minRec, maxRec);
+                    const recordsThisMonth = Math.floor(Math.random() * (safeMax - safeMin + 1)) + safeMin;
+
+                    for (let i = 0; i < recordsThisMonth; i++) {
+                        const day = Math.floor(Math.random() * daysInMonth) + 1;
+                        const recordDate = new Date(year, month, day);
+                        if (recordDate > endDate) continue;
+
+                        const isIncome = Math.random() > 0.85;
+                        const validCategories = isIncome ? defaultIncomeCategories : defaultExpenseCategories;
+
+                        const cat = validCategories[Math.floor(Math.random() * validCategories.length)];
+                        const subCat = cat.sub.length > 0 ? cat.sub[Math.floor(Math.random() * cat.sub.length)] : '';
+                        const tgt = defaultTargets[Math.floor(Math.random() * defaultTargets.length)].tgtId;
+
+                        let amount = 0;
+                        if (isIncome) {
+                            amount = Math.floor(Math.random() * 30000) + 1000;
+                        } else {
+                            amount = Math.floor(Math.random() * 900) + 50;
+                        }
+
+                        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const isoString = recordDate.toISOString();
+
+                        const hasLocation = Math.random() < 0.2;
+                        const hasNote = Math.random() < 0.3;
+                        const hasPhoto = Math.random() < 0.1;
+
+                        records.push({
+                            id: (currentId++).toString(),
+                            date: dateString,
+                            type: cat.type,
+                            amount: amount,
+                            accountId: getRandomAccount(),
+                            majorCategory: cat.catId,
+                            subCategory: subCat,
+                            payee: tgt,
+                            note: hasNote ? sampleNotes[Math.floor(Math.random() * sampleNotes.length)] : '',
+                            location: hasLocation ? sampleLocations[Math.floor(Math.random() * sampleLocations.length)] : '',
+                            attachment: hasPhoto ? samplePhotos[Math.floor(Math.random() * samplePhotos.length)] : '',
+                            createdAt: isoString,
+                            updatedAt: isoString
+                        });
+                    }
+
+                    d.setMonth(d.getMonth() + 1);
+                    d.setDate(1);
+                }
+
+                records.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                const appData = {
+                    config: {
+                        appName: 'TinyLedger',
+                        overwrite: true,
+                        versions: 5
+                    },
+                    data: {
+                        transactions: records,
+                        fixedRecords: fixedRecords,
+                        categories: allCategories.map((c, i) => {
+                            const majorPart = c.catId.split('_')[2];
+                            return { id: (100 + i).toString(), catId: c.catId, i18nKey: c.i18nKey, type: c.type, major: majorPart, name: majorPart, sub: c.sub, icon: 'category', order: c.order };
+                        }),
+                        targets: defaultTargets.map((tgt, i) => {
+                            const namePart = tgt.tgtId.replace('tgt_', '');
+                            return { id: (200 + i).toString(), tgtId: tgt.tgtId, i18nKey: tgt.i18nKey, name: namePart, order: tgt.order };
+                        }),
+                        preferences: {
+                            accounts: JSON.stringify(generatedAccounts),
+                            lang: document.getElementById('lang-select').value
+                        }
+                    }
+                };
+
+                // 使用 File System Access API 開啟原生「另存新檔」對話框
+                // 這樣任何下載管理器擴充功能都無法攔截或改名
+                const exportFormat = document.getElementById('exportFormat').value;
+                let blob;
+                let suggestedName;
+
+                if (exportFormat === 'zip') {
+                    const zip = new JSZip();
+                    const photosFolder = zip.folder("photos");
+                    const dataFolder = zip.folder("data");
+
+                    appData.data.transactions.forEach(r => {
+                        if (r.attachment && r.attachment.startsWith('data:image/svg+xml;base64,')) {
+                            const base64Data = r.attachment.split(',')[1];
+                            const safeId = r.id || ('gen_' + Math.random().toString(36).substring(2, 8));
+                            const fileName = `tx_${safeId}.svg`;
+                            photosFolder.file(fileName, base64Data, { base64: true });
+                            delete r.attachment;
+                            r.photo_ref = `photos/${fileName}`;
+                        }
+                    });
+
+                    // 遵循 ZipBackupHelper 預期的格式 (data/transactions.json, data/global.json)
+                    dataFolder.file('transactions.json', '\uFEFF' + JSON.stringify(appData.data.transactions, null, 2));
+                    const globalData = {
+                        fixedRecords: appData.data.fixedRecords || [],
+                        categories: appData.data.categories || [],
+                        targets: appData.data.targets || [],
+                        preferences: appData.data.preferences || {}
+                    };
+                    dataFolder.file('global.json', '\uFEFF' + JSON.stringify(globalData, null, 2));
+
+                    blob = await zip.generateAsync({ type: "blob", compression: "DEFLATE" });
+                    suggestedName = 'TinyLedger_SampleData.zip';
+                } else {
+                    const jsonStr = JSON.stringify(appData, null, 2);
+                    blob = new Blob([jsonStr], { type: 'application/json' });
+                    suggestedName = 'TinyLedger_SampleData.json';
+                }
+
+                if ('showSaveFilePicker' in window) {
+                    // 現代 Edge/Chrome 支援：直接開系統「另存新檔」對話框
+                    const fileHandle = await window.showSaveFilePicker({
+                        suggestedName: suggestedName,
+                        types: [{
+                            description: exportFormat === 'zip' ? 'ZIP 備份檔案' : 'JSON 備份檔案',
+                            accept: exportFormat === 'zip' ? { 'application/zip': ['.zip'] } : { 'application/json': ['.json'] }
+                        }]
+                    });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(blob);
+                    await writable.close();
+                } else {
+                    // Fallback：舊版瀏覽器
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = suggestedName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+
+                status.style.display = 'block';
+                btn.textContent = t.btnDone;
+                setTimeout(() => {
+                    btn.disabled = false;
+                    updateBtnText();
+                }, 2000);
+
+            } catch (err) {
+                btn.disabled = false;
+                updateBtnText();
+                // AbortError = 使用者取消另存新檔對話框，屬正常行為，不需顯示錯誤
+                if (err.name !== 'AbortError') {
+                    alert('產生失敗: ' + err.message);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

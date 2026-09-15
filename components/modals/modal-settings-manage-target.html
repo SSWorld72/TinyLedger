@@ -1,0 +1,30 @@
+            <!-- Settings Manage Targets Modal -->
+            <div class="modal-overlay" id="settings-manage-target-modal">
+                <div class="modal-container">
+                    <div class="modal-header">
+                        <h2 data-i18n="ui.settings.targets.title">Manage Targets</h2>
+                        <button class="btn-close" id="btn-close-settings-target">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <ul class="manage-list" id="settings-target-list-container">
+                            <!-- Targets will be rendered here -->
+                        </ul>
+                        <button class="btn btn-outline" id="btn-settings-add-target"
+                            style="width: 100%; margin-top: 8px;">
+                            <span class="material-icons"
+                                style="font-size:18px; vertical-align:middle; margin-right:4px;">add</span><span data-i18n="ui.settings.targets.addTarget">Add Target</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer" style="display: flex; align-items: center; gap: 16px;">
+                        <label
+                            style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-right: auto; font-size: 0.9rem;">
+                            <input type="checkbox" id="cb-select-all-targets" autocomplete="off">
+                            <span data-i18n="ui.settings.targets.selectAll">Select All</span>
+                        </label>
+                        <button class="btn btn-outline" id="btn-delete-selected-targets"
+                            style="color: var(--accent-red); border-color: var(--accent-red); display: none;" data-i18n="ui.settings.targets.deleteSelected">🗑️
+                            Delete Selected</button>
+                    </div>
+                </div>
+            </div>

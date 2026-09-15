@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="ui.app.name">TinyLedger</title>
+    <!-- Prevent favicon 404 error -->
+    <link rel="icon" href="data:,">
+    <!-- Google Fonts (Local) -->
+    <link href="libs/fonts/inter.css" rel="stylesheet">
+    <!-- Material Icons (Local) -->
+    <link href="libs/icons/material-icons.css" rel="stylesheet">
+    <!-- Tailwind CSS (For utils components) -->
+    <!-- Tailwind CSS (For utils components) -->
+    <script src="libs/tailwind/tailwindcss.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ['class', '[data-theme="dark"]'],
+            corePlugins: {
+                preflight: false, // Disable preflight to avoid breaking TinyLedger's custom CSS
+            }
+        }
+    </script>
+    <!-- JSZip (For Backup Compression) -->
+    <script src="libs/jszip/jszip.min.js"></script>
+    <!-- Load global error handler (catch unexpected exceptions) -->
+    <script src="utils/js/errorHandler.js"></script>
+    <!-- Prevent flash of unstyled theme -->
+    <script>
+            (function () {
+                try {
+                    const savedTheme = localStorage.getItem('tinyledger-theme');
+                    if (savedTheme === 'dark') {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    } else if (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                } catch (e) { }
+            })();
+    </script>
+    <!-- Custom CSS -->
+    <!-- Base UI Styles -->
+    <link rel="stylesheet" href="utils/css/modern-ui.css?v=1.0.1">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
+
+    <!-- Cropper.js -->
+    <link rel="stylesheet" href="libs/cropper/cropper.min.css">
+    <style>
+        /* Ensure background color fills, avoid browser default white space at bottom when content is too little */
+        html,
+        body {
+            min-height: 100vh;
+            background-color: var(--bg-color, #f4f6f9);
+            /* Ensure sticky works normally, use clip instead of hidden to prevent breaking sticky */
+            overflow-x: clip !important;
+            overflow-y: visible !important;
+        }
+
+        /* Restore basic sticky settings of sticky-top-panel */
+        .sticky-top-panel {
+            position: sticky;
+            top: var(--app-header-height);
+            z-index: 50;
+        }
+
+        /* Ensure Google Maps Autocomplete menu is not covered by Modal */
+        .pac-container {
+            z-index: 99999 !important;
+        }
+
+        /* Restore: fix footer to bottom of screen */
+        #global-footer-element {
+            position: fixed !important;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+    </style>
+    <style>
+        :root {
+            --app-header-height: 74px;
+        }
+
+        /* Ensure header is fully fixed to top of screen */
+        .app-header {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--app-header-height) !important;
+            z-index: 1000 !important;
+        }
+
+        /* Reserve space for header in content area, avoid being covered by fixed header */
+        .app-main {
+            margin-top: var(--app-header-height);
+        }
+
+        /* Desktop version: panel style */
+        @media (min-width: 769px) {
+            .sticky-top-panel {
+                margin: -2rem -2rem 0 -2rem !important;
+                /* Offset app-main desktop version 2rem padding */
+                background-color: var(--bg-color, #f8fafc);
+                padding: 0.25rem 2rem 0.25rem 2rem !important;
+                /* Desktop version padding, maintain left and right indent */
+                border-bottom: 1px solid var(--border-color);
+                /* Add bottom line to distinguish content */
+            }
+        }
+
+        .mobile-text {
+            display: none;
+        }
+
+        .desktop-text {
+            display: inline;
+        }
+
+        /* Layout (Desktop version): vertical (Tabs top, Summary middle, Budget bottom) */
+        .dashboard-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .dashboard-grid .tabs-container {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .dashboard-grid .summary-bar {
+            background: var(--surface-color);
+            border-radius: var(--border-radius-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-grid .budget-container {
+            background: var(--surface-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 0.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Huge space compression for mobile version (Compact UI) */
+        @media (max-width: 768px) {
+            :root {
+                --app-header-height: 54px;
+                /* Header becomes shorter */
+            }
+
+            /* Shrink Header */
+            .app-header {
+                padding: 0.5rem 0.25rem !important;
+            }
+
+            /* Shrink left and right global borders and top border */
+            .app-main {
+                padding: 0.5rem 0.25rem !important;
+                /* Ensure not covered by fixed header */
+                margin-top: var(--app-header-height) !important;
+            }
+
+            .icon-btn {
+                padding: 6px !important;
+            }
+
+            /* Shrink Sticky Panel padding */
+            .sticky-top-panel {
+                background-color: var(--bg-color);
+                margin: -0.5rem -0.25rem 0 -0.25rem !important;
+                /* Offset app-main mobile version 0.5rem 0.25rem padding */
+                /* Stretch upward and left/right, fully align */
+                padding: 0.5rem 0.25rem 0.25rem 0.25rem !important;
+                border-bottom: 1px solid var(--border-color);
+                /* Add bottom line to distinguish content */
+            }
+
+            /* Mobile version: Tabs and Summary on same line, Budget on next line */
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                grid-template-areas:
+                    "tabs summary"
+                    "budget budget";
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .dashboard-grid .tabs-container {
+                grid-area: tabs;
+                padding: 2px;
+                gap: 2px;
+                margin: 0 !important;
+                height: 100% !important;
+            }
+
+            .dashboard-grid .summary-bar {
+                grid-area: summary;
+                padding: 0.4rem 0.5rem !important;
+                border-radius: 8px !important;
+                border: 1px solid var(--border-color) !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                height: 100% !important;
+            }
+
+            .dashboard-grid .budget-container {
+                grid-area: budget;
+                padding: 0.4rem 0.5rem !important;
+                border-radius: 8px !important;
+            }
+
+            .tab-btn {
+                padding: 4px 6px !important;
+                line-height: 1.1 !important;
+                font-size: 0.75rem !important;
+            }
+
+            .dashboard-grid .summary-item {
+                border-right: none !important;
+            }
+
+            .dashboard-grid .summary-label {
+                font-size: 0.65rem !important;
+                opacity: 0.9;
+            }
+
+            .dashboard-grid .summary-item .amount {
+                font-size: 1rem !important;
+            }
+
+            /* Shrink budget card text */
+            #budget-text-left,
+            #budget-text-right {
+                font-size: 0.75rem !important;
+            }
+
+            .budget-progress-bar {
+                height: 6px !important;
+                margin-bottom: 0 !important;
+                /* Eliminate gap below progress bar */
+            }
+
+            /* Make filter single line horizontal slide (avoid line wrap taking up height) */
+            .filter-row {
+                padding: 0.25rem 0.25rem !important;
+                /* Further shrink left and right padding */
+                gap: 0.25rem !important;
+                /* Shrink spacing between elements */
+                margin-bottom: 0 !important;
+                /* Remove spacing with list title below */
+                flex-wrap: nowrap !important;
+                overflow-x: auto;
+                scrollbar-width: none;
+                /* Firefox */
+                -ms-overflow-style: none;
+                /* IE/Edge */
+            }
+
+            .filter-row::-webkit-scrollbar,
+            #account-tabs-container::-webkit-scrollbar {
+                display: none;
+                /* Chrome/Safari */
+            }
+
+            .filter-group label {
+                font-size: 0.75rem !important;
+                white-space: nowrap;
+            }
+
+            .filter-group label.hide-on-mobile {
+                display: none !important;
+            }
+
+            .mobile-text {
+                display: inline !important;
+            }
+
+            .desktop-text {
+                display: none !important;
+            }
+
+            .filter-group .form-control,
+            #select-major-cat,
+            #select-sub-cat,
+            #select-target {
+                padding: 4px 8px !important;
+                font-size: 0.85rem !important;
+                height: auto !important;
+                min-height: 28px !important;
+                line-height: 1.2 !important;
+            }
+
+            /* Limit max width of filter row dropdown menu, avoid options with too many words stretching layout and pushing out following elements */
+            .filter-group select.form-control {
+                max-width: 70px !important;
+                text-overflow: ellipsis;
+            }
+
+            /* Shrink labels and spacing in add record dialog */
+            #select-major-cat,
+            #select-sub-cat,
+            #select-target {
+                width: 100% !important;
+                /* Ensure original width ratio is maintained */
+            }
+
+            .form-row .form-group {
+                margin-bottom: 0.5rem !important;
+            }
+
+            .form-row .form-label {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.2rem !important;
+            }
+
+            /* Force fix iOS mobile version date and amount field height inconsistency issue */
+            #input-date-single,
+            #input-amount,
+            #input-date-start,
+            #input-date-end {
+                -webkit-appearance: none !important;
+                appearance: none !important;
+                height: 40px !important;
+                min-height: 40px !important;
+                max-height: 40px !important;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                line-height: 40px !important;
+                box-sizing: border-box !important;
+                margin: 0 !important;
+            }
+
+            /* Shrink record list padding and spacing (compatible with list-row and record-item) */
+            .record-item,
+            .list-row {
+                padding: 0.4rem 0.25rem !important;
+                /* Top/bottom padding shrunk from 0.75rem to 0.4rem, left/right maintained at 0.25rem */
+            }
+
+            .list-header-row {
+                padding: 0.25rem 0.5rem !important;
+                /* Blue title row inner padding shrunk */
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/calendar.css?v=1.0.1">
+    <script type="module">
+        import { ThemeSwitcher } from './utils/js/themeSwitcher.js';
+        window.themeSwitcher = new ThemeSwitcher('tinyledger-theme', 'auto');
+        window.addEventListener('load', () => document.body.classList.remove('preload'));
+    </script>
+</head>
+
+<body class="preload">
+
+
+    <div id="app-container" class="app-container">
+        <header class="app-header">
+            <div class="header-left">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <h1 data-i18n="ui.app.name"
+                        class="text-base md:text-xl font-bold text-blue-600 tracking-tight whitespace-nowrap m-0">
+                        TinyLedger</h1>
+                </div>
+            </div>
+
+            <!-- Account Filter Button -->
+            <div style="flex: 1; display: flex; align-items: center; justify-content: flex-start; margin: 0 16px;">
+                <button id="btn-account-filter"
+                    style="display: flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--surface-color); font-size: 0.9rem; font-weight: 500; color: var(--text-main); cursor: pointer; transition: background-color 0.2s;">
+                    <span class="material-icons" style="font-size: 16px;">filter_list</span>
+                    <span id="account-filter-text" data-i18n="ui.accounts.filterAll">All Accounts</span>
+                </button>
+            </div>
+
+            <nav class="header-right">
+                <button class="icon-btn action-add" data-i18n-title="ui.nav.addRecord" title="Add Record"
+                    id="btn-add-record"><span class="material-icons">add</span></button>
+                <button class="icon-btn" data-i18n-title="ui.nav.backToList" title="Back to List" id="btn-nav-list"
+                    style="display: none;"><span class="material-icons">format_list_bulleted</span></button>
+                <button class="icon-btn" data-i18n-title="ui.nav.stats" title="Statistics" id="btn-nav-stats"><span
+                        class="material-icons">pie_chart</span></button>
+                <button class="icon-btn" data-i18n-title="ui.nav.calendar" id="btn-nav-calendar" title="Calendar"><span
+                        class="material-icons">calendar_today</span></button>
+                <button class="icon-btn" data-i18n-title="ui.nav.settings" title="Settings" id="btn-nav-settings"><span
+                        class="material-icons">settings</span></button>
+            </nav>
+        </header>
+
+        <main class="app-main">
+            <div id="sticky-top-panel" class="sticky-top-panel">
+                <!-- Top control area: responsive Grid layout -->
+                <div class="dashboard-grid">
+                    <div class="tabs-container">
+                        <button class="tab-btn active" data-target="tab-general">
+                            <span class="desktop-text" data-i18n="ui.nav.tabGeneral">General</span>
+                            <span class="mobile-text" data-i18n-html="ui.nav.tabGeneralMobile">General<br>Records</span>
+                        </button>
+                        <button class="tab-btn" data-target="tab-fixed">
+                            <span class="desktop-text" data-i18n="ui.nav.tabFixed">Fixed</span>
+                            <span class="mobile-text" data-i18n-html="ui.nav.tabFixedMobile">Fixed<br>Records</span>
+                        </button>
+                    </div>
+
+                    <div class="summary-bar" id="summary-bar-container">
+                        <div id="summary-content"
+                            style="display: flex; width: 100%; justify-content: space-between; transition: opacity 0.3s;">
+                            <div class="summary-item text-green">
+                                <span class="summary-label" data-i18n="ui.stats.income">Income</span>
+                                <span class="amount" id="total-income">0</span>
+                            </div>
+                            <div class="summary-item text-red">
+                                <span class="summary-label" data-i18n="ui.stats.expense">Expense</span>
+                                <span class="amount" id="total-expense">0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label" data-i18n="ui.stats.annualBalance">Balance</span>
+                                <span class="amount" id="total-balance">0</span>
+                            </div>
+                        </div>
+                        <!-- Delete overlay -->
+                        <div id="summary-delete-overlay"
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fee2e2; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--accent-red); opacity: 0; pointer-events: none; transition: opacity 0.3s; user-select: none;">
+                            <span class="material-icons" style="margin-right: 8px; font-size: 20px;">delete</span>
+                            <span id="summary-delete-text" style="font-weight: 500; font-size: 1rem;"
+                                data-i18n="ui.list.deleteSelected">Delete Selected (0)</span>
+                        </div>
+                    </div>
+
+                    <div class="budget-container">
+                        <div
+                            style="display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--text-muted); font-size: 0.85rem;">
+                            <span id="budget-text-left">Total Budget 0 &middot; Spent 0%</span>
+                            <span id="budget-text-right" class="text-green">Remaining 0</span>
+                        </div>
+                        <div class="budget-progress-bar"
+                            style="background: var(--border-color); border-radius: 4px; height: 8px; overflow: hidden; margin-bottom: 0;">
+                            <div id="budget-progress" class="progress"
+                                style="background: #fbbf24; height: 100%; width: 0%; transition: width 0.3s, background-color 0.3s;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Row -->
+                <div class="filter-row"
+                    style="display: flex; gap: 1rem; margin-bottom: 0.25rem; background: var(--surface-color); padding: 0.5rem 1.5rem; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-sm); align-items: center; flex-wrap: wrap;">
+
+                    <div id="filter-group-month" class="filter-group"
+                        style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="month" id="month-selector" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;" onclick="this.showPicker()" />
+                    </div>
+                    <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;"><span
+                                class="desktop-text" data-i18n="ui.stats.tableMajor">Major</span><span
+                                class="mobile-text" data-i18n="ui.nav.category">Category</span></label>
+                        <select id="filter-major" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;">
+                            <option value="" data-i18n="ui.list.filterAll">All</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label class="hide-on-mobile"
+                            style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;"
+                            data-i18n="ui.stats.tableSub">Minor</label>
+                        <select id="filter-minor" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;">
+                            <option value="" data-i18n="ui.list.filterAll">All</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;"
+                            data-i18n="ui.stats.tableTarget">Target</label>
+                        <select id="filter-target" class="form-control"
+                            style="width: auto; padding: 4px 8px; cursor: pointer;">
+                            <option value="" data-i18n="ui.list.filterAll">All</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- List fixed title row (Amount title row) -->
+                <div class="list-row list-header-row" id="global-list-header"
+                    style="margin-top: 0.25rem; border-top: 1px solid var(--border-color); padding-top: 0.5rem; background: var(--bg-color); position: relative; z-index: 10;">
+                    <div class="col-check"><input type="checkbox" id="cb-select-all-global"></div>
+                    <div class="col-main" style="display: flex; align-items: center; gap: 12px; overflow: visible;">
+                        <span id="global-list-title" style="white-space: nowrap;" data-i18n="ui.tabs.details">Category /
+                            Details</span>
+                        <span
+                            style="display: inline-flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--text-muted); white-space: nowrap;">
+                            <span data-i18n="ui.list.pageSizePre">每頁</span>
+                            <select id="global-page-size" class="form-control"
+                                style="padding: 2px 4px; font-size: 0.85rem; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); cursor: pointer; width: auto;">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="all" data-i18n="ui.list.filterAll">All</option>
+                            </select>
+                            <span data-i18n="ui.list.pageSizePost">筆</span>
+                        </span>
+                    </div>
+                    <div class="col-amount" data-i18n="ui.stats.tableAmount">Amount</div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="main-content">
+
+                <div id="summary-section" class="summary-section">
+                    <div id="tab-general" class="tab-content active">
+                        <ul class="record-list" id="general-record-list">
+                            <!-- General records will be injected here -->
+                        </ul>
+                        <div id="general-pagination" class="pagination-controls"
+                            style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px; padding-bottom: 16px;">
+                        </div>
+                    </div>
+                    <div id="tab-fixed" class="tab-content">
+                        <ul class="record-list" id="fixed-record-list">
+                            <!-- Fixed records list will be rendered here -->
+                        </ul>
+                        <div id="fixed-pagination" class="pagination-controls"
+                            style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px; padding-bottom: 16px;">
+                        </div>
+                    </div>
+                    <div id="tab-stats" class="tab-content" data-include="components/tabs/tab-stats.html"></div>
+
+                    <div id="tab-calendar" class="tab-content"
+                        style="padding: 0 16px 16px 16px; max-width: 800px; margin: 0 auto;"
+                        data-include="components/tabs/tab-calendar.html"></div>
+                    <div id="tab-settings" class="tab-content" style="padding: 16px; max-width: 800px; margin: 0 auto;"
+                        data-include="components/tabs/tab-settings.html"></div>
+                </div>
+    </div>
+
+    </main>
+
+    </main>
+
+    <!-- Modals Container -->
+    <div id="modals-container">
+
+
+        <!-- Settings Manage Category Modal -->
+        <div data-include="components/modals/modal-settings-manage-cat.html"></div>
+
+        <!-- Settings Manage Targets Modal -->
+        <div data-include="components/modals/modal-settings-manage-target.html"></div>
+
+        <!-- Add Record Modal Overlay -->
+        <div data-include="components/modals/modal-add-record.html"></div>
+
+
+    </div>
+
+    <!-- Crop Photo Modal -->
+    <div data-include="components/modals/modal-crop.html"></div>
+    <!-- Account Filter Modal -->
+    <div data-include="components/modals/modal-account-filter.html"></div>
+
+    <!-- Suggestion Modal (hidden) -->
+    <div data-include="components/modals/modal-photo-settings-help.html"></div>
+
+    </div> <!-- end app-container -->
+
+    <script src="libs/cropper/cropper.min.js"></script>
+    <script src="libs/jszip/jszip.min.js"></script>
+    <script type="module" src="js/app.js?v=28"></script>
+    <script>
+        // Remove preload class to enable transitions after initial load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.body.classList.remove('preload');
+            }, 100);
+
+            // Photo settings help
+            const helpBtn = document.getElementById('btn-open-photo-settings-help');
+            if (helpBtn) {
+                helpBtn.addEventListener('click', () => {
+                    document.getElementById('modal-photo-settings-help').style.display = 'flex';
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
