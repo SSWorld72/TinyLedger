@@ -110,12 +110,12 @@ export default {
         },
         footer: {
             unnamedProject: 'अनाम प्रोजेक्ट',
-            githubProject: 'गिटहब प्रोजेक्ट',
+            githubProject: 'GitHub',
             releaseDate: 'रिलीज की तारीख: {date}'
         },
         app: {
             name: 'TinyLedger',
-            fullName: 'TinyLedger'
+            fullName: 'छोटा खाता'
         },
         accounts: {
             defaultName: 'डिफ़ॉल्ट खाता',

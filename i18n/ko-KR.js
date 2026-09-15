@@ -110,12 +110,12 @@ export default {
         },
         footer: {
             unnamedProject: '이름 없는 프로젝트',
-            githubProject: 'GitHub 프로젝트',
+            githubProject: 'GitHub',
             releaseDate: '출시일: {date}'
         },
         app: {
             name: 'TinyLedger',
-            fullName: '작은 가계부 (TinyLedger)'
+            fullName: '작은 가계부'
         },
         accounts: {
             defaultName: '기본 계정',

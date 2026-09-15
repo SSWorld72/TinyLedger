@@ -110,12 +110,12 @@ export default {
         },
         footer: {
             unnamedProject: '無名プロジェクト',
-            githubProject: 'GitHub プロジェクト',
+            githubProject: 'GitHub',
             releaseDate: '公開日: {date}'
         },
         app: {
             name: 'TinyLedger',
-            fullName: 'ちいさな家計簿 (TinyLedger)'
+            fullName: 'ちいさな家計簿'
         },
         accounts: {
             defaultName: 'デフォルトアカウント',

@@ -110,12 +110,12 @@ export default {
         },
         footer: {
             unnamedProject: '未命名项目',
-            githubProject: 'GitHub 项目',
+            githubProject: 'GitHub',
             releaseDate: '发布日期: {date}'
         },
         app: {
             name: 'TinyLedger',
-            fullName: 'TinyLedger'
+            fullName: '小小记账本'
         },
         accounts: {
             defaultName: '默认账户',

@@ -110,7 +110,7 @@ export default {
         },
         footer: {
             unnamedProject: 'Unnamed Project',
-            githubProject: 'GitHub Project',
+            githubProject: 'GitHub',
             releaseDate: 'Release Date: {date}'
         },
         app: {
