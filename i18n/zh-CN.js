@@ -1,0 +1,723 @@
+export default {
+    categories: {
+        expense: {
+            food: '餐　饮',
+            family: '家庭开销',
+            medical: '医疗保健',
+            clothing: '服　饰',
+            device: '３Ｃ设备',
+            transport: '交通门票',
+            entertainment: '娱　乐',
+            education: '进修交际',
+            tax: '税　金',
+            other: '其　他'
+        },
+        income: {
+            salary: '薪　资',
+            investment: '投　资',
+            other: '其　他'
+        }
+    },
+    targets: {
+        self: '自　己',
+        husband: '老　公',
+        wife: '老　婆',
+        child: '小　孩',
+        grandpa: '爷　爷',
+        grandma: '奶　奶',
+        family: '全　家',
+        other: '其　他'
+    },
+    subcategories: {
+        expense: {
+            food: { breakfast: '早餐', lunch: '午餐', dinner: '晚餐', midnight: '宵夜', drink: '饮料', noodle: '泡面', snack: '饼干', bread: '面包' },
+            family: { allowance: '零用钱', water: '水费', electricity: '电费', phone: '电话费', internet: '网络费', furniture: '家具', appliance: '家电', cleaning: '清洁品', mortgage: '房贷', mall: '购物广场' },
+            medical: { insurance: '保险费', medical: '医药费', supplement: '保健食品' },
+            clothing: { coat: '外套', clothes: '衣服', pants: '裤子', skirt: '裙子', shoes: '鞋子', hat: '帽子', scarf: '围巾', gloves: '手套', underwear: '内衣', underpants: '内裤', socks: '袜子', contacts: '隐形眼镜' },
+            device: { computer: '电脑', phone: '手机', tablet: '平板', console: '游戏机', accessories: '手机配件' },
+            transport: { train: '火车票', hsr: '高铁票', mrt: '捷运票', taxi: '计程车', accommodation: '住宿费', ticket: '门票', parking: '停车费', gas: '加油费', maintenance: '车辆保养' },
+            entertainment: { movie: '看电影', pinball: '打弹珠', balloon: '打气球', claw: '娃娃机', karaoke: '唱歌', gacha: '抽卡', game: '游戏氪金' },
+            education: { books: '书籍', course: '课程', exam: '考试', dine: '聚餐', gift: '送礼', red_envelope: '红包' },
+            tax: { nhi: '健保费', labor: '劳保费', national: '国民年金', business: '营业税', license: '牌照税', income: '综合所得税', house: '房屋税', fuel: '燃料税', land: '地价税' },
+            other: { misc: '杂支', lost: '遗失', unclassified: '未分类' }
+        },
+        income: {
+            salary: { base: '本薪', bonus: '绩效', festival: '节日', overtime: '加班', parttime: '兼职' },
+            investment: { stock: '股票', dividend: '股息', interest: '存款利息', fund: '基金回报', crypto: '外汇/加密货币' },
+            other: { gift: '礼金', refund: '退款', lottery: '发票中奖', subsidy: '补助金' }
+        }
+    },
+
+    logs: {
+        db: {
+            migrationStart: '[数据库] 开始进行 i18n 分类代码化迁移...',
+            migrationSuccess: '[数据库] i18n 分类代码化迁移完成！',
+            migrationFail: '[数据库] i18n 分类代码化迁移失败: {error}',
+            error: '[数据库] 错误:',
+            saveCategorySuccess: '[数据库] 保存类别设定 (saveCategory) 成功',
+            deleteCategorySuccess: '[数据库] 删除类别设定 (deleteCategory) 成功',
+            saveTargetSuccess: '[数据库] 保存目标设定 (saveTarget) 成功',
+            deleteTargetSuccess: '[数据库] 删除目标设定 (deleteTarget) 成功',
+            saveTransactionSuccess: '[数据库] 保存记账纪录 (saveTransaction) 成功',
+            batchSaveTransactionsSuccess: '[数据库] 批次保存记账纪录 (batchSaveTransactions) 成功',
+            batchSaveTransactionsFail: '[数据库] 批次保存记账纪录失败:',
+            deleteTransactionSuccess: '[数据库] 删除记账纪录 (deleteTransaction) 成功',
+            deleteTransactionsByFixedIdSuccess: '[数据库] 批次删除固定纪录关联记账 (deleteTransactionsByFixedId) 成功',
+            saveFixedRecordSuccess: '[数据库] 保存固定纪录 (saveFixedRecord) 成功',
+            batchSaveFixedRecordsSuccess: '[数据库] 批次保存固定纪录 (batchSaveFixedRecords) 成功',
+            batchSaveFixedRecordsFail: '[数据库] 批次保存固定纪录失败:',
+            deleteFixedRecordSuccess: '[数据库] 删除固定纪录 (deleteFixedRecord) 成功'
+        },
+        calendar: {
+            holidayLoadError: '无法载入 {year} 年度国定假日数据',
+            loadHolidaysFail: '[万年历] 无法载入该年度的国定假日数据...'
+        },
+        settings: {
+            accountUpdateSuccess: '[设定] 更新账户设定（saveAccounts）成功',
+            checkAccountDataError: '[设定] 检查账户数据发生错误:',
+            backupUpdateSuccess: '[设定] 私有云设定与同步状态存档成功',
+            saveAccountsSuccess: '[设定] 更新账户设定（saveAccounts）成功',
+            cloudBackupSuccess: '[设定] 私有云设定与同步状态存档成功',
+            restoreError: '还原过程中发生错误：',
+            exportJsonSuccess: '[备份] 手动汇出地端备份成功: ZIP大小 ',
+            fileReadError: '文件读取失败',
+            importJsonSuccess: '[备份] 从地端备份导入成功: 新增/更新 ',
+            checkAccountError: '[设定] 检查账户数据发生错误:',
+            checkCategoryError: '[设定] 检查类别数据发生错误:',
+            checkCategoryBatchError: '[设定] 批次检查类别数据发生错误:',
+            checkTargetError: '[设定] 检查目标数据发生错误:',
+            checkTargetBatchError: '[设定] 批次检查目标数据发生错误:'
+        },
+        record: {
+            festivalReminderError: '[重要节日提醒] 错误:',
+            saveFail: '[记账] 保存失败:'
+        },
+        location: {
+            fetchPlaceInfoFail: '[地点搜索] 无法取得完整的地点信息:',
+            apiLoadFail: '[地点搜索] Google Maps API 载入失败...'
+        },
+        app: {
+            alreadyInitialized: '[主程序] app.js 已被初始化，跳过重复执行...'
+        },
+        htmlLoader: {
+            loadFail: '[HTML 载入器] 载入失败',
+            fetchFail: '[HTML 载入器] 无法获取'
+        }
+    },
+    ui: {
+        common: {
+            unnamed: '(未命名)'
+        },
+        footer: {
+            unnamedProject: '未命名项目',
+            githubProject: 'GitHub 项目',
+            releaseDate: '发布日期: {date}'
+        },
+        app: {
+            name: 'TinyLedger',
+            fullName: 'TinyLedger'
+        },
+        accounts: {
+            defaultName: '默认账户',
+            colors: {
+                blue: '蓝色', green: '绿色', red: '红色', yellow: '黄色', purple: '紫色', gray: '灰色'
+            },
+            filterAll: '全部',
+            filterPartial: '({selected}/{total})',
+            alertNoAccount: '请至少选择一个账户！'
+        },
+        tabs: {
+            rules: '类别 / 规则',
+            details: '类别 / 明细'
+        },
+        nav: {
+            addRecord: '新增交易纪录',
+            backToList: '返回清单',
+            stats: '统计图',
+            calendar: '万年历',
+            settings: '设定',
+            tabGeneral: '一般纪录',
+            tabGeneralMobile: '一般<br>纪录',
+            tabFixed: '固定纪录',
+            tabFixedMobile: '固定<br>纪录',
+            category: '类别'
+        },
+        list: {
+            summary: '📊 目前数据：手动纪录 {txLen} 笔、固定纪录 {fixLen} 笔',
+            filterAll: '全部',
+            emptyFixed: '目前尚无符合条件的固定纪录',
+            emptyGeneral: '该月尚无纪录',
+            pageInfo: '第 {current} 页，共 {total} 页',
+            prevPage: '上一页',
+            nextPage: '下一页',
+            pageSizePre: '每页',
+            pageSizePost: '笔'
+        },
+        budget: {
+            status: '本月总预算 {monthlyBudget} · 总支出已用 ${totalExpenseMonth} ({budgetPercent}%)',
+            over: '超支 {amount}',
+            left: '剩余 {amount}'
+        },
+        record: {
+            typeIncome: '收',
+            typeExpense: '支',
+            ruleYearly: '每年 {month}月{day}日',
+            ruleMonthly: '每月 {day}日',
+            ruleWeekly: '每周{weekday}',
+            weekdays: ['日', '一', '二', '三', '四', '五', '六'],
+            ruleCount: '共 {count} 笔',
+            noDeadline: '无期限',
+            labelTarget: '👤 对象：',
+            labelLocation: '📍 地点：',
+            labelNote: '📝 备注：',
+            labelPhoto: '📷 已附照片',
+            noNote: '无备注',
+            fixedGeneratedTip: '固定纪录产生的明细，仅供检视',
+            addTitle: '新增纪录',
+            copyTitle: '复制纪录',
+            editFixedTitle: '编辑固定规则',
+            viewFixedTitle: '检视固定规则明细',
+            addBtn: '新增',
+            copyBtn: '复制',
+            promptLocation: '请先输入或选择一个地点',
+            importantFestivalPrefix: '⭐',
+            festivalJoin: '、',
+            attachment: '附件'
+        },
+        batch: {
+            typeNameFixed: '固定规则',
+            typeNameGeneral: '一般纪录',
+            unnamedRule: '未命名规则',
+            boundPreview: '- [{name}] ({count}笔纪录, 如 {date})',
+            andOthers: '...及其他',
+            confirmDeleteFixed: '确定要删除这 {count} 笔固定规则吗？此动作无法复原。',
+            confirmDeleteFixedBound: '【严重警告】您选取的规则共自动产生了 {totalBound} 笔历史纪录：\n{boundLines}\n\n删除规则将会「一并删除」这些历史纪录！\n若只想停止产生未来纪录，建议取消删除并修改「结束日期」。\n\n确定要强制删除并销毁历史纪录吗？',
+            confirmDeleteType: '确定要删除这 {count} 笔{typeName}吗？',
+            btnDeleteSelected: '删除所选 ({count})'
+        },
+        stats: {
+            tabs: {
+                pie: '饼图',
+                bar: '柱状图',
+                line: '折线图',
+                annual: '年度图'
+            },
+            filters: {
+                period: '区间：',
+                week: '周',
+                month: '月',
+                year: '年',
+                all: '全部',
+                custom: '自订',
+                groupby: '分类：',
+                major: '大类',
+                sub: '小类',
+                payee: '对象',
+                xaxis: 'Ｘ轴：',
+                byDay: '以日',
+                byMonth: '以月',
+                yearLabel: '年份：'
+            },
+            noData: '尚无数据',
+            unclassified: '(未分类)',
+            unspecified: '(未指定)',
+            tableMajor: '大类',
+            tableSub: '小类',
+            tableTarget: '对象',
+            tableAmount: '金额',
+            tablePercent: '占比',
+            tableTotal: '合计',
+            noAnnualRecord: '{year} 年尚无记录',
+            annualTotalIncome: '总收入',
+            annualTotalExpense: '总支出',
+            annualBalance: '结余',
+            monthlyDetails: '各月明细',
+            month: '月份',
+            monthSuffix: '月',
+            year: '年',
+            income: '收入',
+            expense: '支出',
+            top5Expenses: '前五大支出类别'
+        },
+        settings: {
+            dangerZone: {
+                title: '危险区域',
+                desc: '清空本机的所有记账纪录、固定纪录与类别设定。如果您想重新开始，或清除异常数据，可点击下方按钮。(此操作无法复原)',
+                button: '强制清空本机所有数据',
+                confirmTitle: '确定要清空吗？',
+                confirmMsg: '这将会彻底删除您手机/电脑内所有的本地数据。\n此操作无法复原，请确认您已经备份！',
+                doubleConfirmTitle: '最后确认',
+                doubleConfirmMsg: '真的要清空吗？\n此操作将永久销毁本地数据库。',
+                btnConfirm: '我要清空',
+                btnCancel: '取消',
+                btnDoubleConfirm: '确定销毁数据',
+                btnDoubleCancel: '再想一下',
+                busyTitle: '正在清空数据',
+                busyDetail: '删除中...',
+                success: '✅ 本机所有数据已彻底清空！系统将自动重新载入。',
+                error: '清空数据时发生错误: {error}'
+            },
+            systemLogs: {
+                title: '系统日志 (System Logs)',
+                desc: '显示最近 999 笔控制台日志，方便排解连线或数据同步问题。',
+                placeholderSearch: '搜索时间或关键字...',
+                titleCopy: '复制过滤后的日志',
+                btnCopy: '复制',
+                btnExport: '汇出',
+                titleClear: '清空日志',
+                btnClear: '清除',
+                confirmClear: '确定要清空所有系统日志吗？此操作无法复原。',
+                emptyExport: '目前没有可汇出的日志',
+                emptyCopy: '目前没有可复制的日志',
+                copySuccess: '日志已复制到剪贴板',
+                copyError: '复制失败: {error}'
+            },
+            language: { title: '显示语言 (Language)' },
+            title: '系统设定',
+            sponsor: '赞助作者',
+            theme: {
+                title: '外观主题'
+            },
+            backup: {
+                title: '手动与自动备份',
+                manualExport: '汇出 ZIP',
+                manualImport: '导入备份',
+                importHint: '支持 .zip 或旧版 .json 格式',
+                autoExport: '自动汇出范围',
+                daily: '每日 (当月数据)',
+                yearly: '依年份 (整年度数据)',
+                yearlyAll: '全部年份',
+                yearlyCurrent: '仅今年',
+                yearlyLast: '去年与今年',
+                includePhotos: '包含照片 (将大幅增加文件大小)',
+                exporting: '准备下载 ZIP 备份档...',
+                exportSuccess: '✅ 备份汇出成功！\n共汇出 {txCount} 笔一般纪录、{fixedCount} 笔固定纪录\n包含 {catCount} 个大类与 {tgtCount} 个对象设定',
+                exportError: '汇出失败：{error}',
+                importing: '解析备份档中...',
+                importError: '还原过程中发生错误：{error}',
+                errorJsonParse: '无法解析 JSON，文件格式错误',
+                errorOldFormat: '不支持的旧版备份格式，请使用最新版本的备份档',
+                errorUnsupportedFile: '不支持的文件格式，请提供 .zip 或 .json 备份档',
+                gasUrlConflictPrompt: '⚠️ 发现备份档中的「专属备份 GAS 网址」与本机不同！\n\n[备份] {newUrl}\n[本机] {oldUrl}\n\n是否要使用备份的网址「覆盖」本机网址？\n\n(按「确定」覆盖，按「取消」保留本机网址)',
+                parsedTitle: '备份档解析完成',
+                startImport: '开始导入',
+                cancel: '取消',
+                clearingData: '正在清除本地数据',
+                deletingRecords: '删除既有纪录中...',
+                restoringLocal: '正在还原到本地',
+                writingDb: '写入数据库中...',
+                progressFormat: {
+                    wait: '等待写入{type}... ({current} / {total})',
+                    doing: '写入{type}中... ({current} / {total})',
+                    done: '已写入{type}... ({current} / {total})',
+                    typeTx: '一般纪录',
+                    typeFixed: '固定纪录',
+                    typeCat: '类别设定',
+                    typeTgt: '对象设定'
+                },
+                importComplete: '✅ 导入完成！\n\n[本次新增]\n{adds}',
+                reloading: '系统即将重新载入...',
+                fullBackup: '完整备份：',
+                fullBackupDesc: '您的所有记账纪录、固定纪录、类别设定、万年历偏好设定。',
+                overwriteWarning: '从私有云端还原时，将会完全覆盖目前的本地数据',
+                exportingTitle: '正在汇出数据',
+                advancedTitle: '进阶备份设定 (套用于本机与云端)',
+                mode: {
+                    title: '备份模式',
+                    daily: '日常备份 (全部数据，适合覆盖还原)',
+                    yearly: '年度备份 (按年份拆分，适合合并还原)'
+                },
+                yearlyRange: {
+                    title: '年度备份范围',
+                    all: '逐年备份 (所有年份)',
+                    current: '只备份最近1年内 (今年)'
+                },
+                includePhotos: {
+                    title: '包含照片数据',
+                    desc: '取消勾选可大幅缩小备份档体积'
+                },
+                restoreMode: {
+                    title: '数据还原方式 (适用于地端与云端)',
+                    merge: '合并方式 (保留本机，跳过重复)',
+                    overwrite: '覆盖方式 (清空本机，完全覆盖)'
+                },
+                localTitle: '手动文件备份 (Local ZIP)',
+                localDesc: '将目前的记账纪录汇出为 ZIP 备份档下载至您的设备中。您可于换机或数据丢失时透过此文件手动还原。',
+                exportBtn: '汇出备份',
+                importBtn: '导入备份',
+                generateSample: '产生测试数据'
+            },
+            cloudBackup: {
+                title: '私有云端同步与备份 (Google Apps Script)',
+                syncing: '云端同步处理中...',
+                desc: '备份您的所有记账纪录、固定纪录、类别设定、万年历偏好设定。\n(*从私有云端还原时，将会完全覆盖目前的本地数据)',
+                successSummary: '✅ 备份汇出成功！\n共汇出 {txCount} 笔一般纪录、{fixedCount} 笔固定纪录\n包含 {catCount} 个大类与 {tgtCount} 个对象设定',
+                restoreConfirmMerge: '【合并模式】\n确定要将这份数据合并至本机吗？\n(会保留本机纪录，并自动跳过重复项目)',
+                restoreConfirmOverwrite: '【覆盖模式警告】\n确定要使用这份数据完全覆盖本机所有纪录吗？\n(本机现有的纪录将被全数删除！)',
+                restoreConfirmEmpty: '【数据还原】\n确定要将这份云端数据还原至本机吗？',
+                restoreSummary: '此备份共包含：\n- 一般纪录：{txCount} 笔\n- 固定纪录：{fixedCount} 笔\n- 类别设定：{catCount} 个\n- 对象设定：{tgtCount} 个\n',
+                restoreFiltered: '\n(已自动过滤重复)\n',
+                restoreFilteredTx: '- 一般纪录：{txSkip} 笔\n',
+                restoreFilteredFixed: '- 固定纪录：{fixedSkip} 笔\n',
+                restoreFilteredCat: '- 类别设定：{catSkip} 个\n',
+                restoreFilteredTgt: '- 对象设定：{tgtSkip} 个\n',
+                restoreCompleteEmpty: '✅ 云端还原完成！\n\n【新增】\n{adds}\n\n系统即将重新载入...',
+                restoreCompleteOverwrite: '✅ 云端还原完成 (覆盖模式)！\n\n【新增】\n{adds}\n\n系统即将重新载入...',
+                restoreCompleteMerge: '✅ 云端还原完成 (合并模式)！\n\n【新增】\n{adds}',
+                restoreCompleteMergeSkipped: '\n\n(自动略过重复)\n',
+                addedTx: '一般纪录 {tx} 笔',
+                addedFixed: '固定纪录 {fixed} 笔',
+                addedCat: '类别设定 {cat} 个',
+                addedTgt: '对象设定 {tgt} 个'
+            },
+            accounts: {
+                title: '账户参数设定',
+                add: '新增账户',
+                edit: '编辑账户',
+                defaultAccountName: '账户 A',
+                accountName: '账户名称',
+                accountNamePh: '例如: 现金、信用卡',
+                requireName: '请输入账户名称',
+                tagColor: '标签颜色',
+                monthlyBudget: '本月预算',
+                budgetPh: '例如: 25000',
+                save: '保存',
+                budget: '本月预算: ${amount}',
+                isDefault: '默认',
+                setDefault: '设为默认',
+                deleteConfirmTitle: '确定要删除这个账户吗？',
+                deleteErrorMsg: '无法删除！此账户内还有：\n',
+                deleteErrorTxs: '- {count} 笔单次交易纪录 (存在于 {dates})\n',
+                deleteErrorFixed: '- {count} 笔固定支出/收入规则\n',
+                deleteErrorEnd: '\n请先将这些纪录转移至其他账户，或将其删除后再试。'
+            },
+            dataManagement: {
+                title: '交易信息管理',
+                expense: '支出类别',
+                income: '收入类别',
+                target: '记账对象'
+            },
+            calendar: {
+                title: '万年历与显示设定',
+                remindDaysBefore: '提前几天提醒：',
+                monthSuffix: '月',
+                daySuffix: '日',
+                month: '{m} 月',
+                day: '{d} 日',
+                monthPh: '月',
+                dayPh: '日',
+                festivalNamePh: '请输入节日名称',
+                dayNumPh: '天数 {n}',
+                nationalHoliday: {
+                    title: '国定假日 (仅适用于台湾)',
+                    desc: '显示人事行政总处公告之国定假日',
+                    lastUpdated: '上次更新：',
+                    neverUpdated: '无',
+                    updateNow: '立即更新',
+                    updating: '下载中...',
+                    updateSuccess: '✅ 国定假日更新完成！\n已下载 {years} 年度共 {count} 笔假日数据。',
+                    updateSuccessLog: '[系统设定] 成功更新国定假日数据 ({years})，共 {count} 笔。',
+                    updateError: '❌ 下载失败：{error}'
+                },
+                lunarDate: {
+                    title: '农历日期 (中国传统)',
+                    desc: '显示农历初几 (如：初一、十五)'
+                },
+                stembranch: {
+                    title: '天干地支 (中国传统)',
+                    desc: '显示日干支 (如：甲子、乙丑)'
+                },
+                solarterm: {
+                    title: '二十四节气 (中国传统)',
+                    desc: '显示当日节气名称 (如：立春、清明)'
+                },
+                festival: {
+                    title: '节日 (中国传统)',
+                    desc: '显示传统节庆与在地纪念日 (春节、端午等)'
+                },
+                globalFestival: {
+                    title: '节日 (全球)',
+                    desc: '显示全球性与西方节日 (元旦、圣诞等)'
+                },
+                bazi: {
+                    title: '八字完整排盘 (中国传统)',
+                    desc: '点选日期时显示四柱、十神、藏干、纳音'
+                },
+                valentine: {
+                    title: '趣味情人节',
+                    desc: '显示每月 14 号的特色情人节 (包含 2/14 西洋、白色、黑色情人节等)'
+                },
+                importantFestival: {
+                    title: '重要节日提醒设定',
+                    enableTitle: '启用重要节日提醒',
+                    enableDesc: '在节日到达前，记账时会自动跳出提示，并在日历显示专属星形标记',
+                    addBtn: '新增节日 (最多 10 组)'
+                }
+            },
+            photoUpload: {
+                title: '照片上传',
+                enableTitle: '照片拍照上传功能',
+                enableDesc: '开启后即可在记账时附加照片',
+                maxSize: '最大照片尺寸',
+                size320: '320 x 320',
+                size480: '480 x 480 (建议下限)',
+                size640: '640 x 640 (默认)',
+                size800: '800 x 800',
+                size1024: '1024 x 1024',
+                quality: 'JPEG 压缩品质',
+                qual03: '0.3 (高压缩)',
+                qual05: '0.5 (建议下限)',
+                qual07: '0.7 (默认)',
+                qual09: '0.9 (低压缩)'
+            },
+            mapLink: {
+                title: 'Google Map 定位',
+                enableTitle: '清单地点链接地图',
+                enableDesc: '允许在首页纪录清单中直接点击地点来开启地图'
+            },
+            about: {
+                title: '关于',
+                licenseTitle: '开放源代码与开源协议',
+                licenseDesc: '检视本项目使用之第三方开源套件',
+                openSourceLicense: '开放源代码协议 (MIT License)',
+                visualAssetsCopyright: '视觉资产版权声明',
+                visualAssetsDesc: '本项目的底层源代码采用 MIT 授权条款释出。<br><br>但本软件内包含的所有的品牌识别、UI 界面设计、图标以及相关视觉资产，版权皆由原作者完全保留，<strong class="text-rose-600 dark:text-rose-400 font-semibold">并不适用</strong> 上述 MIT 授权条款。<br><br>未经作者明确的书面授权，严禁挪用、重制、散布或将上述视觉资产用于其他项目或商业用途。',
+                poweredBy: '技术与开源套件'
+            },
+
+            categories: {
+                title: '管理类别',
+                selectAll: '全选',
+                cascadeUpdateConfirm: '这个动作会将所有使用「{oldValue}」的历史纪录\n一并修改为「{newValue}」，确定要继续吗？',
+                cascadeUpdateTitle: '连动更新确认',
+                confirmUpdate: '确定修改',
+                cancel: '取消',
+                noData: '没有数据，请新增',
+                addExpenseMajor: '新增支出大类',
+                addIncomeMajor: '新增收入大类',
+                promptNewMajor: '输入新大类名称:',
+                deleteSelected: '🗑️ 删除所选 ({count})',
+                addMinor: '新增小类',
+                promptNewMinor: '输入新的小类名称:',
+                deleteInUseMsg: '无法删除！此类别已被使用于：\n',
+                deleteInUseTx: '- {count} 笔单次交易纪录 (发生于 {dates}{more})\n',
+                deleteInUseFixed: '- {count} 笔固定支出/收入规则 ({names}{more})\n',
+                deleteInUseTail: '\n请先将这些纪录删除或修改为其他类别后再试。',
+                editSub: '编辑小类',
+                deleteSub: '删除小类',
+                moreDays: ' 等共 {count} 天',
+                etc: ' 等',
+                deleteConfirm: '确定要删除这笔类别吗？此动作无法复原。',
+                expenseTitle: '支出类别管理',
+                incomeTitle: '收入类别管理',
+                deleteBatchConfirm: '确定要删除这 {majorCount} 个大类、{minorCount} 个小类，共计 {total} 个项目吗？\n(注意：删除大类会一并删除其下的所有小类)',
+                deleteBatchConfirmMinorOnly: '确定要删除这 {count} 个小类项目吗？',
+                deleteBatchConfirmMajorOnly: '确定要删除这 {count} 个大类项目吗？\n(注意：删除大类会一并删除其下的所有小类)',
+                deleteBatchInUseMsg: '无法删除！以下类别已被使用：\n',
+                deleteBatchInUseMinorItem: '- 小类 [{major} > {sub}] ({details})',
+                deleteBatchInUseMajorItem: '- 大类 [{major}] ({details})',
+                deleteBatchInUseTxDetail: '{count}笔纪录(如{date})',
+                deleteBatchInUseFixedDetail: '{count}笔规则',
+                deleteBatchInUseMore: '\n...及其他项目',
+                deleteBatchInUseTail: '\n\n请先将这些纪录删除或修改为其他类别后再试。'
+            },
+            targets: {
+                title: '记账对象',
+                addTarget: '新增对象',
+                selectAll: '全选',
+                noData: '没有数据，请新增',
+                noDataSimple: '没有数据',
+                deleteSelected: '🗑️ 删除所选 ({count})',
+                deleteInUseMsg: '无法删除！此对象已被使用于：\n',
+                deleteInUseTx: '- {count} 笔单次交易纪录 (发生于 {dates}{more})\n',
+                deleteInUseFixed: '- {count} 笔固定支出/收入规则 ({names}{more})\n',
+                deleteInUseTail: '\n请先将这些纪录删除或修改为其他对象后再试。',
+                moreDates: ' 等共 {count} 个日期',
+                deleteConfirm: '确定要删除这个对象吗？此动作无法复原。',
+                promptNewTarget: '输入新对象名称:',
+                duplicateAlert: '对象名称「{name}」已存在！',
+                reorderTitle: '请选择排序号码 (数字越小越优先)',
+                deleteBatchInUseMsg: '无法删除！以下对象已被使用：\n',
+                deleteBatchInUseItem: '- 对象 [{name}] ({details})',
+                deleteBatchInUseMore: '\n...及其他项目',
+                deleteBatchInUseTail: '\n\n请先将这些纪录删除或修改为其他对象后再试。',
+                deleteBatchConfirm: '确定要删除这 {count} 个对象吗？此动作无法复原。',
+                cascadeUpdateTitle: '连动更新确认',
+                cascadeUpdateConfirm: '是否将历史纪录中的对象「{oldValue}」一并更新为「{newValue}」？',
+                confirmUpdate: '连动更新'
+            },
+            accountA: '账户 A',
+            defaultBadge: '默认',
+            monthlyBudget: '本月预算: ${amount}',
+            setDefault: '设为默认',
+            deleteAccountError: '无法删除！此账户内还有：\n{boundTxs}{boundFixed}\n请先将这些纪录转移至其他账户，或将其删除后再试。',
+            deleteAccountErrorTx: '- {count} 笔单次交易纪录 (存在于 {displayDates}{moreStr})\n',
+            deleteAccountErrorMoreDates: ' 等共 {count} 个日期',
+            deleteAccountErrorFixed: '- {count} 笔固定支出/收入规则\n',
+            confirmDeleteAccount: '确定要删除这个账户吗？',
+            editAccountError: '编辑账户发生错误: {error}',
+            addAccountError: '新增账户发生错误: {error}',
+            modalAddAccount: '新增账户',
+            modalEditAccount: '编辑账户',
+            modalAccountName: '账户名称',
+            modalLabelColor: '标签颜色',
+            modalSave: '保存',
+            festivalMonth: '月',
+            festivalDay: '日',
+            festivalName: '节日名称 (如: 纪念日)',
+            festivalReminder: '提醒(天前):',
+            festivalDays1: '天数1',
+            festivalDays2: '天数2',
+            festivalDays3: '天数3',
+            downloading: '下载中...',
+            lastUpdated: '上次更新：{date}',
+            lastUpdatedNever: '上次更新：无',
+            holidayUpdateSuccess: '✅ 国定假日更新完成！\n已下载 {years} 年度共 {count} 笔假日数据。',
+            holidayUpdateFail: '❌ 下载失败：{error}',
+            holidayUpdateFailUnknown: '未知错误',
+            btnUpdateHoliday: '更新国定假日',
+            backupSuccess: '✅ 备份汇出成功！\n共汇出 {txCount} 笔一般纪录、{fixedCount} 笔固定纪录\n包含 {catCount} 个大类与 {tgtCount} 个对象设定',
+            restoreConfirmWarningLocalEmpty: '【数据还原】\n确定要将这份云端数据还原至本机吗？',
+            restoreConfirmWarningOverwrite: '【覆盖模式警告】\n确定要使用这份数据完全覆盖本机所有纪录吗？\n(本机现有的纪录将被全数删除！)',
+            restoreConfirmWarningMerge: '【合并模式】\n确定要将这份数据合并至本机吗？\n(会保留本机纪录，并自动跳过重复项目)',
+            restoreConfirmMsg: '此备份共包含：\n- 一般纪录：{totalTx} 笔\n- 固定纪录：{totalFixed} 笔\n- 类别设定：{totalCat} 个\n- 对象设定：{totalTgt} 个\n',
+            restoreConfirmMsgFilter: '\n(已自动过滤重复)\n',
+            restoreConfirmMsgFilterTx: '- 一般纪录：{count} 笔\n',
+            restoreConfirmMsgFilterFixed: '- 固定纪录：{count} 笔\n',
+            restoreConfirmMsgFilterCat: '- 类别设定：{count} 个\n',
+            restoreConfirmMsgFilterTgt: '- 对象设定：{count} 个\n',
+            inputNamePlaceholder: '例如: 现金、信用卡',
+            inputBudgetPlaceholder: '例如 25000',
+            requireAccountName: '请输入账户名称'
+        },
+        modals: {
+            accountFilter: {
+                title: '过滤账户',
+                selectLabel: '选择要显示的账户',
+                selectAll: '全选',
+                clearAll: '全不选',
+                confirm: '确认'
+            },
+            crop: {
+                title: '裁剪照片',
+                warning: '⚠️ 重复裁剪会造成画质减损',
+                cancel: '取消',
+                confirm: '确认裁剪'
+            },
+            photoHelp: {
+                title: '照片质量建议设定',
+                p1: '320x320 与 0.3 品质确实会「非常模糊」。如果您只是想拍一张「这是一杯咖啡」的意象图，那勉强够用；但如果您拍的是「实体发票或收据」，上面的文字跟数字绝对会糊在一起看不清楚。',
+                p2: '建议如果要保留收据数字的辨识度，最少要设定在 <strong style="color: var(--primary-color);">480x480 / 品质 0.5</strong> 以上。',
+                estimateTitle: '预估单张照片大小 (存入数据库后)',
+                li1: '320x320 / 品质 0.3：约 10~20 KB <span style="font-size: 0.8rem;">(极小但极模糊)</span>',
+                li2: '480x480 / 品质 0.5：约 15~30 KB',
+                li3: '640x640 / 品质 0.7：约 40~60 KB <strong style="color: var(--text-main); font-weight: 500;">(默认，清晰度佳)</strong>',
+                li4: '1024x1024 / 品质 0.9：约 150~250 KB <span style="font-size: 0.8rem;">(极清晰但占用较大)</span>',
+                understand: '了解'
+            },
+            record: {
+                editTitle: '编辑纪录',
+                tabExpense: '支出',
+                tabIncome: '收入',
+                tabSingle: '单次',
+                tabFixed: '固定',
+                date: '日期',
+                dateRange: '起讫日期',
+                startDate: '开始日期',
+                endDate: '结束日期',
+                amount: '金额',
+                repeatType: '重复方式',
+                ruleYearly: '每年',
+                ruleMonthly: '每月',
+                ruleWeekly: '每周',
+                ruleDetail: '详细规则',
+                monday: '星期一',
+                tuesday: '星期二',
+                wednesday: '星期三',
+                thursday: '星期四',
+                friday: '星期五',
+                saturday: '星期六',
+                sunday: '星期日',
+                majorCat: '大类',
+                subCat: '小类',
+                target: '对象',
+                location: '地点',
+                locationPlaceholder: '输入地址或店名',
+                mapTitle: '在地图中开启',
+                photo: '照片',
+                photoUpload: '拍照或上传照片',
+                photoPreview: '预览图',
+                photoRecrop: '点击重新裁剪',
+                photoDelete: '删除照片',
+                note: '备注',
+                notePlaceholder: '备注...',
+                btnDelete: '删除',
+                btnCopy: '复制',
+                btnSave: '保存',
+                btnCancel: '取消'
+            }
+        },
+        globalFestivals: {
+            newYear: '元旦',
+            valentinesDay: '西洋情人节',
+            womensDay: '国际妇女节',
+            foolsDay: '愚人节',
+            earthDay: '世界地球日',
+            laborDay: '劳动节',
+            halloween: '万圣节',
+            christmas: '圣诞节',
+            mothersDay: '母亲节',
+            thanksgiving: '感恩节',
+            easter: '复活节',
+            internationalCoopDay: '国际合作节',
+            captiveNationsWeek: '被奴役国家周',
+            diaryValentinesDay: '日记情人节',
+            westernValentinesDay: '西洋情人节',
+            whiteValentinesDay: '白色情人节',
+            blackValentinesDay: '黑色情人节',
+            roseValentinesDay: '玫瑰情人节',
+            kissValentinesDay: '亲吻情人节',
+            silverValentinesDay: '银色情人节',
+            greenValentinesDay: '绿色情人节',
+            photoValentinesDay: '相片情人节',
+            wineValentinesDay: '葡萄酒情人节',
+            movieValentinesDay: '电影情人节',
+            hugValentinesDay: '拥抱情人节'
+        },
+        calendar: {
+            weekdays: ['日', '一', '二', '三', '四', '五', '六'],
+            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            lunarDays: ['初一','初二','初三','初四','初五','初六','初七','初八','初九','初十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十','廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十'],
+            lunarMonths: ['正','二','三','四','五','六','七','八','九','十','十一','十二'],
+            lunarLeap: '闰',
+            lunarMonthSuffix: '月',
+            dayDetail: {
+                txTitle: '当日交易纪录',
+                closeBtn: '关闭详细信息'
+            },
+            recordOf: '的纪录',
+            noRecord: '当日尚无纪录',
+            baziDayMaster: '日主',
+            baziYearPillar: '年柱',
+            baziMonthPillar: '月柱',
+            baziDayPillar: '日柱',
+            baziNote: '* 轻量级排盘不含时柱'
+        }
+    },
+    systemLogs: {
+        taiwanHolidays: {
+            localStorageFormatError: '[万年历] localStorage 数据格式错误 ({func})，已忽略',
+            loadPersistedError: '[万年历] 载入本地假日数据失败 ({func}):',
+            noDataYet: '[万年历] 尚未提供 {year} 年度的国定假日数据。',
+            fetchError: '[API] 获取政府行事历失败 ({func} - {year}):',
+            downloadError: '[API] 下载政府行事历失败 ({year}):',
+            saveLocalStorageError: '[万年历] 保存 localStorage 失败:',
+            updateUnexpectedError: '[API] 手动更新国定假日数据时发生未预期错误:'
+        },
+        themeSwitcher: {
+            readCustomThemeError: '[外观主题] 无法读取自订主题:',
+            containerNotFound: '[外观主题] 找不到主题容器: {containerId}',
+            switchedTheme: '[外观主题] 透过菜单切换主题至: {newTheme}'
+        }
+    }
+};

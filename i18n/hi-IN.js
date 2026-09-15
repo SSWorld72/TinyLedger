@@ -1,0 +1,723 @@
+export default {
+    categories: {
+        expense: {
+            food: 'भोजन और पेय',
+            family: 'पारिवारिक व्यय',
+            medical: 'चिकित्सा देखभाल',
+            clothing: 'कपड़े और सहायक उपकरण',
+            device: '3C उपकरण',
+            transport: 'परिवहन और टिकट',
+            entertainment: 'मनोरंजन',
+            education: 'शिक्षा और नेटवर्किंग',
+            tax: 'कर और शुल्क',
+            other: 'अन्य'
+        },
+        income: {
+            salary: 'वेतन',
+            investment: 'निवेश',
+            other: 'अन्य'
+        }
+    },
+    targets: {
+        self: 'स्वयं',
+        husband: 'पति',
+        wife: 'पत्नी',
+        child: 'बच्चा',
+        grandpa: 'दादा/नाना',
+        grandma: 'दादी/नानी',
+        family: 'पूरा परिवार',
+        other: 'अन्य'
+    },
+    subcategories: {
+        expense: {
+            food: { breakfast: 'नाश्ता', lunch: 'दोपहर का भोजन', dinner: 'रात का भोजन', midnight: 'मध्यरात्रि नाश्ता', drink: 'पेय', noodle: 'इंस्टेंट नूडल्स', snack: 'नाश्ता (स्नैक)', bread: 'ब्रेड' },
+            family: { allowance: 'जेब खर्च', water: 'पानी का बिल', electricity: 'बिजली का बिल', phone: 'फोन का बिल', internet: 'इंटरनेट का बिल', furniture: 'फर्नीचर', appliance: 'घरेलू उपकरण', cleaning: 'सफाई के उत्पाद', mortgage: 'होम लोन', mall: 'शॉपिंग मॉल' },
+            medical: { insurance: 'बीमा प्रीमियम', medical: 'चिकित्सा व्यय', supplement: 'स्वास्थ्य पूरक' },
+            clothing: { coat: 'कोट', clothes: 'कपड़े', pants: 'पतलून', skirt: 'स्कर्ट', shoes: 'जूते', hat: 'टोपी', scarf: 'स्कार्फ', gloves: 'दस्ताने', underwear: 'अंतःवस्त्र', underpants: 'अंडरपैंट', socks: 'मोज़े', contacts: 'कांटेक्ट लेंस' },
+            device: { computer: 'कंप्यूटर', phone: 'मोबाइल फोन', tablet: 'टैबलेट', console: 'गेम कंसोल', accessories: 'मोबाइल सहायक उपकरण' },
+            transport: { train: 'ट्रेन टिकट', hsr: 'हाई-स्पीड रेल', mrt: 'मेट्रो टिकट', taxi: 'टैक्सी', accommodation: 'आवास शुल्क', ticket: 'टिकट', parking: 'पार्किंग शुल्क', gas: 'ईंधन', maintenance: 'वाहन रखरखाव' },
+            entertainment: { movie: 'फिल्में', pinball: 'पिनबॉल', balloon: 'गुब्बारे', claw: 'क्लॉ मशीन', karaoke: 'कराओके', gacha: 'गचा', game: 'गेम टॉप-अप' },
+            education: { books: 'किताबें', course: 'पाठ्यक्रम', exam: 'परीक्षा', dine: 'डाइनिंग आउट', gift: 'उपहार', red_envelope: 'लाल लिफाफा' },
+            tax: { nhi: 'स्वास्थ्य बीमा', labor: 'श्रम बीमा', national: 'राष्ट्रीय पेंशन', business: 'व्यापार कर', license: 'लाइसेंस कर', income: 'आयकर', house: 'हाउस टैक्स', fuel: 'ईंधन कर', land: 'भूमि कर' },
+            other: { misc: 'विविध', lost: 'गुम हुआ', unclassified: 'अवर्गीकृत' }
+        },
+        income: {
+            salary: { base: 'मूल वेतन', bonus: 'बोनस', festival: 'त्योहार बोनस', overtime: 'ओवरटाइम', parttime: 'पार्ट-टाइम' },
+            investment: { stock: 'शेयर', dividend: 'लाभांश', interest: 'जमा ब्याज', fund: 'फंड रिटर्न', crypto: 'विदेशी मुद्रा/क्रिप्टो' },
+            other: { gift: 'उपहार राशि', refund: 'धनवापसी', lottery: 'लॉटरी जीत', subsidy: 'सब्सिडी' }
+        }
+    },
+
+    logs: {
+        db: {
+            migrationStart: '[डेटाबेस] i18n श्रेणी कोड प्रवासन शुरू हो रहा है...',
+            migrationSuccess: '[डेटाबेस] i18n श्रेणी कोड प्रवासन पूरा हुआ!',
+            migrationFail: '[डेटाबेस] i18n श्रेणी कोड प्रवासन विफल: {error}',
+            error: '[डेटाबेस] त्रुटि:',
+            saveCategorySuccess: '[डेटाबेस] श्रेणी सेटिंग्स (saveCategory) सहेजना सफल',
+            deleteCategorySuccess: '[डेटाबेस] श्रेणी सेटिंग्स (deleteCategory) हटाना सफल',
+            saveTargetSuccess: '[डेटाबेस] लक्ष्य सेटिंग्स (saveTarget) सहेजना सफल',
+            deleteTargetSuccess: '[डेटाबेस] लक्ष्य सेटिंग्स (deleteTarget) हटाना सफल',
+            saveTransactionSuccess: '[डेटाबेस] लेनदेन (saveTransaction) सहेजना सफल',
+            batchSaveTransactionsSuccess: '[डेटाबेस] बैच लेनदेन सहेजना (batchSaveTransactions) सफल',
+            batchSaveTransactionsFail: '[डेटाबेस] बैच लेनदेन सहेजना विफल:',
+            deleteTransactionSuccess: '[डेटाबेस] लेनदेन हटाना (deleteTransaction) सफल',
+            deleteTransactionsByFixedIdSuccess: '[डेटाबेस] बैच-लिंक किए गए निश्चित रिकॉर्ड हटाना (deleteTransactionsByFixedId) सफल',
+            saveFixedRecordSuccess: '[डेटाबेस] निश्चित रिकॉर्ड सहेजना (saveFixedRecord) सफल',
+            batchSaveFixedRecordsSuccess: '[डेटाबेस] बैच निश्चित रिकॉर्ड सहेजना (batchSaveFixedRecords) सफल',
+            batchSaveFixedRecordsFail: '[डेटाबेस] बैच निश्चित रिकॉर्ड सहेजना विफल:',
+            deleteFixedRecordSuccess: '[डेटाबेस] निश्चित रिकॉर्ड हटाना (deleteFixedRecord) सफल'
+        },
+        calendar: {
+            holidayLoadError: 'वर्ष {year} के लिए अवकाश डेटा लोड करने में असमर्थ',
+            loadHolidaysFail: '[कैलेंडर] इस वर्ष के लिए अवकाश डेटा लोड करने में असमर्थ...'
+        },
+        settings: {
+            accountUpdateSuccess: '[सेटिंग्स] खाता सेटिंग्स (saveAccounts) को अपडेट करना सफल रहा',
+            checkAccountDataError: '[सेटिंग्स] खाता डेटा जांचने में त्रुटि:',
+            backupUpdateSuccess: '[सेटिंग्स] निजी क्लाउड सेटिंग्स और सिंक स्थिति सहेजना सफल रहा',
+            saveAccountsSuccess: '[सेटिंग्स] खाता सेटिंग्स (saveAccounts) को अपडेट करना सफल रहा',
+            cloudBackupSuccess: '[सेटिंग्स] निजी क्लाउड सेटिंग्स और सिंक स्थिति सहेजना सफल रहा',
+            restoreError: 'पुनर्स्थापना के दौरान त्रुटि हुई:',
+            exportJsonSuccess: '[बैकअप] स्थानीय बैकअप निर्यात करना सफल रहा: ज़िप आकार ',
+            fileReadError: 'फ़ाइल पढ़ना विफल रहा',
+            importJsonSuccess: '[बैकअप] स्थानीय बैकअप से आयात करना सफल रहा: जोड़ा/अपडेट किया गया ',
+            checkAccountError: '[सेटिंग्स] खाता डेटा जांचने में त्रुटि:',
+            checkCategoryError: '[सेटिंग्स] श्रेणी डेटा जांचने में त्रुटि:',
+            checkCategoryBatchError: '[सेटिंग्स] बैच श्रेणी डेटा जांचने में त्रुटि:',
+            checkTargetError: '[सेटिंग्स] लक्ष्य डेटा जांचने में त्रुटि:',
+            checkTargetBatchError: '[सेटिंग्स] बैच लक्ष्य डेटा जांचने में त्रुटि:'
+        },
+        record: {
+            festivalReminderError: '[महत्वपूर्ण त्योहार अनुस्मारक] त्रुटि:',
+            saveFail: '[रिकॉर्ड] सहेजना विफल:'
+        },
+        location: {
+            fetchPlaceInfoFail: '[स्थान खोज] पूर्ण स्थान जानकारी प्राप्त करने में असमर्थ:',
+            apiLoadFail: '[स्थान खोज] Google मानचित्र API लोड करने में विफल...'
+        },
+        app: {
+            alreadyInitialized: '[मुख्य ऐप] app.js पहले ही प्रारंभ हो चुका है, दोहराव से बच रहे हैं...'
+        },
+        htmlLoader: {
+            loadFail: '[HTML लोडर] लोड करने में विफल',
+            fetchFail: '[HTML लोडर] लाने में असमर्थ'
+        }
+    },
+    ui: {
+        common: {
+            unnamed: '(अनाम)'
+        },
+        footer: {
+            unnamedProject: 'अनाम प्रोजेक्ट',
+            githubProject: 'गिटहब प्रोजेक्ट',
+            releaseDate: 'रिलीज की तारीख: {date}'
+        },
+        app: {
+            name: 'TinyLedger',
+            fullName: 'TinyLedger'
+        },
+        accounts: {
+            defaultName: 'डिफ़ॉल्ट खाता',
+            colors: {
+                blue: 'नीला', green: 'हरा', red: 'लाल', yellow: 'पीला', purple: 'बैंगनी', gray: 'धूसर'
+            },
+            filterAll: 'सभी',
+            filterPartial: '({selected}/{total})',
+            alertNoAccount: 'कृपया कम से कम एक खाता चुनें!'
+        },
+        tabs: {
+            rules: 'श्रेणी / नियम',
+            details: 'श्रेणी / विवरण'
+        },
+        nav: {
+            addRecord: 'नया रिकॉर्ड जोड़ें',
+            backToList: 'सूची पर वापस जाएं',
+            stats: 'चार्ट',
+            calendar: 'कैलेंडर',
+            settings: 'सेटिंग्स',
+            tabGeneral: 'सामान्य रिकॉर्ड',
+            tabGeneralMobile: 'सामान्य<br>रिकॉर्ड',
+            tabFixed: 'निश्चित रिकॉर्ड',
+            tabFixedMobile: 'निश्चित<br>रिकॉर्ड',
+            category: 'श्रेणी'
+        },
+        list: {
+            summary: '📊 वर्तमान डेटा: मैन्युअल रिकॉर्ड {txLen}, निश्चित रिकॉर्ड {fixLen}',
+            filterAll: 'सभी',
+            emptyFixed: 'वर्तमान में कोई निश्चित रिकॉर्ड मेल नहीं खाता',
+            emptyGeneral: 'इस महीने कोई रिकॉर्ड नहीं है',
+            pageInfo: 'पृष्ठ {current} का {total}',
+            prevPage: 'पिछला पृष्ठ',
+            nextPage: 'अगला पृष्ठ',
+            pageSizePre: 'प्रति पृष्ठ',
+            pageSizePost: 'आइटम'
+        },
+        budget: {
+            status: 'इस महीने का बजट {monthlyBudget} · कुल खर्च किया गया ${totalExpenseMonth} ({budgetPercent}%)',
+            over: 'अतिरिक्त खर्च {amount}',
+            left: 'शेष {amount}'
+        },
+        record: {
+            typeIncome: 'आय',
+            typeExpense: 'व्यय',
+            ruleYearly: 'हर साल {day} {month} को',
+            ruleMonthly: 'हर महीने की {day} तारीख को',
+            ruleWeekly: 'हर सप्ताह के {weekday} को',
+            weekdays: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'],
+            ruleCount: 'कुल {count} रिकॉर्ड',
+            noDeadline: 'कोई समय सीमा नहीं',
+            labelTarget: '👤 लक्ष्य:',
+            labelLocation: '📍 स्थान:',
+            labelNote: '📝 नोट:',
+            labelPhoto: '📷 फोटो संलग्न',
+            noNote: 'कोई नोट नहीं',
+            fixedGeneratedTip: 'निश्चित रिकॉर्ड से उत्पन्न विवरण केवल देखने के लिए हैं',
+            addTitle: 'रिकॉर्ड जोड़ें',
+            copyTitle: 'रिकॉर्ड कॉपी करें',
+            editFixedTitle: 'निश्चित नियम संपादित करें',
+            viewFixedTitle: 'निश्चित नियम देखें',
+            addBtn: 'जोड़ें',
+            copyBtn: 'कॉपी करें',
+            promptLocation: 'कृपया कोई स्थान दर्ज करें या चुनें',
+            importantFestivalPrefix: '⭐',
+            festivalJoin: ', ',
+            attachment: 'अनुलग्नक'
+        },
+        batch: {
+            typeNameFixed: 'निश्चित नियम',
+            typeNameGeneral: 'सामान्य रिकॉर्ड',
+            unnamedRule: 'अनाम नियम',
+            boundPreview: '- [{name}] ({count} आइटम, उदा. {date})',
+            andOthers: '...और अन्य',
+            confirmDeleteFixed: 'क्या आप वाकई इन {count} निश्चित नियमों को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।',
+            confirmDeleteFixedBound: '【गंभीर चेतावनी】आपके द्वारा चुने गए नियमों ने स्वचालित रूप से {totalBound} ऐतिहासिक रिकॉर्ड बनाए हैं:\n{boundLines}\n\nनियम हटाने से ये ऐतिहासिक रिकॉर्ड "एक साथ हटा" दिए जाएंगे!\nयदि आप भविष्य के रिकॉर्ड उत्पन्न करना बंद करना चाहते हैं, तो हटाने को रद्द करने और "समाप्ति तिथि" को संशोधित करने की अनुशंसा की जाती है।\n\nक्या आप वाकई जबरन हटाना और ऐतिहासिक रिकॉर्ड को नष्ट करना चाहते हैं?',
+            confirmDeleteType: 'क्या आप वाकई इन {count} {typeName} को हटाना चाहते हैं?',
+            btnDeleteSelected: 'चयनित हटाएं ({count})'
+        },
+        stats: {
+            tabs: {
+                pie: 'पाई चार्ट',
+                bar: 'बार चार्ट',
+                line: 'लाइन चार्ट',
+                annual: 'वार्षिक चार्ट'
+            },
+            filters: {
+                period: 'अवधि:',
+                week: 'सप्ताह',
+                month: 'महीना',
+                year: 'वर्ष',
+                all: 'सभी',
+                custom: 'कस्टम',
+                groupby: 'समूह द्वारा:',
+                major: 'प्रमुख',
+                sub: 'उप',
+                payee: 'लक्ष्य',
+                xaxis: 'एक्स-अक्ष:',
+                byDay: 'दिन के अनुसार',
+                byMonth: 'महीने के अनुसार',
+                yearLabel: 'वर्ष:'
+            },
+            noData: 'अभी तक कोई डेटा नहीं',
+            unclassified: '(अवर्गीकृत)',
+            unspecified: '(अनिर्दिष्ट)',
+            tableMajor: 'प्रमुख',
+            tableSub: 'उप',
+            tableTarget: 'लक्ष्य',
+            tableAmount: 'राशि',
+            tablePercent: 'प्रतिशत',
+            tableTotal: 'कुल',
+            noAnnualRecord: 'वर्ष {year} के लिए कोई रिकॉर्ड नहीं है',
+            annualTotalIncome: 'कुल आय',
+            annualTotalExpense: 'कुल व्यय',
+            annualBalance: 'संतुलन',
+            monthlyDetails: 'मासिक विवरण',
+            month: 'महीना',
+            monthSuffix: '',
+            year: 'वर्ष',
+            income: 'आय',
+            expense: 'व्यय',
+            top5Expenses: 'शीर्ष 5 व्यय श्रेणियां'
+        },
+        settings: {
+            dangerZone: {
+                title: 'खतरा क्षेत्र',
+                desc: 'स्थानीय रूप से सभी रिकॉर्ड, निश्चित नियम और श्रेणी सेटिंग्स साफ़ करें। यदि आप फिर से शुरू करना चाहते हैं, या असामान्य डेटा साफ़ करना चाहते हैं, तो आप नीचे दिए गए बटन पर क्लिक कर सकते हैं। (इस क्रिया को पूर्ववत नहीं किया जा सकता है)',
+                button: 'सभी स्थानीय डेटा को जबरन साफ़ करें',
+                confirmTitle: 'क्या आप वाकई साफ़ करना चाहते हैं?',
+                confirmMsg: 'यह आपके फोन/कंप्यूटर पर मौजूद सभी स्थानीय डेटा को पूरी तरह से हटा देगा।\nयह क्रिया पूर्ववत नहीं की जा सकती है, कृपया पुष्टि करें कि आपने बैकअप लिया है!',
+                doubleConfirmTitle: 'अंतिम पुष्टि',
+                doubleConfirmMsg: 'क्या आप वाकई साफ़ करना चाहते हैं?\nयह क्रिया स्थानीय डेटाबेस को स्थायी रूप से नष्ट कर देगी।',
+                btnConfirm: 'मैं साफ़ करना चाहता हूँ',
+                btnCancel: 'रद्द करें',
+                btnDoubleConfirm: 'डेटा को नष्ट करने की पुष्टि करें',
+                btnDoubleCancel: 'फिर से सोचें',
+                busyTitle: 'डेटा साफ़ कर रहा है',
+                busyDetail: 'हटा रहा है...',
+                success: '✅ सभी स्थानीय डेटा पूरी तरह से साफ़ कर दिया गया है! सिस्टम स्वचालित रूप से पुनः लोड होगा।',
+                error: 'डेटा साफ़ करते समय एक त्रुटि हुई: {error}'
+            },
+            systemLogs: {
+                title: 'सिस्टम लॉग (System Logs)',
+                desc: 'कनेक्शन या डेटा सिंक समस्याओं के निवारण में सहायता के लिए हाल के 999 कंसोल लॉग प्रदर्शित करता है।',
+                placeholderSearch: 'समय या कीवर्ड खोजें...',
+                titleCopy: 'फ़िल्टर किए गए लॉग कॉपी करें',
+                btnCopy: 'कॉपी करें',
+                btnExport: 'निर्यात करें',
+                titleClear: 'लॉग साफ़ करें',
+                btnClear: 'साफ़ करें',
+                confirmClear: 'क्या आप वाकई सभी सिस्टम लॉग साफ़ करना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।',
+                emptyExport: 'वर्तमान में निर्यात करने के लिए कोई लॉग नहीं हैं',
+                emptyCopy: 'वर्तमान में कॉपी करने के लिए कोई लॉग नहीं हैं',
+                copySuccess: 'लॉग क्लिपबोर्ड पर कॉपी किए गए',
+                copyError: 'कॉपी करने में विफल: {error}'
+            },
+            language: { title: 'प्रदर्शन भाषा (Language)' },
+            title: 'सिस्टम सेटिंग्स',
+            sponsor: 'लेखक का प्रायोजन करें',
+            theme: {
+                title: 'उपस्थिति थीम'
+            },
+            backup: {
+                title: 'मैन्युअल और स्वचालित बैकअप',
+                manualExport: 'ज़िप निर्यात करें',
+                manualImport: 'बैकअप आयात करें',
+                importHint: '.zip या पुराने .json प्रारूप का समर्थन करता है',
+                autoExport: 'स्वचालित निर्यात क्षेत्र',
+                daily: 'दैनिक (इस महीने का डेटा)',
+                yearly: 'वर्ष के अनुसार (पूरे वर्ष का डेटा)',
+                yearlyAll: 'सभी वर्ष',
+                yearlyCurrent: 'केवल इस वर्ष',
+                yearlyLast: 'पिछले साल और इस साल',
+                includePhotos: 'तस्वीरें शामिल करें (फ़ाइल का आकार काफी बढ़ जाएगा)',
+                exporting: 'ज़िप बैकअप फ़ाइल डाउनलोड करने की तैयारी कर रहा है...',
+                exportSuccess: '✅ बैकअप सफलतापूर्वक निर्यात किया गया!\nकुल {txCount} सामान्य रिकॉर्ड, {fixedCount} निश्चित रिकॉर्ड निर्यात किए गए\n{catCount} प्रमुख श्रेणियों और {tgtCount} लक्ष्य सेटिंग्स सहित',
+                exportError: 'निर्यात विफल: {error}',
+                importing: 'बैकअप फ़ाइल पार्स कर रहा है...',
+                importError: 'पुनर्स्थापना के दौरान त्रुटि हुई: {error}',
+                errorJsonParse: 'JSON को पार्स करने में असमर्थ, फ़ाइल स्वरूप गलत है',
+                errorOldFormat: 'असमर्थित पुराने बैकअप प्रारूप, कृपया बैकअप फ़ाइल के नवीनतम संस्करण का उपयोग करें',
+                errorUnsupportedFile: 'असमर्थित फ़ाइल स्वरूप, कृपया एक .zip या .json बैकअप फ़ाइल प्रदान करें',
+                gasUrlConflictPrompt: '⚠️ पाया गया कि बैकअप फ़ाइल में "एक्सक्लूसिव बैकअप जीएएस यूआरएल" स्थानीय मशीन से अलग है!\n\n[बैकअप] {newUrl}\n[स्थानीय] {oldUrl}\n\nक्या आप स्थानीय यूआरएल को बैकअप के यूआरएल से "ओवरराइट" करना चाहते हैं?\n\n(ओवरराइट करने के लिए "ओके" दबाएं, स्थानीय यूआरएल रखने के लिए "रद्द करें" दबाएं)',
+                parsedTitle: 'बैकअप फ़ाइल पार्स करना पूरा हुआ',
+                startImport: 'आयात शुरू करें',
+                cancel: 'रद्द करें',
+                clearingData: 'स्थानीय डेटा साफ़ कर रहा है',
+                deletingRecords: 'मौजूदा रिकॉर्ड हटा रहा है...',
+                restoringLocal: 'स्थानीय पर पुनर्स्थापित कर रहा है',
+                writingDb: 'डेटाबेस में लिख रहा है...',
+                progressFormat: {
+                    wait: '{type} लिखने की प्रतीक्षा कर रहा है... ({current} / {total})',
+                    doing: '{type} लिख रहा है... ({current} / {total})',
+                    done: '{type} लिखा गया... ({current} / {total})',
+                    typeTx: 'सामान्य रिकॉर्ड',
+                    typeFixed: 'निश्चित रिकॉर्ड',
+                    typeCat: 'श्रेणी सेटिंग्स',
+                    typeTgt: 'लक्ष्य सेटिंग्स'
+                },
+                importComplete: '✅ आयात पूर्ण!\n\n[नए जोड़े गए]\n{adds}',
+                reloading: 'सिस्टम पुनः लोड होने वाला है...',
+                fullBackup: 'पूर्ण बैकअप:',
+                fullBackupDesc: 'आपके सभी बिलिंग रिकॉर्ड, निश्चित रिकॉर्ड, श्रेणी सेटिंग्स, और कैलेंडर प्राथमिकताएं।',
+                overwriteWarning: 'निजी क्लाउड से पुनर्स्थापित करते समय, वर्तमान स्थानीय डेटा पूरी तरह से अधिलेखित हो जाएगा',
+                exportingTitle: 'डेटा निर्यात कर रहा है',
+                advancedTitle: 'उन्नत बैकअप सेटिंग्स (स्थानीय और क्लाउड के लिए लागू)',
+                mode: {
+                    title: 'बैकअप मोड',
+                    daily: 'दैनिक बैकअप (सभी डेटा, अधिलेखित पुनर्स्थापना के लिए उपयुक्त)',
+                    yearly: 'वार्षिक बैकअप (वर्ष के अनुसार विभाजित, मर्ज पुनर्स्थापना के लिए उपयुक्त)'
+                },
+                yearlyRange: {
+                    title: 'वार्षिक बैकअप रेंज',
+                    all: 'वर्ष-दर-वर्ष बैकअप (सभी वर्ष)',
+                    current: 'केवल पिछले 1 वर्ष के भीतर (इस वर्ष)'
+                },
+                includePhotos: {
+                    title: 'फोटो डेटा शामिल करें',
+                    desc: 'इसे अनचेक करने से बैकअप फ़ाइल का आकार काफी कम हो सकता है'
+                },
+                restoreMode: {
+                    title: 'डेटा पुनर्स्थापना मोड (स्थानीय और क्लाउड के लिए लागू)',
+                    merge: 'मर्ज मोड (स्थानीय रखें, डुप्लिकेट छोड़ें)',
+                    overwrite: 'ओवरराइट मोड (स्थानीय साफ़ करें, पूरी तरह से अधिलेखित करें)'
+                },
+                localTitle: 'मैन्युअल फ़ाइल बैकअप (Local ZIP)',
+                localDesc: 'वर्तमान बिलिंग रिकॉर्ड को अपने डिवाइस पर डाउनलोड करने के लिए ज़िप बैकअप फ़ाइल के रूप में निर्यात करें। डिवाइस बदलते समय या डेटा खो जाने पर आप इस फ़ाइल के माध्यम से मैन्युअल रूप से पुनर्स्थापित कर सकते हैं।',
+                exportBtn: 'बैकअप निर्यात करें',
+                importBtn: 'बैकअप आयात करें',
+                generateSample: 'परीक्षण डेटा उत्पन्न करें'
+            },
+            cloudBackup: {
+                title: 'निजी क्लाउड सिंक और बैकअप (Google Apps Script)',
+                syncing: 'क्लाउड सिंक प्रक्रिया में है...',
+                desc: 'अपने सभी बिलिंग रिकॉर्ड, निश्चित रिकॉर्ड, श्रेणी सेटिंग्स, कैलेंडर प्राथमिकताएं सहेजें।\n(*निजी क्लाउड से पुनर्स्थापित करते समय, वर्तमान स्थानीय डेटा पूरी तरह से अधिलेखित हो जाएगा)',
+                successSummary: '✅ बैकअप सफलतापूर्वक निर्यात किया गया!\nकुल {txCount} सामान्य रिकॉर्ड, {fixedCount} निश्चित रिकॉर्ड निर्यात किए गए\n{catCount} प्रमुख श्रेणियों और {tgtCount} लक्ष्य सेटिंग्स सहित',
+                restoreConfirmMerge: '【मर्ज मोड】\nक्या आप वाकई इस डेटा को स्थानीय मशीन में मर्ज करना चाहते हैं?\n(स्थानीय रिकॉर्ड रखे जाएंगे और डुप्लिकेट स्वचालित रूप से छोड़ दिए जाएंगे)',
+                restoreConfirmOverwrite: '【ओवरराइट मोड चेतावनी】\nक्या आप वाकई इस डेटा के साथ स्थानीय मशीन के सभी रिकॉर्ड को पूरी तरह से अधिलेखित करना चाहते हैं?\n(मौजूदा स्थानीय रिकॉर्ड पूरी तरह से हटा दिए जाएंगे!)',
+                restoreConfirmEmpty: '【डेटा पुनर्स्थापना】\nक्या आप वाकई इस क्लाउड डेटा को स्थानीय मशीन पर पुनर्स्थापित करना चाहते हैं?',
+                restoreSummary: 'इस बैकअप में शामिल हैं:\n- सामान्य रिकॉर्ड: {txCount} आइटम\n- निश्चित रिकॉर्ड: {fixedCount} आइटम\n- श्रेणी सेटिंग्स: {catCount} आइटम\n- लक्ष्य सेटिंग्स: {tgtCount} आइटम\n',
+                restoreFiltered: '\n(डुप्लिकेट स्वचालित रूप से फ़िल्टर किए गए)\n',
+                restoreFilteredTx: '- सामान्य रिकॉर्ड: {txSkip} आइटम\n',
+                restoreFilteredFixed: '- निश्चित रिकॉर्ड: {fixedSkip} आइटम\n',
+                restoreFilteredCat: '- श्रेणी सेटिंग्स: {catSkip} आइटम\n',
+                restoreFilteredTgt: '- लक्ष्य सेटिंग्स: {tgtSkip} आइटम\n',
+                restoreCompleteEmpty: '✅ क्लाउड पुनर्स्थापना पूर्ण!\n\n【नए जोड़े गए】\n{adds}\n\nसिस्टम पुनः लोड होने वाला है...',
+                restoreCompleteOverwrite: '✅ क्लाउड पुनर्स्थापना पूर्ण (ओवरराइट मोड)!\n\n【नए जोड़े गए】\n{adds}\n\nसिस्टम पुनः लोड होने वाला है...',
+                restoreCompleteMerge: '✅ क्लाउड पुनर्स्थापना पूर्ण (मर्ज मोड)!\n\n【नए जोड़े गए】\n{adds}',
+                restoreCompleteMergeSkipped: '\n\n(डुप्लिकेट स्वचालित रूप से छोड़े गए)\n',
+                addedTx: 'सामान्य रिकॉर्ड {tx} आइटम',
+                addedFixed: 'निश्चित रिकॉर्ड {fixed} आइटम',
+                addedCat: 'श्रेणी सेटिंग्स {cat} आइटम',
+                addedTgt: 'लक्ष्य सेटिंग्स {tgt} आइटम'
+            },
+            accounts: {
+                title: 'खाता पैरामीटर सेटिंग्स',
+                add: 'खाता जोड़ें',
+                edit: 'खाता संपादित करें',
+                defaultAccountName: 'खाता ए',
+                accountName: 'खाते का नाम',
+                accountNamePh: 'उदाहरण: नकद, क्रेडिट कार्ड',
+                requireName: 'कृपया खाते का नाम दर्ज करें',
+                tagColor: 'टैग का रंग',
+                monthlyBudget: 'मासिक बजट',
+                budgetPh: 'उदाहरण: 25000',
+                save: 'सहेजें',
+                budget: 'मासिक बजट: ${amount}',
+                isDefault: 'डिफ़ॉल्ट',
+                setDefault: 'डिफ़ॉल्ट के रूप में सेट करें',
+                deleteConfirmTitle: 'क्या आप वाकई इस खाते को हटाना चाहते हैं?',
+                deleteErrorMsg: 'हटाने में असमर्थ! इस खाते में अभी भी हैं:\n',
+                deleteErrorTxs: '- {count} एकल लेनदेन रिकॉर्ड ({dates} में मौजूद)\n',
+                deleteErrorFixed: '- {count} निश्चित व्यय/आय नियम\n',
+                deleteErrorEnd: '\nकृपया इन रिकॉर्डों को किसी अन्य खाते में स्थानांतरित करें, या पुनः प्रयास करने से पहले उन्हें हटा दें।'
+            },
+            dataManagement: {
+                title: 'लेनदेन सूचना प्रबंधन',
+                expense: 'व्यय श्रेणियां',
+                income: 'आय श्रेणियां',
+                target: 'बिलिंग लक्ष्य'
+            },
+            calendar: {
+                title: 'कैलेंडर और प्रदर्शन सेटिंग्स',
+                remindDaysBefore: 'कितने दिन पहले याद दिलाएं:',
+                monthSuffix: 'महीना',
+                daySuffix: 'तारीख',
+                month: '{m} महीना',
+                day: '{d} तारीख',
+                monthPh: 'महीना',
+                dayPh: 'तारीख',
+                festivalNamePh: 'कृपया त्योहार का नाम दर्ज करें',
+                dayNumPh: 'दिनों की संख्या {n}',
+                nationalHoliday: {
+                    title: 'राष्ट्रीय अवकाश (केवल ताइवान के लिए लागू)',
+                    desc: 'कार्मिक प्रशासन महानिदेशालय द्वारा घोषित राष्ट्रीय अवकाश प्रदर्शित करें',
+                    lastUpdated: 'अंतिम अद्यतन: ',
+                    neverUpdated: 'कोई नहीं',
+                    updateNow: 'अभी अद्यतन करें',
+                    updating: 'डाउनलोड हो रहा है...',
+                    updateSuccess: '✅ राष्ट्रीय अवकाश अद्यतन पूरा हुआ!\n{years} वर्ष के लिए कुल {count} अवकाश डेटा डाउनलोड किया गया।',
+                    updateSuccessLog: '[सिस्टम सेटिंग्स] राष्ट्रीय अवकाश डेटा ({years}) को सफलतापूर्वक अद्यतन किया गया, कुल {count} प्रविष्टियाँ।',
+                    updateError: '❌ डाउनलोड विफल: {error}'
+                },
+                lunarDate: {
+                    title: 'चंद्र तिथि (चीनी परंपरा)',
+                    desc: 'चंद्र तिथि प्रदर्शित करें (जैसे: पहला दिन, पंद्रहवां दिन)'
+                },
+                stembranch: {
+                    title: 'स्टेम और शाखा (चीनी परंपरा)',
+                    desc: 'दैनिक शाखाएं प्रदर्शित करें (जैसे: जियाज़ी, यिचौ)'
+                },
+                solarterm: {
+                    title: 'चौबीस सौर शब्द (चीनी परंपरा)',
+                    desc: 'दिन का सौर शब्द नाम प्रदर्शित करें (जैसे: लिचुन, किंगमिंग)'
+                },
+                festival: {
+                    title: 'त्योहार (चीनी परंपरा)',
+                    desc: 'पारंपरिक त्योहार और स्थानीय स्मारक दिवस प्रदर्शित करें (वसंत महोत्सव, ड्रैगन बोट, आदि)'
+                },
+                globalFestival: {
+                    title: 'त्योहार (वैश्विक)',
+                    desc: 'वैश्विक और पश्चिमी त्योहार प्रदर्शित करें (नव वर्ष, क्रिसमस, आदि)'
+                },
+                bazi: {
+                    title: 'बाज़ी पूर्ण चार्ट (चीनी परंपरा)',
+                    desc: 'तारीख पर क्लिक करने पर चार स्तंभ, दस देवता, छिपे हुए तने, और यिनयिंग प्रदर्शित करें'
+                },
+                valentine: {
+                    title: 'मजेदार वेलेंटाइन डे',
+                    desc: 'हर महीने की 14 तारीख को विशेष वेलेंटाइन डे प्रदर्शित करें (जिसमें 2/14 पश्चिमी, सफेद, काले वेलेंटाइन डे, आदि शामिल हैं)'
+                },
+                importantFestival: {
+                    title: 'महत्वपूर्ण त्योहार अनुस्मारक सेटिंग्स',
+                    enableTitle: 'महत्वपूर्ण त्योहार अनुस्मारक सक्षम करें',
+                    enableDesc: 'त्योहार आने से पहले, बिलिंग के समय एक अनुस्मारक स्वचालित रूप से पॉप अप होगा, और कैलेंडर पर एक विशेष तारा चिह्न प्रदर्शित किया जाएगा',
+                    addBtn: 'त्योहार जोड़ें (अधिकतम 10 समूह)'
+                }
+            },
+            photoUpload: {
+                title: 'फोटो अपलोड',
+                enableTitle: 'फोटो लें और अपलोड फ़ंक्शन',
+                enableDesc: 'चालू होने पर, बिलिंग करते समय तस्वीरें संलग्न की जा सकती हैं',
+                maxSize: 'अधिकतम फोटो आकार',
+                size320: '320 x 320',
+                size480: '480 x 480 (सुझाई गई निचली सीमा)',
+                size640: '640 x 640 (डिफ़ॉल्ट)',
+                size800: '800 x 800',
+                size1024: '1024 x 1024',
+                quality: 'जेपीईजी संपीड़न गुणवत्ता',
+                qual03: '0.3 (उच्च संपीड़न)',
+                qual05: '0.5 (सुझाई गई निचली सीमा)',
+                qual07: '0.7 (डिफ़ॉल्ट)',
+                qual09: '0.9 (निम्न संपीड़न)'
+            },
+            mapLink: {
+                title: 'Google मानचित्र स्थिति',
+                enableTitle: 'स्थान सूची मानचित्र से लिंक करती है',
+                enableDesc: 'मुख पृष्ठ रिकॉर्ड सूची में स्थान पर सीधे क्लिक करके मानचित्र खोलने की अनुमति दें'
+            },
+            about: {
+                title: 'के बारे में',
+                licenseTitle: 'ओपन सोर्स कोड और लाइसेंस',
+                licenseDesc: 'इस परियोजना में प्रयुक्त तृतीय-पक्ष ओपन सोर्स संकुल देखें',
+                openSourceLicense: 'ओपन सोर्स लाइसेंस (MIT License)',
+                visualAssetsCopyright: 'दृश्य संपत्ति कॉपीराइट कथन',
+                visualAssetsDesc: 'इस परियोजना का अंतर्निहित स्रोत कोड MIT लाइसेंस के तहत जारी किया गया है।<br><br>हालांकि, इस सॉफ़्टवेयर में शामिल सभी ब्रांड पहचान, UI डिज़ाइन, आइकन और संबंधित दृश्य संपत्तियां पूरी तरह से मूल लेखक द्वारा कॉपीराइट की गई हैं, <strong class="text-rose-600 dark:text-rose-400 font-semibold">और उपरोक्त MIT लाइसेंस के अधीन नहीं हैं</strong>।<br><br>लेखक से स्पष्ट लिखित प्राधिकरण के बिना, उपरोक्त दृश्य संपत्तियों का दुरुपयोग, पुनरुत्पादन, वितरण या उपयोग अन्य परियोजनाओं या व्यावसायिक उद्देश्यों के लिए सख्ती से निषिद्ध है।',
+                poweredBy: 'प्रौद्योगिकी और ओपन सोर्स पैकेज'
+            },
+
+            categories: {
+                title: 'श्रेणियां प्रबंधित करें',
+                selectAll: 'सभी चुनें',
+                cascadeUpdateConfirm: 'यह क्रिया उन सभी ऐतिहासिक रिकॉर्डों को बदल देगी जो 「{oldValue}」 का उपयोग करते हैं\n「{newValue}」 में, क्या आप वाकई जारी रखना चाहते हैं?',
+                cascadeUpdateTitle: 'लिंक्ड अपडेट की पुष्टि',
+                confirmUpdate: 'संशोधन की पुष्टि करें',
+                cancel: 'रद्द करें',
+                noData: 'कोई डेटा नहीं, कृपया जोड़ें',
+                addExpenseMajor: 'प्रमुख व्यय श्रेणी जोड़ें',
+                addIncomeMajor: 'प्रमुख आय श्रेणी जोड़ें',
+                promptNewMajor: 'नया प्रमुख श्रेणी नाम दर्ज करें:',
+                deleteSelected: '🗑️ चयनित हटाएं ({count})',
+                addMinor: 'उप-श्रेणी जोड़ें',
+                promptNewMinor: 'नया उप-श्रेणी नाम दर्ज करें:',
+                deleteInUseMsg: 'हटाने में असमर्थ! यह श्रेणी पहले से ही उपयोग में है:\n',
+                deleteInUseTx: '- {count} एकल लेनदेन रिकॉर्ड ({dates}{more} में हुआ)\n',
+                deleteInUseFixed: '- {count} निश्चित व्यय/आय नियम ({names}{more})\n',
+                deleteInUseTail: '\nकृपया इन रिकॉर्डों को हटा दें या उन्हें किसी अन्य श्रेणी में संशोधित करने का प्रयास करें।',
+                editSub: 'उप-श्रेणी संपादित करें',
+                deleteSub: 'उप-श्रेणी हटाएं',
+                moreDays: ' कुल {count} दिनों की प्रतीक्षा कर रहा है',
+                etc: ' आदि',
+                deleteConfirm: 'क्या आप वाकई इस श्रेणी को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।',
+                expenseTitle: 'व्यय श्रेणी प्रबंधन',
+                incomeTitle: 'आय श्रेणी प्रबंधन',
+                deleteBatchConfirm: 'क्या आप वाकई इन {majorCount} प्रमुख श्रेणियों और {minorCount} उप-श्रेणियों को हटाना चाहते हैं, कुल {total} आइटम?\n(नोट: किसी प्रमुख श्रेणी को हटाने से उसके अंतर्गत सभी उप-श्रेणियां भी हट जाएंगी)',
+                deleteBatchConfirmMinorOnly: 'क्या आप वाकई इन {count} उप-श्रेणी आइटम को हटाना चाहते हैं?',
+                deleteBatchConfirmMajorOnly: 'क्या आप वाकई इन {count} प्रमुख श्रेणी आइटम को हटाना चाहते हैं?\n(नोट: किसी प्रमुख श्रेणी को हटाने से उसके अंतर्गत सभी उप-श्रेणियां भी हट जाएंगी)',
+                deleteBatchInUseMsg: 'हटाने में असमर्थ! निम्नलिखित श्रेणियां पहले से ही उपयोग में हैं:\n',
+                deleteBatchInUseMinorItem: '- उप-श्रेणी [{major} > {sub}] ({details})',
+                deleteBatchInUseMajorItem: '- प्रमुख श्रेणी [{major}] ({details})',
+                deleteBatchInUseTxDetail: '{count} रिकॉर्ड (जैसे {date})',
+                deleteBatchInUseFixedDetail: '{count} नियम',
+                deleteBatchInUseMore: '\n...और अन्य आइटम',
+                deleteBatchInUseTail: '\n\nकृपया इन रिकॉर्डों को हटा दें या उन्हें किसी अन्य श्रेणी में संशोधित करने का प्रयास करें।'
+            },
+            targets: {
+                title: 'बिलिंग लक्ष्य',
+                addTarget: 'लक्ष्य जोड़ें',
+                selectAll: 'सभी चुनें',
+                noData: 'कोई डेटा नहीं, कृपया जोड़ें',
+                noDataSimple: 'कोई डेटा नहीं',
+                deleteSelected: '🗑️ चयनित हटाएं ({count})',
+                deleteInUseMsg: 'हटाने में असमर्थ! यह लक्ष्य पहले से ही उपयोग में है:\n',
+                deleteInUseTx: '- {count} एकल लेनदेन रिकॉर्ड ({dates}{more} में हुआ)\n',
+                deleteInUseFixed: '- {count} निश्चित व्यय/आय नियम ({names}{more})\n',
+                deleteInUseTail: '\nकृपया इन रिकॉर्डों को हटा दें या उन्हें किसी अन्य लक्ष्य में संशोधित करने का प्रयास करें।',
+                moreDates: ' कुल {count} तिथियों की प्रतीक्षा कर रहा है',
+                deleteConfirm: 'क्या आप वाकई इस लक्ष्य को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।',
+                promptNewTarget: 'नया लक्ष्य नाम दर्ज करें:',
+                duplicateAlert: 'लक्ष्य नाम 「{name}」 पहले से मौजूद है!',
+                reorderTitle: 'कृपया एक क्रम संख्या चुनें (जितनी छोटी संख्या, उतनी अधिक प्राथमिकता)',
+                deleteBatchInUseMsg: 'हटाने में असमर्थ! निम्नलिखित लक्ष्य पहले से ही उपयोग में हैं:\n',
+                deleteBatchInUseItem: '- लक्ष्य [{name}] ({details})',
+                deleteBatchInUseMore: '\n...और अन्य आइटम',
+                deleteBatchInUseTail: '\n\nकृपया इन रिकॉर्डों को हटा दें या उन्हें किसी अन्य लक्ष्य में संशोधित करने का प्रयास करें।',
+                deleteBatchConfirm: 'क्या आप वाकई इन {count} लक्ष्यों को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।',
+                cascadeUpdateTitle: 'लिंक्ड अपडेट की पुष्टि',
+                cascadeUpdateConfirm: 'क्या आप ऐतिहासिक रिकॉर्ड में लक्ष्य 「{oldValue}」 को 「{newValue}」 में एक साथ अपडेट करना चाहते हैं?',
+                confirmUpdate: 'लिंक्ड अपडेट'
+            },
+            accountA: 'खाता ए',
+            defaultBadge: 'डिफ़ॉल्ट',
+            monthlyBudget: 'मासिक बजट: ${amount}',
+            setDefault: 'डिफ़ॉल्ट के रूप में सेट करें',
+            deleteAccountError: 'हटाने में असमर्थ! इस खाते में अभी भी हैं:\n{boundTxs}{boundFixed}\nकृपया इन रिकॉर्डों को किसी अन्य खाते में स्थानांतरित करें, या पुनः प्रयास करने से पहले उन्हें हटा दें।',
+            deleteAccountErrorTx: '- {count} एकल लेनदेन रिकॉर्ड ({displayDates}{moreStr} में मौजूद)\n',
+            deleteAccountErrorMoreDates: ' कुल {count} तिथियों की प्रतीक्षा कर रहा है',
+            deleteAccountErrorFixed: '- {count} निश्चित व्यय/आय नियम\n',
+            confirmDeleteAccount: 'क्या आप वाकई इस खाते को हटाना चाहते हैं?',
+            editAccountError: 'खाता संपादित करते समय एक त्रुटि हुई: {error}',
+            addAccountError: 'खाता जोड़ते समय एक त्रुटि हुई: {error}',
+            modalAddAccount: 'खाता जोड़ें',
+            modalEditAccount: 'खाता संपादित करें',
+            modalAccountName: 'खाते का नाम',
+            modalLabelColor: 'टैग का रंग',
+            modalSave: 'सहेजें',
+            festivalMonth: 'महीना',
+            festivalDay: 'तारीख',
+            festivalName: 'त्योहार का नाम (जैसे: सालगिरह)',
+            festivalReminder: 'अनुस्मारक (दिन पहले):',
+            festivalDays1: 'दिन 1',
+            festivalDays2: 'दिन 2',
+            festivalDays3: 'दिन 3',
+            downloading: 'डाउनलोड हो रहा है...',
+            lastUpdated: 'अंतिम अद्यतन: {date}',
+            lastUpdatedNever: 'अंतिम अद्यतन: कभी नहीं',
+            holidayUpdateSuccess: '✅ राष्ट्रीय अवकाश अद्यतन पूरा हुआ!\n{years} वर्ष के लिए कुल {count} अवकाश डेटा डाउनलोड किया गया।',
+            holidayUpdateFail: '❌ डाउनलोड विफल: {error}',
+            holidayUpdateFailUnknown: 'अज्ञात त्रुटि',
+            btnUpdateHoliday: 'राष्ट्रीय अवकाश अद्यतन करें',
+            backupSuccess: '✅ बैकअप सफलतापूर्वक निर्यात किया गया!\nकुल {txCount} सामान्य रिकॉर्ड, {fixedCount} निश्चित रिकॉर्ड निर्यात किए गए\n{catCount} प्रमुख श्रेणियों और {tgtCount} लक्ष्य सेटिंग्स सहित',
+            restoreConfirmWarningLocalEmpty: '【डेटा पुनर्स्थापना】\nक्या आप वाकई इस क्लाउड डेटा को स्थानीय मशीन पर पुनर्स्थापित करना चाहते हैं?',
+            restoreConfirmWarningOverwrite: '【ओवरराइट मोड चेतावनी】\nक्या आप वाकई इस डेटा के साथ स्थानीय मशीन के सभी रिकॉर्ड को पूरी तरह से अधिलेखित करना चाहते हैं?\n(मौजूदा स्थानीय रिकॉर्ड पूरी तरह से हटा दिए जाएंगे!)',
+            restoreConfirmWarningMerge: '【मर्ज मोड】\nक्या आप वाकई इस डेटा को स्थानीय मशीन में मर्ज करना चाहते हैं?\n(स्थानीय रिकॉर्ड रखे जाएंगे और डुप्लिकेट स्वचालित रूप से छोड़ दिए जाएंगे)',
+            restoreConfirmMsg: 'इस बैकअप में शामिल हैं:\n- सामान्य रिकॉर्ड: {totalTx} आइटम\n- निश्चित रिकॉर्ड: {totalFixed} आइटम\n- श्रेणी सेटिंग्स: {totalCat} आइटम\n- लक्ष्य सेटिंग्स: {totalTgt} आइटम\n',
+            restoreConfirmMsgFilter: '\n(डुप्लिकेट स्वचालित रूप से फ़िल्टर किए गए)\n',
+            restoreConfirmMsgFilterTx: '- सामान्य रिकॉर्ड: {count} आइटम\n',
+            restoreConfirmMsgFilterFixed: '- निश्चित रिकॉर्ड: {count} आइटम\n',
+            restoreConfirmMsgFilterCat: '- श्रेणी सेटिंग्स: {count} आइटम\n',
+            restoreConfirmMsgFilterTgt: '- लक्ष्य सेटिंग्स: {count} आइटम\n',
+            inputNamePlaceholder: 'उदाहरण: नकद, क्रेडिट कार्ड',
+            inputBudgetPlaceholder: 'उदाहरण के लिए 25000',
+            requireAccountName: 'कृपया खाते का नाम दर्ज करें'
+        },
+        modals: {
+            accountFilter: {
+                title: 'फ़िल्टर खाते',
+                selectLabel: 'प्रदर्शित करने के लिए खाते चुनें',
+                selectAll: 'सभी चुनें',
+                clearAll: 'सभी साफ़ करें',
+                confirm: 'पुष्टि करें'
+            },
+            crop: {
+                title: 'फोटो क्रॉप करें',
+                warning: '⚠️ बार-बार क्रॉप करने से छवि गुणवत्ता कम हो जाएगी',
+                cancel: 'रद्द करें',
+                confirm: 'क्रॉप की पुष्टि करें'
+            },
+            photoHelp: {
+                title: 'फोटो गुणवत्ता के लिए सुझाई गई सेटिंग्स',
+                p1: '320x320 और 0.3 गुणवत्ता निश्चित रूप से "बहुत धुंधली" होगी। यदि आप केवल एक वैचारिक तस्वीर लेना चाहते हैं कि "यह एक कप कॉफी है", तो यह मुश्किल से पर्याप्त है; लेकिन यदि आप "भौतिक चालान या रसीद" लेते हैं, तो पाठ और संख्याएं निश्चित रूप से एक साथ धुंधली हो जाएंगी और स्पष्ट रूप से नहीं देखी जा सकती हैं।',
+                p2: 'यदि आप रसीद संख्या की पहचान बनाए रखना चाहते हैं, तो यह अनुशंसा की जाती है कि इसे कम से कम <strong style="color: var(--primary-color);">480x480 / गुणवत्ता 0.5</strong> या उससे अधिक पर सेट करें।',
+                estimateTitle: 'एक तस्वीर का अनुमानित आकार (डेटाबेस में सहेजने के बाद)',
+                li1: '320x320 / गुणवत्ता 0.3: लगभग 10~20 KB <span style="font-size: 0.8rem;">(बहुत छोटा लेकिन बहुत धुंधला)</span>',
+                li2: '480x480 / गुणवत्ता 0.5: लगभग 15~30 KB',
+                li3: '640x640 / गुणवत्ता 0.7: लगभग 40~60 KB <strong style="color: var(--text-main); font-weight: 500;">(डिफ़ॉल्ट, अच्छी स्पष्टता)</strong>',
+                li4: '1024x1024 / गुणवत्ता 0.9: लगभग 150~250 KB <span style="font-size: 0.8rem;">(बहुत स्पष्ट लेकिन अधिक स्थान लेता है)</span>',
+                understand: 'समझ गया'
+            },
+            record: {
+                editTitle: 'रिकॉर्ड संपादित करें',
+                tabExpense: 'व्यय',
+                tabIncome: 'आय',
+                tabSingle: 'एकल',
+                tabFixed: 'निश्चित',
+                date: 'तारीख',
+                dateRange: 'तारीख सीमा',
+                startDate: 'आरंभ तिथि',
+                endDate: 'समाप्ति तिथि',
+                amount: 'राशि',
+                repeatType: 'दोहराव का प्रकार',
+                ruleYearly: 'सालाना',
+                ruleMonthly: 'मासिक',
+                ruleWeekly: 'साप्ताहिक',
+                ruleDetail: 'विस्तृत नियम',
+                monday: 'सोमवार',
+                tuesday: 'मंगलवार',
+                wednesday: 'बुधवार',
+                thursday: 'गुरुवार',
+                friday: 'शुक्रवार',
+                saturday: 'शनिवार',
+                sunday: 'रविवार',
+                majorCat: 'प्रमुख श्रेणी',
+                subCat: 'उप-श्रेणी',
+                target: 'लक्ष्य',
+                location: 'स्थान',
+                locationPlaceholder: 'पता या स्टोर का नाम दर्ज करें',
+                mapTitle: 'मानचित्र में खोलें',
+                photo: 'फोटो',
+                photoUpload: 'फोटो लें या फोटो अपलोड करें',
+                photoPreview: 'पूर्वावलोकन',
+                photoRecrop: 'फिर से क्रॉप करने के लिए क्लिक करें',
+                photoDelete: 'फोटो हटाएं',
+                note: 'नोट',
+                notePlaceholder: 'नोट...',
+                btnDelete: 'हटाएं',
+                btnCopy: 'कॉपी करें',
+                btnSave: 'सहेजें',
+                btnCancel: 'रद्द करें'
+            }
+        },
+        globalFestivals: {
+            newYear: 'नव वर्ष',
+            valentinesDay: 'पश्चिमी वेलेंटाइन डे',
+            womensDay: 'अंतर्राष्ट्रीय महिला दिवस',
+            foolsDay: 'अप्रैल फूल डे',
+            earthDay: 'पृथ्वी दिवस',
+            laborDay: 'मज़दूर दिवस',
+            halloween: 'हैलोवीन',
+            christmas: 'क्रिसमस',
+            mothersDay: 'मातृ दिवस',
+            thanksgiving: 'थैंक्सगिविंग डे',
+            easter: 'ईस्टर',
+            internationalCoopDay: 'अंतर्राष्ट्रीय सहकारिता दिवस',
+            captiveNationsWeek: 'कैप्टिव नेशंस वीक',
+            diaryValentinesDay: 'डायरी वेलेंटाइन डे',
+            westernValentinesDay: 'पश्चिमी वेलेंटाइन डे',
+            whiteValentinesDay: 'व्हाइट वेलेंटाइन डे',
+            blackValentinesDay: 'ब्लैक वेलेंटाइन डे',
+            roseValentinesDay: 'रोज वेलेंटाइन डे',
+            kissValentinesDay: 'किस वेलेंटाइन डे',
+            silverValentinesDay: 'सिल्वर वेलेंटाइन डे',
+            greenValentinesDay: 'ग्रीन वेलेंटाइन डे',
+            photoValentinesDay: 'फोटो वेलेंटाइन डे',
+            wineValentinesDay: 'वाइन वेलेंटाइन डे',
+            movieValentinesDay: 'मूवी वेलेंटाइन डे',
+            hugValentinesDay: 'हग वेलेंटाइन डे'
+        },
+        calendar: {
+            weekdays: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'],
+            months: ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'],
+            lunarDays: ['पहला','दूसरा','तीसरा','चौथा','पांचवां','छठा','सातवां','आठवां','नौवां','दसवां','ग्यारहवां','बारहवां','तेरहवां','चौदहवां','पंद्रहवां','सोलहवां','सत्रहवां','अठारहवां','उन्नीसवां','बीसवां','इक्कीसवां','बाईसवां','तेईसवां','चौबीसवां','पच्चीसवां','छब्बीसवां','सत्ताईसवां','अट्ठाईसवां','उनतीसवां','तीसवां'],
+            lunarMonths: ['पहला','दूसरा','तीसरा','चौथा','पांचवां','छठा','सातवां','आठवां','नौवां','दसवां','ग्यारहवां','बारहवां'],
+            lunarLeap: 'लीप',
+            lunarMonthSuffix: 'महीना',
+            dayDetail: {
+                txTitle: 'दिन का लेनदेन रिकॉर्ड',
+                closeBtn: 'विवरण बंद करें'
+            },
+            recordOf: 'का रिकॉर्ड',
+            noRecord: 'उस दिन कोई रिकॉर्ड नहीं',
+            baziDayMaster: 'दिन का स्वामी',
+            baziYearPillar: 'वर्ष स्तंभ',
+            baziMonthPillar: 'महीना स्तंभ',
+            baziDayPillar: 'दिन स्तंभ',
+            baziNote: '* लाइटवेट चार्ट में समय स्तंभ शामिल नहीं है'
+        }
+    },
+    systemLogs: {
+        taiwanHolidays: {
+            localStorageFormatError: '[कैलेंडर] localStorage डेटा स्वरूपण त्रुटि ({func}), अनदेखा कर दिया गया',
+            loadPersistedError: '[कैलेंडर] स्थानीय अवकाश डेटा लोड करने में विफल ({func}):',
+            noDataYet: '[कैलेंडर] {year} के लिए राष्ट्रीय अवकाश डेटा अभी तक प्रदान नहीं किया गया है।',
+            fetchError: '[API] सरकार का कैलेंडर प्राप्त करने में विफल ({func} - {year}):',
+            downloadError: '[API] सरकार का कैलेंडर डाउनलोड करने में विफल ({year}):',
+            saveLocalStorageError: '[कैलेंडर] localStorage को सहेजने में विफल:',
+            updateUnexpectedError: '[API] राष्ट्रीय अवकाश डेटा को मैन्युअल रूप से अपडेट करते समय अप्रत्याशित त्रुटि हुई:'
+        },
+        themeSwitcher: {
+            readCustomThemeError: '[उपस्थिति थीम] कस्टम थीम पढ़ने में असमर्थ:',
+            containerNotFound: '[उपस्थिति थीम] थीम कंटेनर नहीं मिला: {containerId}',
+            switchedTheme: '[उपस्थिति थीम] मेनू के माध्यम से थीम को इसमें बदल दिया गया: {newTheme}'
+        }
+    }
+};

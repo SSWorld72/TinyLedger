@@ -1,0 +1,723 @@
+export default {
+    categories: {
+        expense: {
+            food: '食費',
+            family: '生活費',
+            medical: '医療・健康',
+            clothing: '衣服',
+            device: 'デバイス',
+            transport: '交通・チケット',
+            entertainment: 'エンタメ',
+            education: '教育・交際',
+            tax: '税金',
+            other: 'その他'
+        },
+        income: {
+            salary: '給与',
+            investment: '投資',
+            other: 'その他'
+        }
+    },
+    targets: {
+        self: '自分',
+        husband: '夫',
+        wife: '妻',
+        child: '子供',
+        grandpa: 'おじいちゃん',
+        grandma: 'おばあちゃん',
+        family: '家族全員',
+        other: 'その他'
+    },
+    subcategories: {
+        expense: {
+            food: { breakfast: '朝食', lunch: '昼食', dinner: '夕食', midnight: '夜食', drink: '飲み物', noodle: 'カップ麺', snack: 'お菓子', bread: 'パン' },
+            family: { allowance: 'お小遣い', water: '水道代', electricity: '電気代', phone: '電話代', internet: 'ネット代', furniture: '家具', appliance: '家電', cleaning: '掃除用品', mortgage: '住宅ローン', mall: 'ショッピングモール' },
+            medical: { insurance: '保険料', medical: '医療費', supplement: 'サプリメント' },
+            clothing: { coat: 'コート', clothes: '服', pants: 'ズボン', skirt: 'スカート', shoes: '靴', hat: '帽子', scarf: 'マフラー', gloves: '手袋', underwear: '肌着', underpants: '下着', socks: '靴下', contacts: 'コンタクト' },
+            device: { computer: 'パソコン', phone: 'スマホ', tablet: 'タブレット', console: 'ゲーム機', accessories: 'スマホアクセサリ' },
+            transport: { train: '電車の切符', hsr: '新幹線の切符', mrt: '地下鉄の切符', taxi: 'タクシー', accommodation: '宿泊費', ticket: '入場券', parking: '駐車料金', gas: 'ガソリン代', maintenance: '車のメンテナンス' },
+            entertainment: { movie: '映画', pinball: 'パチンコ', balloon: '風船割り', claw: 'クレーンゲーム', karaoke: 'カラオケ', gacha: 'ガチャ', game: 'ゲーム課金' },
+            education: { books: '書籍', course: 'コース', exam: '試験', dine: '会食', gift: '贈り物', red_envelope: 'お年玉' },
+            tax: { nhi: '健康保険', labor: '労働保険', national: '国民年金', business: '営業税', license: 'ナンバープレート税', income: '総合所得税', house: '家屋税', fuel: '燃料税', land: '地価税' },
+            other: { misc: '雑費', lost: '紛失', unclassified: '未分類' }
+        },
+        income: {
+            salary: { base: '基本給', bonus: 'ボーナス', festival: 'お祝い金', overtime: '残業代', parttime: 'アルバイト' },
+            investment: { stock: '株式', dividend: '配当金', interest: '預金利息', fund: 'ファンドリターン', crypto: 'FX/仮想通貨' },
+            other: { gift: 'ご祝儀', refund: '返金', lottery: '宝くじ当選', subsidy: '補助金' }
+        }
+    },
+
+    logs: {
+        db: {
+            migrationStart: '[データベース] i18n カテゴリコード化移行を開始します...',
+            migrationSuccess: '[データベース] i18n カテゴリコード化移行が完了しました！',
+            migrationFail: '[データベース] i18n カテゴリコード化移行失敗: {error}',
+            error: '[データベース] エラー:',
+            saveCategorySuccess: '[データベース] カテゴリ設定 (saveCategory) 保存成功',
+            deleteCategorySuccess: '[データベース] カテゴリ設定 (deleteCategory) 削除成功',
+            saveTargetSuccess: '[データベース] ターゲット設定 (saveTarget) 保存成功',
+            deleteTargetSuccess: '[データベース] ターゲット設定 (deleteTarget) 削除成功',
+            saveTransactionSuccess: '[データベース] 記録 (saveTransaction) 保存成功',
+            batchSaveTransactionsSuccess: '[データベース] 記録の一括保存 (batchSaveTransactions) 成功',
+            batchSaveTransactionsFail: '[データベース] 記録の一括保存失敗:',
+            deleteTransactionSuccess: '[データベース] 記録 (deleteTransaction) 削除成功',
+            deleteTransactionsByFixedIdSuccess: '[データベース] 固定ルール関連記録の一括削除 (deleteTransactionsByFixedId) 成功',
+            saveFixedRecordSuccess: '[データベース] 固定ルール (saveFixedRecord) 保存成功',
+            batchSaveFixedRecordsSuccess: '[データベース] 固定ルールの一括保存 (batchSaveFixedRecords) 成功',
+            batchSaveFixedRecordsFail: '[データベース] 固定ルールの一括保存失敗:',
+            deleteFixedRecordSuccess: '[データベース] 固定ルール (deleteFixedRecord) 削除成功'
+        },
+        calendar: {
+            holidayLoadError: '{year} 年度の祝日データを読み込めません',
+            loadHolidaysFail: '[カレンダー] 該当年度の祝日データを読み込めません...'
+        },
+        settings: {
+            accountUpdateSuccess: '[設定] アカウント設定の更新 (saveAccounts) 成功',
+            checkAccountDataError: '[設定] アカウントデータの確認中にエラーが発生しました:',
+            backupUpdateSuccess: '[設定] プライベートクラウド設定と同期ステータスの保存成功',
+            saveAccountsSuccess: '[設定] アカウント設定の更新 (saveAccounts) 成功',
+            cloudBackupSuccess: '[設定] プライベートクラウド設定と同期ステータスの保存成功',
+            restoreError: '復元中にエラーが発生しました：',
+            exportJsonSuccess: '[バックアップ] 手動ローカルバックアップのエクスポート成功: ZIP サイズ ',
+            fileReadError: 'ファイルの読み込み失敗',
+            importJsonSuccess: '[バックアップ] ローカルバックアップからのインポート成功: 追加/更新 ',
+            checkAccountError: '[設定] アカウントデータの確認中にエラーが発生しました:',
+            checkCategoryError: '[設定] カテゴリデータの確認中にエラーが発生しました:',
+            checkCategoryBatchError: '[設定] カテゴリデータの一括確認中にエラーが発生しました:',
+            checkTargetError: '[設定] ターゲットデータの確認中にエラーが発生しました:',
+            checkTargetBatchError: '[設定] ターゲットデータの一括確認中にエラーが発生しました:'
+        },
+        record: {
+            festivalReminderError: '[重要なお祭りリマインダー] エラー:',
+            saveFail: '[記録] 保存失敗:'
+        },
+        location: {
+            fetchPlaceInfoFail: '[場所検索] 完全な場所情報を取得できません:',
+            apiLoadFail: '[場所検索] Google Maps API の読み込み失敗...'
+        },
+        app: {
+            alreadyInitialized: '[メインプログラム] app.js はすでに初期化されています。重複実行をスキップします...'
+        },
+        htmlLoader: {
+            loadFail: '[HTML ローダー] 読み込み失敗',
+            fetchFail: '[HTML ローダー] 取得できません'
+        }
+    },
+    ui: {
+        common: {
+            unnamed: '(無名)'
+        },
+        footer: {
+            unnamedProject: '無名プロジェクト',
+            githubProject: 'GitHub プロジェクト',
+            releaseDate: '公開日: {date}'
+        },
+        app: {
+            name: 'TinyLedger',
+            fullName: 'ちいさな家計簿 (TinyLedger)'
+        },
+        accounts: {
+            defaultName: 'デフォルトアカウント',
+            colors: {
+                blue: '青色', green: '緑色', red: '赤色', yellow: '黄色', purple: '紫色', gray: '灰色'
+            },
+            filterAll: 'すべて',
+            filterPartial: '({selected}/{total})',
+            alertNoAccount: '少なくとも1つのアカウントを選択してください！'
+        },
+        tabs: {
+            rules: 'カテゴリ / ルール',
+            details: 'カテゴリ / 明細'
+        },
+        nav: {
+            addRecord: '新しい取引を追加',
+            backToList: 'リストに戻る',
+            stats: '統計',
+            calendar: 'カレンダー',
+            settings: '設定',
+            tabGeneral: '一般記録',
+            tabGeneralMobile: '一般<br>記録',
+            tabFixed: '固定記録',
+            tabFixedMobile: '固定<br>記録',
+            category: 'カテゴリ'
+        },
+        list: {
+            summary: '📊 現在のデータ：手動記録 {txLen} 件、固定記録 {fixLen} 件',
+            filterAll: 'すべて',
+            emptyFixed: '条件に一致する固定記録はありません',
+            emptyGeneral: 'この月の記録はありません',
+            pageInfo: '第 {current} ページ / 全 {total} ページ',
+            prevPage: '前へ',
+            nextPage: '次へ',
+            pageSizePre: '毎ページ',
+            pageSizePost: '件'
+        },
+        budget: {
+            status: '今月の予算 {monthlyBudget} · 総支出 ${totalExpenseMonth} ({budgetPercent}%)',
+            over: '超過 {amount}',
+            left: '残り {amount}'
+        },
+        record: {
+            typeIncome: '収入',
+            typeExpense: '支出',
+            ruleYearly: '毎年 {month}月{day}日',
+            ruleMonthly: '毎月 {day}日',
+            ruleWeekly: '毎週{weekday}',
+            weekdays: ['日', '月', '火', '水', '木', '金', '土'],
+            ruleCount: '計 {count} 件',
+            noDeadline: '期限なし',
+            labelTarget: '👤 対象：',
+            labelLocation: '📍 場所：',
+            labelNote: '📝 メモ：',
+            labelPhoto: '📷 写真添付済み',
+            noNote: 'メモなし',
+            fixedGeneratedTip: '固定記録によって生成された明細です (閲覧専用)',
+            addTitle: '記録を追加',
+            copyTitle: '記録をコピー',
+            editFixedTitle: '固定ルールを編集',
+            viewFixedTitle: '固定ルールの明細を表示',
+            addBtn: '追加',
+            copyBtn: 'コピー',
+            promptLocation: '場所を入力または選択してください',
+            importantFestivalPrefix: '⭐',
+            festivalJoin: '、',
+            attachment: '添付ファイル'
+        },
+        batch: {
+            typeNameFixed: '固定ルール',
+            typeNameGeneral: '一般記録',
+            unnamedRule: '無名ルール',
+            boundPreview: '- [{name}] ({count}件の記録, 例 {date})',
+            andOthers: '...その他',
+            confirmDeleteFixed: 'これら {count} 件の固定ルールを削除してもよろしいですか？この操作は元に戻せません。',
+            confirmDeleteFixedBound: '【重大な警告】選択したルールによって合計 {totalBound} 件の履歴が自動生成されました：\n{boundLines}\n\nルールを削除すると、これらの履歴も「一緒に削除」されます！\n将来の記録の生成を停止したいだけの場合は、削除をキャンセルして「終了日」を変更することをお勧めします。\n\n強制的に削除して履歴を破棄してもよろしいですか？',
+            confirmDeleteType: 'これら {count} 件の {typeName} を削除してもよろしいですか？',
+            btnDeleteSelected: '選択したものを削除 ({count})'
+        },
+        stats: {
+            tabs: {
+                pie: '円グラフ',
+                bar: '棒グラフ',
+                line: '折れ線グラフ',
+                annual: '年間チャート'
+            },
+            filters: {
+                period: '期間：',
+                week: '週',
+                month: '月',
+                year: '年',
+                all: 'すべて',
+                custom: 'カスタム',
+                groupby: '分類：',
+                major: '大分類',
+                sub: '小分類',
+                payee: '対象',
+                xaxis: 'Ｘ軸：',
+                byDay: '日別',
+                byMonth: '月別',
+                yearLabel: '年：'
+            },
+            noData: 'データなし',
+            unclassified: '(未分類)',
+            unspecified: '(未指定)',
+            tableMajor: '大分類',
+            tableSub: '小分類',
+            tableTarget: '対象',
+            tableAmount: '金額',
+            tablePercent: '割合',
+            tableTotal: '合計',
+            noAnnualRecord: '{year} 年の記録はありません',
+            annualTotalIncome: '総収入',
+            annualTotalExpense: '総支出',
+            annualBalance: '残高',
+            monthlyDetails: '月別詳細',
+            month: '月',
+            monthSuffix: '月',
+            year: '年',
+            income: '収入',
+            expense: '支出',
+            top5Expenses: '上位5つの支出カテゴリー'
+        },
+        settings: {
+            dangerZone: {
+                title: '危険領域 (Danger Zone)',
+                desc: 'ローカルのすべての記録、固定ルール、カテゴリー設定をクリアします。最初からやり直したい場合や、異常なデータを消去したい場合は、下のボタンをクリックしてください。(この操作は元に戻せません)',
+                button: 'ローカルのすべてのデータを強制的にクリア',
+                confirmTitle: '本当にクリアしますか？',
+                confirmMsg: 'これにより、スマートフォン/コンピューター内のすべてのローカルデータが完全に削除されます。\nこの操作は元に戻せません。バックアップしたことを確認してください！',
+                doubleConfirmTitle: '最終確認',
+                doubleConfirmMsg: '本当にクリアしますか？\nこの操作によりローカルデータベースが永久に破棄されます。',
+                btnConfirm: 'クリアする',
+                btnCancel: 'キャンセル',
+                btnDoubleConfirm: 'データを破棄する',
+                btnDoubleCancel: '考え直す',
+                busyTitle: 'データをクリア中',
+                busyDetail: '削除しています...',
+                success: '✅ ローカルのすべてのデータが完全にクリアされました！システムは自動的に再読み込みされます。',
+                error: 'データをクリアする際にエラーが発生しました: {error}'
+            },
+            systemLogs: {
+                title: 'システムログ (System Logs)',
+                desc: '最近の 999 件のコンソールログを表示します。接続やデータ同期の問題をトラブルシューティングするのに役立ちます。',
+                placeholderSearch: '時間またはキーワードを検索...',
+                titleCopy: 'フィルタリングされたログをコピー',
+                btnCopy: 'コピー',
+                btnExport: 'エクスポート',
+                titleClear: 'ログをクリア',
+                btnClear: 'クリア',
+                confirmClear: 'すべてのシステムログをクリアしてもよろしいですか？この操作は元に戻せません。',
+                emptyExport: 'エクスポートするログがありません',
+                emptyCopy: 'コピーするログがありません',
+                copySuccess: 'ログがクリップボードにコピーされました',
+                copyError: 'コピー失敗: {error}'
+            },
+            language: { title: '言語 (Language)' },
+            title: 'システム設定',
+            sponsor: '作者を支援する',
+            theme: {
+                title: '外観テーマ'
+            },
+            backup: {
+                title: '手動および自動バックアップ',
+                manualExport: 'ZIP をエクスポート',
+                manualImport: 'バックアップをインポート',
+                importHint: '.zip または古いバージョンの .json 形式をサポート',
+                autoExport: '自動エクスポートの範囲',
+                daily: '毎日 (当月のデータ)',
+                yearly: '年別 (1年間のデータ)',
+                yearlyAll: 'すべての年',
+                yearlyCurrent: '今年のみ',
+                yearlyLast: '昨年と今年',
+                includePhotos: '写真を含める (ファイルサイズが大幅に増加します)',
+                exporting: 'ZIP バックアップファイルをダウンロードする準備中...',
+                exportSuccess: '✅ バックアップのエクスポートに成功しました！\n{txCount} 件の一般記録、{fixedCount} 件の固定記録をエクスポートしました\n{catCount} 個の大分類と {tgtCount} 個の対象設定が含まれています',
+                exportError: 'エクスポート失敗：{error}',
+                importing: 'バックアップファイルを解析しています...',
+                importError: '復元中にエラーが発生しました：{error}',
+                errorJsonParse: 'JSON を解析できません。ファイル形式が正しくありません',
+                errorOldFormat: 'サポートされていない古いバックアップ形式です。最新バージョンのバックアップファイルを使用してください',
+                errorUnsupportedFile: 'サポートされていないファイル形式です。.zip または .json バックアップファイルを提供してください',
+                gasUrlConflictPrompt: '⚠️ バックアップファイル内の「専用バックアップ GAS URL」がローカルと異なります！\n\n[バックアップ] {newUrl}\n[ローカル] {oldUrl}\n\nバックアップの URL でローカル URL を「上書き」しますか？\n\n(「確認」を押して上書き、「キャンセル」を押してローカル URL を保持)',
+                parsedTitle: 'バックアップファイルの解析完了',
+                startImport: 'インポートを開始',
+                cancel: 'キャンセル',
+                clearingData: 'ローカルデータを消去しています',
+                deletingRecords: '既存の記録を削除しています...',
+                restoringLocal: 'ローカルに復元しています',
+                writingDb: 'データベースに書き込んでいます...',
+                progressFormat: {
+                    wait: '{type} の書き込みを待機中... ({current} / {total})',
+                    doing: '{type} を書き込んでいます... ({current} / {total})',
+                    done: '{type} を書き込みました... ({current} / {total})',
+                    typeTx: '一般記録',
+                    typeFixed: '固定記録',
+                    typeCat: 'カテゴリ設定',
+                    typeTgt: '対象設定'
+                },
+                importComplete: '✅ インポート完了！\n\n[今回追加]\n{adds}',
+                reloading: 'システムを再読み込みしています...',
+                fullBackup: '完全バックアップ：',
+                fullBackupDesc: 'すべての記録、固定ルール、カテゴリ設定、カレンダーの設定。',
+                overwriteWarning: 'プライベートクラウドから復元すると、現在のローカルデータが完全に上書きされます',
+                exportingTitle: 'データをエクスポートしています',
+                advancedTitle: '高度なバックアップ設定 (ローカルとクラウドに適用)',
+                mode: {
+                    title: 'バックアップモード',
+                    daily: '日常バックアップ (すべてのデータ、上書き復元に適しています)',
+                    yearly: '年間バックアップ (年ごとに分割、マージ復元に適しています)'
+                },
+                yearlyRange: {
+                    title: '年間バックアップの範囲',
+                    all: '年ごとにバックアップ (すべての年)',
+                    current: '最近1年分のみバックアップ (今年)'
+                },
+                includePhotos: {
+                    title: '写真データを含める',
+                    desc: 'チェックを外すと、バックアップファイルのサイズを大幅に縮小できます'
+                },
+                restoreMode: {
+                    title: 'データ復元モード (ローカルとクラウドに適用)',
+                    merge: 'マージモード (ローカルを保持し、重複をスキップ)',
+                    overwrite: '上書きモード (ローカルをクリアし、完全に上書き)'
+                },
+                localTitle: '手動ファイルバックアップ (Local ZIP)',
+                localDesc: '現在の記録を ZIP バックアップファイルとしてエクスポートし、デバイスにダウンロードします。デバイスの変更やデータの紛失時に、このファイルから手動で復元できます。',
+                exportBtn: 'バックアップをエクスポート',
+                importBtn: 'バックアップをインポート',
+                generateSample: 'テストデータを生成'
+            },
+            cloudBackup: {
+                title: 'プライベートクラウド同期とバックアップ (Google Apps Script)',
+                syncing: 'クラウド同期処理中...',
+                desc: 'すべての記録、固定ルール、カテゴリ設定、カレンダーの設定をバックアップします。\n(*プライベートクラウドから復元すると、現在のローカルデータが完全に上書きされます)',
+                successSummary: '✅ バックアップのエクスポート成功！\n{txCount} 件の一般記録、{fixedCount} 件の固定記録をエクスポートしました\n{catCount} 個の大分類と {tgtCount} 個の対象設定が含まれています',
+                restoreConfirmMerge: '【マージモード】\nこのデータをローカルにマージしてもよろしいですか？\n(ローカル記録を保持し、重複する項目を自動的にスキップします)',
+                restoreConfirmOverwrite: '【上書きモードの警告】\nこのデータを使用してローカルのすべての記録を完全に上書きしてもよろしいですか？\n(ローカルの既存の記録はすべて削除されます！)',
+                restoreConfirmEmpty: '【データの復元】\nこのクラウドデータをローカルに復元してもよろしいですか？',
+                restoreSummary: 'このバックアップには以下が含まれます：\n- 一般記録：{txCount} 件\n- 固定記録：{fixedCount} 件\n- カテゴリ設定：{catCount} 個\n- 対象設定：{tgtCount} 個\n',
+                restoreFiltered: '\n(重複は自動的にフィルタリングされました)\n',
+                restoreFilteredTx: '- 一般記録：{txSkip} 件\n',
+                restoreFilteredFixed: '- 固定記録：{fixedSkip} 件\n',
+                restoreFilteredCat: '- カテゴリ設定：{catSkip} 個\n',
+                restoreFilteredTgt: '- 対象設定：{tgtSkip} 個\n',
+                restoreCompleteEmpty: '✅ クラウドの復元が完了しました！\n\n【追加】\n{adds}\n\nシステムを再読み込みしています...',
+                restoreCompleteOverwrite: '✅ クラウドの復元が完了しました (上書きモード)！\n\n【追加】\n{adds}\n\nシステムを再読み込みしています...',
+                restoreCompleteMerge: '✅ クラウドの復元が完了しました (マージモード)！\n\n【追加】\n{adds}',
+                restoreCompleteMergeSkipped: '\n\n(重複を自動的にスキップしました)\n',
+                addedTx: '一般記録 {tx} 件',
+                addedFixed: '固定記録 {fixed} 件',
+                addedCat: 'カテゴリ設定 {cat} 個',
+                addedTgt: '対象設定 {tgt} 個'
+            },
+            accounts: {
+                title: 'アカウント設定',
+                add: 'アカウントを追加',
+                edit: 'アカウントを編集',
+                defaultAccountName: 'アカウント A',
+                accountName: 'アカウント名',
+                accountNamePh: '例: 現金、クレジットカード',
+                requireName: 'アカウント名を入力してください',
+                tagColor: 'タグの色',
+                monthlyBudget: '今月の予算',
+                budgetPh: '例: 25000',
+                save: '保存',
+                budget: '今月の予算: ${amount}',
+                isDefault: 'デフォルト',
+                setDefault: 'デフォルトに設定',
+                deleteConfirmTitle: 'このアカウントを削除してもよろしいですか？',
+                deleteErrorMsg: '削除できません！このアカウントにはまだ以下が含まれています：\n',
+                deleteErrorTxs: '- {count} 件の単発取引記録 ({dates} に存在)\n',
+                deleteErrorFixed: '- {count} 件の固定収支ルール\n',
+                deleteErrorEnd: '\nこれらの記録を他のアカウントに移動するか、削除してから再試行してください。'
+            },
+            dataManagement: {
+                title: '取引情報管理',
+                expense: '支出カテゴリ',
+                income: '収入カテゴリ',
+                target: '記録対象'
+            },
+            calendar: {
+                title: 'カレンダーと表示設定',
+                remindDaysBefore: '何日前に通知するか：',
+                monthSuffix: '月',
+                daySuffix: '日',
+                month: '{m} 月',
+                day: '{d} 日',
+                monthPh: '月',
+                dayPh: '日',
+                festivalNamePh: 'お祭りの名前を入力してください',
+                dayNumPh: '日数 {n}',
+                nationalHoliday: {
+                    title: '国民の祝日 (台湾のみ)',
+                    desc: '人事行政総処が発表した国民の祝日を表示します',
+                    lastUpdated: '最終更新：',
+                    neverUpdated: 'なし',
+                    updateNow: '今すぐ更新',
+                    updating: 'ダウンロード中...',
+                    updateSuccess: '✅ 祝日の更新が完了しました！\n{years} 年度の合計 {count} 件の休日データをダウンロードしました。',
+                    updateSuccessLog: '[システム設定] 祝日データの更新に成功しました ({years})、合計 {count} 件。',
+                    updateError: '❌ ダウンロード失敗：{error}'
+                },
+                lunarDate: {
+                    title: '旧暦の日付 (中国の伝統)',
+                    desc: '旧暦の日付を表示します'
+                },
+                stembranch: {
+                    title: '干支 (中国の伝統)',
+                    desc: '日の干支を表示します'
+                },
+                solarterm: {
+                    title: '二十四節気 (中国の伝統)',
+                    desc: '当日の節気の名前を表示します'
+                },
+                festival: {
+                    title: 'お祭り (中国の伝統)',
+                    desc: '伝統的なお祭りと記念日を表示します'
+                },
+                globalFestival: {
+                    title: 'お祭り (グローバル)',
+                    desc: '世界的なお祭りと西洋のお祭りを表示します'
+                },
+                bazi: {
+                    title: '四柱推命 命式 (中国の伝統)',
+                    desc: '日付をクリックすると四柱、十神、蔵干などを表示します'
+                },
+                valentine: {
+                    title: '趣味のバレンタインデー',
+                    desc: '毎月14日の特徴的なバレンタインデーを表示します'
+                },
+                importantFestival: {
+                    title: '重要なお祭りリマインダー設定',
+                    enableTitle: '重要なお祭りリマインダーを有効にする',
+                    enableDesc: 'お祭りが来る前に、記録時にポップアップリマインダーが自動的に表示され、カレンダーに専用の星マークが表示されます',
+                    addBtn: 'お祭りを追加 (最大 10 個)'
+                }
+            },
+            photoUpload: {
+                title: '写真のアップロード',
+                enableTitle: '写真のアップロード機能を有効にする',
+                enableDesc: 'オンにすると、記録時に写真を添付できます',
+                maxSize: '最大写真サイズ',
+                size320: '320 x 320',
+                size480: '480 x 480 (推奨下限)',
+                size640: '640 x 640 (デフォルト)',
+                size800: '800 x 800',
+                size1024: '1024 x 1024',
+                quality: 'JPEG 圧縮品質',
+                qual03: '0.3 (高圧縮)',
+                qual05: '0.5 (推奨下限)',
+                qual07: '0.7 (デフォルト)',
+                qual09: '0.9 (低圧縮)'
+            },
+            mapLink: {
+                title: 'Google マップのリンク',
+                enableTitle: '場所をマップにリンク',
+                enableDesc: 'ホームの記録リストで場所をクリックしてマップを直接開けるようにします'
+            },
+            about: {
+                title: '概要',
+                licenseTitle: 'オープンソースとライセンス',
+                licenseDesc: 'このプロジェクトで使用されているサードパーティのオープンソースパッケージを表示します',
+                openSourceLicense: 'オープンソースライセンス (MIT License)',
+                visualAssetsCopyright: 'ビジュアル資産の著作権声明',
+                visualAssetsDesc: 'このプロジェクトの基礎となるソースコードは MIT ライセンスの下でリリースされています。<br><br>ただし、このソフトウェアに含まれるすべてのブランドアイデンティティ、UI デザイン、アイコン、および関連するビジュアル資産の著作権は、原作者によって完全に保持されており、上記の MIT ライセンスは<strong class="text-rose-600 dark:text-rose-400 font-semibold">適用されません</strong>。<br><br>作者の明示的な書面による許可なしに、これらのビジュアル資産を不正流用、複製、配布、または他のプロジェクトや商業目的で使用することは固く禁じられています。',
+                poweredBy: 'テクノロジーとオープンソースパッケージ'
+            },
+
+            categories: {
+                title: 'カテゴリの管理',
+                selectAll: 'すべて選択',
+                cascadeUpdateConfirm: 'この操作を行うと、「{oldValue}」を使用しているすべての履歴記録が\n「{newValue}」に変更されます。続行してもよろしいですか？',
+                cascadeUpdateTitle: '連動更新の確認',
+                confirmUpdate: '変更を確認',
+                cancel: 'キャンセル',
+                noData: 'データがありません。追加してください',
+                addExpenseMajor: '支出の大分類を追加',
+                addIncomeMajor: '収入の大分類を追加',
+                promptNewMajor: '新しい大分類名を入力:',
+                deleteSelected: '🗑️ 選択したものを削除 ({count})',
+                addMinor: '小分類を追加',
+                promptNewMinor: '新しい小分類名を入力:',
+                deleteInUseMsg: '削除できません！このカテゴリは以下で使用されています：\n',
+                deleteInUseTx: '- {count} 件の単発取引記録 ({dates}{more} に発生)\n',
+                deleteInUseFixed: '- {count} 件の固定収支ルール ({names}{more})\n',
+                deleteInUseTail: '\nこれらの記録を削除するか、他のカテゴリに変更してから再試行してください。',
+                editSub: '小分類を編集',
+                deleteSub: '小分類を削除',
+                moreDays: ' など合計 {count} 日',
+                etc: ' など',
+                deleteConfirm: 'このカテゴリを削除してもよろしいですか？この操作は元に戻せません。',
+                expenseTitle: '支出カテゴリの管理',
+                incomeTitle: '収入カテゴリの管理',
+                deleteBatchConfirm: 'これら {majorCount} 個の大分類、{minorCount} 個の小分類、合計 {total} 個の項目を削除してもよろしいですか？\n(注意：大分類を削除すると、その下のすべての小分類も削除されます)',
+                deleteBatchConfirmMinorOnly: 'これら {count} 個の小分類項目を削除してもよろしいですか？',
+                deleteBatchConfirmMajorOnly: 'これら {count} 個の大分類項目を削除してもよろしいですか？\n(注意：大分類を削除すると、その下のすべての小分類も削除されます)',
+                deleteBatchInUseMsg: '削除できません！以下のカテゴリが使用されています：\n',
+                deleteBatchInUseMinorItem: '- 小分類 [{major} > {sub}] ({details})',
+                deleteBatchInUseMajorItem: '- 大分類 [{major}] ({details})',
+                deleteBatchInUseTxDetail: '{count}件の記録(例 {date})',
+                deleteBatchInUseFixedDetail: '{count}件のルール',
+                deleteBatchInUseMore: '\n...その他',
+                deleteBatchInUseTail: '\n\nこれらの記録を削除するか、他のカテゴリに変更してから再試行してください。'
+            },
+            targets: {
+                title: '記録対象',
+                addTarget: '対象を追加',
+                selectAll: 'すべて選択',
+                noData: 'データがありません。追加してください',
+                noDataSimple: 'データなし',
+                deleteSelected: '🗑️ 選択したものを削除 ({count})',
+                deleteInUseMsg: '削除できません！この対象は以下で使用されています：\n',
+                deleteInUseTx: '- {count} 件の単発取引記録 ({dates}{more} に発生)\n',
+                deleteInUseFixed: '- {count} 件の固定収支ルール ({names}{more})\n',
+                deleteInUseTail: '\nこれらの記録を削除するか、他の対象に変更してから再試行してください。',
+                moreDates: ' など合計 {count} 日',
+                deleteConfirm: 'この対象を削除してもよろしいですか？この操作は元に戻せません。',
+                promptNewTarget: '新しい対象名を入力:',
+                duplicateAlert: '対象名「{name}」はすでに存在します！',
+                reorderTitle: 'ソート番号を選択してください (数字が小さいほど優先されます)',
+                deleteBatchInUseMsg: '削除できません！以下の対象が使用されています：\n',
+                deleteBatchInUseItem: '- 対象 [{name}] ({details})',
+                deleteBatchInUseMore: '\n...その他',
+                deleteBatchInUseTail: '\n\nこれらの記録を削除するか、他の対象に変更してから再試行してください。',
+                deleteBatchConfirm: 'これら {count} 個の対象を削除してもよろしいですか？この操作は元に戻せません。',
+                cascadeUpdateTitle: '連動更新の確認',
+                cascadeUpdateConfirm: '履歴記録の対象「{oldValue}」も「{newValue}」に更新しますか？',
+                confirmUpdate: '連動更新'
+            },
+            accountA: 'アカウント A',
+            defaultBadge: 'デフォルト',
+            monthlyBudget: '今月の予算: ${amount}',
+            setDefault: 'デフォルトに設定',
+            deleteAccountError: '削除できません！このアカウントにはまだ以下が含まれています：\n{boundTxs}{boundFixed}\nこれらの記録を他のアカウントに移動するか、削除してから再試行してください。',
+            deleteAccountErrorTx: '- {count} 件の単発取引記録 ({displayDates}{moreStr} に存在)\n',
+            deleteAccountErrorMoreDates: ' など合計 {count} 日',
+            deleteAccountErrorFixed: '- {count} 件の固定収支ルール\n',
+            confirmDeleteAccount: 'このアカウントを削除してもよろしいですか？',
+            editAccountError: 'アカウントの編集中にエラーが発生しました: {error}',
+            addAccountError: 'アカウントの追加中にエラーが発生しました: {error}',
+            modalAddAccount: 'アカウントを追加',
+            modalEditAccount: 'アカウントを編集',
+            modalAccountName: 'アカウント名',
+            modalLabelColor: 'タグの色',
+            modalSave: '保存',
+            festivalMonth: '月',
+            festivalDay: '日',
+            festivalName: 'お祭りの名前 (例: 記念日)',
+            festivalReminder: '通知(日前):',
+            festivalDays1: '日数1',
+            festivalDays2: '日数2',
+            festivalDays3: '日数3',
+            downloading: 'ダウンロード中...',
+            lastUpdated: '最終更新：{date}',
+            lastUpdatedNever: '最終更新：なし',
+            holidayUpdateSuccess: '✅ 祝日の更新が完了しました！\n{years} 年度の合計 {count} 件の休日データをダウンロードしました。',
+            holidayUpdateFail: '❌ ダウンロード失敗：{error}',
+            holidayUpdateFailUnknown: '未知のエラー',
+            btnUpdateHoliday: '国民の祝日を更新',
+            backupSuccess: '✅ バックアップのエクスポート成功！\n{txCount} 件の一般記録、{fixedCount} 件の固定記録をエクスポートしました\n{catCount} 個の大分類と {tgtCount} 個の対象設定が含まれています',
+            restoreConfirmWarningLocalEmpty: '【データの復元】\nこのクラウドデータをローカルに復元してもよろしいですか？',
+            restoreConfirmWarningOverwrite: '【上書きモードの警告】\nこのデータを使用してローカルのすべての記録を完全に上書きしてもよろしいですか？\n(ローカルの既存の記録はすべて削除されます！)',
+            restoreConfirmWarningMerge: '【マージモード】\nこのデータをローカルにマージしてもよろしいですか？\n(ローカル記録を保持し、重複する項目を自動的にスキップします)',
+            restoreConfirmMsg: 'このバックアップには以下が含まれます：\n- 一般記録：{totalTx} 件\n- 固定記録：{totalFixed} 件\n- カテゴリ設定：{totalCat} 個\n- 対象設定：{totalTgt} 個\n',
+            restoreConfirmMsgFilter: '\n(重複は自動的にフィルタリングされました)\n',
+            restoreConfirmMsgFilterTx: '- 一般記録：{count} 件\n',
+            restoreConfirmMsgFilterFixed: '- 固定記録：{count} 件\n',
+            restoreConfirmMsgFilterCat: '- カテゴリ設定：{count} 個\n',
+            restoreConfirmMsgFilterTgt: '- 対象設定：{count} 個\n',
+            inputNamePlaceholder: '例: 現金、クレジットカード',
+            inputBudgetPlaceholder: '例 25000',
+            requireAccountName: 'アカウント名を入力してください'
+        },
+        modals: {
+            accountFilter: {
+                title: 'アカウントのフィルタリング',
+                selectLabel: '表示するアカウントを選択',
+                selectAll: 'すべて選択',
+                clearAll: 'すべて解除',
+                confirm: '確認'
+            },
+            crop: {
+                title: '写真をトリミング',
+                warning: '⚠️ 繰り返しトリミングすると画質が低下します',
+                cancel: 'キャンセル',
+                confirm: 'トリミングを確認'
+            },
+            photoHelp: {
+                title: '写真の品質の推奨設定',
+                p1: '320x320 と 0.3 の品質は確かに「非常にぼやけ」ます。「これがコーヒーです」というイメージ画像を撮りたいだけであればかろうじて十分ですが、「物理的なレシートや領収書」を撮影する場合、上のテキストと数字は完全に混ざって見えなくなります。',
+                p2: 'レシートの数字を認識できるようにしたい場合は、少なくとも <strong style="color: var(--primary-color);">480x480 / 品質 0.5</strong> 以上に設定することをお勧めします。',
+                estimateTitle: '単一写真の推定サイズ (データベース保存後)',
+                li1: '320x320 / 品質 0.3：約 10~20 KB <span style="font-size: 0.8rem;">(極小だが非常にぼやける)</span>',
+                li2: '480x480 / 品質 0.5：約 15~30 KB',
+                li3: '640x640 / 品質 0.7：約 40~60 KB <strong style="color: var(--text-main); font-weight: 500;">(デフォルト、良好な鮮明度)</strong>',
+                li4: '1024x1024 / 品質 0.9：約 150~250 KB <span style="font-size: 0.8rem;">(非常に鮮明だが大きく占有する)</span>',
+                understand: '了解しました'
+            },
+            record: {
+                editTitle: '記録を編集',
+                tabExpense: '支出',
+                tabIncome: '収入',
+                tabSingle: '単発',
+                tabFixed: '固定',
+                date: '日付',
+                dateRange: '開始日と終了日',
+                startDate: '開始日',
+                endDate: '終了日',
+                amount: '金額',
+                repeatType: '繰り返しの種類',
+                ruleYearly: '毎年',
+                ruleMonthly: '毎月',
+                ruleWeekly: '毎週',
+                ruleDetail: '詳細ルール',
+                monday: '月曜日',
+                tuesday: '火曜日',
+                wednesday: '水曜日',
+                thursday: '木曜日',
+                friday: '金曜日',
+                saturday: '土曜日',
+                sunday: '日曜日',
+                majorCat: '大分類',
+                subCat: '小分類',
+                target: '対象',
+                location: '場所',
+                locationPlaceholder: '住所または店舗名を入力',
+                mapTitle: 'マップで開く',
+                photo: '写真',
+                photoUpload: '写真を撮るまたはアップロード',
+                photoPreview: 'プレビュー',
+                photoRecrop: 'クリックして再トリミング',
+                photoDelete: '写真を削除',
+                note: 'メモ',
+                notePlaceholder: 'メモ...',
+                btnDelete: '削除',
+                btnCopy: 'コピー',
+                btnSave: '保存',
+                btnCancel: 'キャンセル'
+            }
+        },
+        globalFestivals: {
+            newYear: '元日',
+            valentinesDay: '西洋バレンタインデー',
+            womensDay: '国際女性デー',
+            foolsDay: 'エイプリルフール',
+            earthDay: 'アースデー',
+            laborDay: 'メーデー',
+            halloween: 'ハロウィン',
+            christmas: 'クリスマス',
+            mothersDay: '母の日',
+            thanksgiving: '感謝祭',
+            easter: '復活祭',
+            internationalCoopDay: '国際協同組合デー',
+            captiveNationsWeek: '囚われの国週間',
+            diaryValentinesDay: 'ダイアリーデー',
+            westernValentinesDay: '西洋バレンタインデー',
+            whiteValentinesDay: 'ホワイトデー',
+            blackValentinesDay: 'ブラックデー',
+            roseValentinesDay: 'ローズデー',
+            kissValentinesDay: 'キスデー',
+            silverValentinesDay: 'シルバーデー',
+            greenValentinesDay: 'グリーンデー',
+            photoValentinesDay: 'ミュージック・フォトデー',
+            wineValentinesDay: 'ワインデー',
+            movieValentinesDay: 'ムービーデー',
+            hugValentinesDay: 'ハグデー'
+        },
+        calendar: {
+            weekdays: ['日', '月', '火', '水', '木', '金', '土'],
+            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            lunarDays: ['初一','初二','初三','初四','初五','初六','初七','初八','初九','初十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十','廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十'],
+            lunarMonths: ['正','二','三','四','五','六','七','八','九','十','十一','十二'],
+            lunarLeap: '閏',
+            lunarMonthSuffix: '月',
+            dayDetail: {
+                txTitle: '当日の取引記録',
+                closeBtn: '詳細を閉じる'
+            },
+            recordOf: 'の記録',
+            noRecord: '当日の記録はありません',
+            baziDayMaster: '日主',
+            baziYearPillar: '年柱',
+            baziMonthPillar: '月柱',
+            baziDayPillar: '日柱',
+            baziNote: '* 軽量命式には時柱は含まれません'
+        }
+    },
+    systemLogs: {
+        taiwanHolidays: {
+            localStorageFormatError: '[カレンダー] localStorage のデータ形式エラー ({func})、無視されました',
+            loadPersistedError: '[カレンダー] ローカルの祝日データの読み込み失敗 ({func}):',
+            noDataYet: '[カレンダー] {year} 年度の祝日データはまだ提供されていません。',
+            fetchError: '[API] 政府のカレンダーの取得失敗 ({func} - {year}):',
+            downloadError: '[API] 政府のカレンダーのダウンロード失敗 ({year}):',
+            saveLocalStorageError: '[カレンダー] localStorage の保存失敗:',
+            updateUnexpectedError: '[API] 祝日データを手動で更新中に予期しないエラーが発生しました:'
+        },
+        themeSwitcher: {
+            readCustomThemeError: '[外観テーマ] カスタムテーマを読み込めません:',
+            containerNotFound: '[外観テーマ] テーマコンテナが見つかりません: {containerId}',
+            switchedTheme: '[外観テーマ] メニューを通じてテーマを切り替えました: {newTheme}'
+        }
+    }
+};

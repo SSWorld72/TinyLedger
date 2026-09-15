@@ -542,7 +542,7 @@ export class GasBackupModule {
                 this.settings.lastSyncTime = twTime;
                 this.onSaveSettings();
 
-                console.log((window.t ? window.t('systemLogs.gasBackupModule.logBackupSuccess', { type: isAutoSync ? (window.t ? window.t('systemLogs.gasBackupModule.typeAuto') : 'Auto') : (window.t ? window.t('systemLogs.gasBackupModule.typeManual') : 'Manual'), size: fileSizeKb }) : `[Cloud Backup] ${isAutoSync ? 'Auto' : 'Manual'} backup database (backupToPrivateCloud) successful: File size ${fileSizeKb} KB`));
+                console.log((window.t ? window.t('gasBackupModule.logBackupSuccess', { type: isAutoSync ? (window.t ? window.t('gasBackupModule.typeAuto') : 'Auto') : (window.t ? window.t('gasBackupModule.typeManual') : 'Manual'), size: fileSizeKb }) : `[Cloud Backup] ${isAutoSync ? 'Auto' : 'Manual'} backup database (backupToPrivateCloud) successful: File size ${fileSizeKb} KB`));
 
                 if (!isAutoSync) {
                     let successMsg = t('utils.gasBackup.backupSuccess');
@@ -637,20 +637,20 @@ export class GasBackupModule {
             try {
                 listPayload = JSON.parse(listText);
             } catch (e) {
-                console.error((window.t ? window.t('systemLogs.gasBackupModule.errorNonJson') : 'Cloud returned non-JSON data:'), listText);
+                console.error((window.t ? window.t('gasBackupModule.errorNonJson') : 'Cloud returned non-JSON data:'), listText);
                 let extraHint = '';
                 if (listText.toLowerCase().includes('<html')) {
-                    extraHint = (window.t ? window.t('systemLogs.gasBackupModule.errorHtmlHint') : '\\n(System received webpage HTML instead of data. Please check: 1. Did you copy the script editor URL? It must be the "Web App" URL. 2. Is access set to "Anyone"?)');
+                    extraHint = (window.t ? window.t('gasBackupModule.errorHtmlHint') : '\\n(System received webpage HTML instead of data. Please check: 1. Did you copy the script editor URL? It must be the "Web App" URL. 2. Is access set to "Anyone"?)');
                 }
-                throw new Error((window.t ? window.t('systemLogs.gasBackupModule.errorParseCloud') : 'Unable to parse cloud data. Please verify the URL is correct and the GAS script is up to date.') + extraHint);
+                throw new Error((window.t ? window.t('gasBackupModule.errorParseCloud') : 'Unable to parse cloud data. Please verify the URL is correct and the GAS script is up to date.') + extraHint);
             }
             if (listPayload.status === 'error') {
-                throw new Error((window.t ? window.t('systemLogs.gasBackupModule.errorCloudResponse') : 'Cloud returned error: ') + listPayload.message);
+                throw new Error((window.t ? window.t('gasBackupModule.errorCloudResponse') : 'Cloud returned error: ') + listPayload.message);
             }
 
             const versions = listPayload.data || [];
             if (versions.length === 0) {
-                throw new Error(window.t ? window.t('systemLogs.gasBackupModule.errorNoBackup') : 'Restore failed: No backup data on the cloud yet.');
+                throw new Error(window.t ? window.t('gasBackupModule.errorNoBackup') : 'Restore failed: No backup data on the cloud yet.');
             }
 
             let selectedFileId = null;

@@ -114,7 +114,8 @@ export default {
             releaseDate: 'Release Date: {date}'
         },
         app: {
-            name: 'TinyLedger'
+            name: 'TinyLedger',
+            fullName: 'TinyLedger'
         },
         accounts: {
             defaultName: 'Default Account',

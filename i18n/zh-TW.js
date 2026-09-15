@@ -114,7 +114,8 @@ export default {
             releaseDate: '發布日期: {date}'
         },
         app: {
-            name: 'TinyLedger'
+            name: 'TinyLedger',
+            fullName: '小小計帳本 (TinyLedger)'
         },
         accounts: {
             defaultName: '預設帳戶',

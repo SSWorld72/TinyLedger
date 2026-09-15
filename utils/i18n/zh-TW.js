@@ -190,14 +190,14 @@ export default {
             freeQuota: 'Google 提供每月 200 美元的免費額度，一般個人使用完全不需擔心費用問題。設定帳單帳戶是 Google 的必要步驟，不代表會馬上收費。',
             btnOk: '了解'
         }
-        // 未來可持續擴充共用模組翻譯
     },
     logs: {
         i18n: {
             init: '[i18n] 初始化多語系引擎，字典鍵值數: {count}',
             warnMissing: '[i18n] 警告：找不到翻譯鍵值: {key}',
             startObserver: '[i18n] 啟動 DOM 監聽器',
-            bindCount: '[i18n] 綁定 DOM 元素數: {count}'
+            bindCount: '[i18n] 綁定 DOM 元素數: {count}',
+            debugMode: '[i18n] 除錯模式已切換為 {state}'
         }
     },
     systemLogs: {
@@ -229,6 +229,7 @@ export default {
             typeManual: '手動',
             restoreNoZipDataError: '找不到 ZIP 備份資料！',
             extractZipError: '解壓縮 ZIP 備份檔失敗：{error}',
+            errorNonJson: '雲端回傳非 JSON 資料：',
             errorHtmlHint: '\n(系統接收到網頁 HTML 而非資料。請檢查：1. 是否複製到指令碼編輯器的網址？必須是「網頁應用程式」網址。2. 發布權限是否設為「所有人」？)',
             errorParseCloud: '無法解析雲端資料。請確認網址正確且 GAS 腳本已更新至最新版。',
             errorCloudResponse: '雲端回傳錯誤：',

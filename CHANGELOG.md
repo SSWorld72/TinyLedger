@@ -1,188 +1,199 @@
-# 小小計帳本 (TinyLedger) - 版本更新紀錄
+# TinyLedger - Changelog
 
-## 2026-09-15 (v1.5.5.0 - 介面固定與排版一致性優化)
-### 修復 (Fixes)
-- **介面固定功能修復**：修正頁面捲動時，上方的控制面板與分類列無法正常固定在畫面頂端的問題，現在不管是「一般紀錄」還是「統計圖」，頂端選單都能完美固定了。
-- **手機與電腦版排版錯亂**：修正部分頁面在平板尺寸下，字體與佈局會跳動的不一致問題。
+> 🇹🇼 若要查看繁體中文版，請參閱 [CHANGELOG.zh-TW.md](CHANGELOG.zh-TW.md)
 
-### 新增 (Added)
-- **自訂分頁筆數**：在清單頁面新增「每頁顯示筆數」選擇器，讓你自由切換一次想看多少筆資料。
+## 2026-09-15 (v1.5.6.0 - 5 New Languages & Cache Fix)
+### Added
+- **Support More Languages**: Added 7 display languages: Simplified Chinese, Japanese, Korean, Thai, Hindi, French, and German.
 
----
-
-## 2026-09-14 (v1.5.4.0 - 雲端同步效能與還原邏輯修正)
-### 修復 (Fixes)
-- **雲端同步異常修正**：修復了因資料過大時導致的備份與讀取異常，大幅提升單次傳輸的穩定性。
-- **合併還原帳戶保留**：現在使用「合併還原」時，會聰明地保留你自己在本地端設定好的帳戶名稱與顏色，不會再被預設值蓋掉了。
-- **清空資料安全保護**：執行「強制清空本機資料」時，系統將自動保護你的 Google Maps 金鑰與私人雲端設定，不怕誤刪。
-
-### 優化 (Improvements)
-- **自動同步排隊機制**：增強背景同步的穩定度，連續快速新增多筆資料也不會漏掉任何一筆。
+### Fixes
+- **Language Cache Exception Fix**: Fixed an issue where browser caching prevented some users from seeing the newly added language options in the list.
 
 ---
 
-## 2026-09-11 (v1.5.3.0 - 備份/還原完整性修正)
-### 修復 (Fixes)
-- **備份更完整**：備份檔現在會一併儲存顯示語言設定，還原後不再發生語言被重置的問題。
-- **合併還原更聰明**：使用「合併」方式還原時，本機已有的帳戶和重要節日提醒將被正確保留，不再被備份檔的資料意外覆蓋；備份中有而本機沒有的項目才會被補入。
+## 2026-09-15 (v1.5.5.0 - Interface Fixation & Layout Consistency Optimization)
+### Fixes
+- **Interface Fixation Fix**: Fixed the issue where the top control panel and category bar could not be properly fixed at the top of the screen when scrolling. Now, whether in the "General Records" or "Statistics Charts", the top menu can be perfectly fixed.
+- **Mobile and Desktop Layout Dislocation**: Fixed inconsistent issues where fonts and layouts would jump on some pages under tablet sizes.
 
-### 優化 (Improvements)
-- **介面語言統一**：修正備份還原過程中的進度文字，確保在英文介面下也能正確顯示英文，不再混入中文。
+### Added
+- **Custom Pagination Count**: Added a "Records Per Page" selector on the list page, allowing you to freely switch how many records you want to view at once.
 
 ---
 
-## 2026-09-10 (v1.5.2.0 - 測試資料產生器與雲端 ZIP 備份升級)
-### 新增 (Added)
-- **獨立測試資料產生器**：新增 `generate_sample.html` 開發輔助工具，支援一鍵產生大量且逼真的中英文隨機記帳紀錄（包含各類別、多帳戶、週期固定紀錄），方便新進使用者預覽或開發測試。
-- **隨機照片產生功能**：測試資料產生器現在支援自動夾帶多張真實高解析度 (480x320) 的測試收據/明細假照片，用以模擬真實備份的檔案體積。
-- **測試資料匯入連結**：於系統「設定 > 備份」區塊右上角新增「產生測試資料」快捷連結。
+## 2026-09-14 (v1.5.4.0 - Cloud Sync Performance & Restore Logic Fixes)
+### Fixes
+- **Cloud Sync Exception Fix**: Fixed a read gap exception caused by the final consistency of Google Drive when data is split and uploaded due to large sizes. The single transmission limit has now been significantly increased to 20MB, allowing the vast majority of backups to be completed at once.
+- **Merge Restore Account Retention Fix**: When using "Merge Restore", if a local account with the same ID (e.g., default account) exists, the custom name and settings from the cloud backup will now be correctly overwritten back instead of being directly skipped.
+- **Clear Data Security Protection**: When executing "Force Clear Local Data", the system will automatically protect and retain your Google Maps API Key and GAS Private Cloud settings to prevent the loss of important keys.
 
-### 優化 (Improvements)
-- **多行同步進度顯示**：在地端 ZIP 匯入與雲端備份還原時，新增支援四行並列的同步進度狀態面板，讓使用者能夠即時掌握「一般紀錄」、「固定紀錄」、「類別設定」與「對象設定」的個別寫入進度。
-- **精確寫入計數機制**：重新設計底層 IndexedDB 寫入與進度回報邏輯，將原先以批次 (Chunk) 為單位的進度跳動，升級為與每筆資料寫入同步的精確 `+1` 遞增，讓還原進度更加滑順且真實。
-- **私有雲端 (GAS) 備份全面升級 ZIP 壓縮**：將原先直接傳送巨型 JSON Base64 的雲端備份機制，正式升級為「ZIP 圖文分離壓縮技術」。現在備份至雲端時，系統會自動在本地端將紀錄與照片分離打包成 ZIP 再行加密上傳，大幅降低手機端瀏覽器 Out of Memory (OOM) 的風險，並縮小備份檔體積。
-- **備份檔格式描述統一**：因應地端與雲端全面採用 ZIP 壓縮，移除 UI 設定介面與多國語系中會令人誤解的「(JSON)」字樣。
-- **還原後環境刷新**：優化地端 ZIP 還原流程，在匯入成功後將自動重新整理網頁，確保所有主題、設定與全域變數皆能正確套用，與雲端還原行為保持一致。
+### Improvements
+- **Auto-Sync Queuing Mechanism**: If new data changes occur during background sync execution, the system will automatically queue the request to ensure no omissions occur when continuously adding data.
 
-## 2026-09-09 (v1.5.1.0 - 行動裝置 UI 優化與萬年曆重疊修復)
-### 修復 (Fixes)
-- **萬年曆節日重疊與排版**：徹底解耦底層農曆模組與介面渲染邏輯，移除 2/14 節日設定，並統一交由「趣味情人節」專屬開關控制。同時優化「特定節日 (紀念日)」的顯示位置，將其移至日曆詳情面板的八字排盤下方。
+---
 
-### 優化 (Improvements)
-- **行動版地址輸入優化**：修復新增紀錄對話框中，地址搜尋欄位因 Google Maps 元件預設 Padding 導致的寬度被過度壓縮與文字截斷問題。
-- **防虛擬鍵盤遮擋**：加入智慧聚焦機制，當在手機上點擊地址輸入框時，畫面會自動平滑滾動至最頂部，確保 Google Maps 自動完成下拉選單不會被彈出的虛擬鍵盤遮擋。
+## 2026-09-11 (v1.5.3.0 - Backup/Restore Completeness Fix)
+### Fixes
+- **More Complete Backup**: Backup files will now simultaneously save the display language settings, preventing the language from being reset after restoration.
+- **Smarter Merge Restore**: When restoring using the "Merge" method, existing local accounts and important festival reminders will be correctly retained and no longer accidentally overwritten by data in the backup file; only items present in the backup but not locally will be supplemented.
 
-## 2026-09-08 (v1.5.0.0 - 國際多語系支援與架構重構)
-### 新增 (Added)
-- **多語系 (i18n) 支援**：全面導入國際化多語系架構，新增英文 (English) 介面。使用者可於設定頁面即時切換語言，包含 UI 介面、圖表單位、內建分類及提示訊息皆能自動翻譯轉換。
-- **UI 模組化載入機制**：實作 `htmlLoader.js`，將原本肥大的 `index.html` 徹底拆分為多個獨立視圖 (Views) 與對話框 (Modals)，並結合多語系字典進行渲染，大幅提高載入效能與維護性。
+### Improvements
+- **Interface Language Unification**: Fixed the progress text during backup and restoration to ensure English is correctly displayed under the English interface without mixing in Chinese.
 
-### 優化 (Improvements)
-- **圖表與資料呈現**：`charts.js` 加入多語系支援，將單位「萬/億」轉換為「K/M/B」顯示。
-- **資料庫升級腳本**：新增 `i18nMigration.js`，將舊有資料中的 `catId` 升級為標準的多語系 `i18nKey` 格式。
+---
 
-## 2026-09-03 (v1.4.2.0 - 主題一致性與日誌強化)
-### 新增 (Added)
-- **全域錯誤日誌捕捉**：系統日誌面板現在能自動捕捉未預期的程式錯誤，方便排查問題。
+## 2026-09-10 (v1.5.2.0 - Test Data Generator & Cloud ZIP Backup Upgrade)
+### Added
+- **Standalone Test Data Generator**: Added the `generate_sample.html` development helper tool, supporting one-click generation of massive and realistic random Chinese and English bookkeeping records (including various categories, multi-accounts, and periodic fixed records), making it easy for new users to preview or developers to test.
+- **Random Photo Generation**: The test data generator now supports automatically including multiple real high-resolution (480x320) test receipt/detail fake photos to simulate the file size of a real backup.
+- **Test Data Import Link**: Added a "Generate Test Data" quick link in the top right corner of the "Settings > Backup" section.
 
-### 優化 (Improvements)
-- **設定頁面主題同步**：設定頁面中的所有區塊（GAS 備份、Google Maps、照片設定、系統日誌）現在會完美跟隨外觀主題變色。
-- **設定頁面排版統一**：統一所有設定區塊的間距與小標題格式，視覺更整齊一致。
-- **日誌訊息顏色區分**：系統日誌面板中的錯誤訊息改為紅色、警告改為黃色，方便快速辨識。
-- **主題選擇器簡化**：外觀主題下拉選單僅顯示主題名稱，版面更簡潔。
+### Improvements
+- **Multi-Line Sync Progress Display**: Added support for a four-line parallel sync progress status panel during local ZIP import and cloud backup/restore, allowing users to instantly grasp the individual writing progress of "General Records", "Fixed Records", "Category Settings", and "Target Settings".
+- **Precise Write Counting Mechanism**: Redesigned the underlying IndexedDB writing and progress reporting logic, upgrading the progress jump from batch (Chunk) units to a precise `+1` increment synchronized with each data write, making the restoration progress smoother and more realistic.
+- **Private Cloud (GAS) Backup Fully Upgraded to ZIP Compression**: The cloud backup mechanism that previously transmitted giant JSON Base64 directly has been officially upgraded to the "ZIP Text-Image Separation Compression Technology". Now, when backing up to the cloud, the system automatically separates and packages the records and photos into a ZIP locally before encrypting and uploading, significantly reducing the risk of Out of Memory (OOM) on mobile web browsers and shrinking the backup file size.
+- **Unified Backup File Format Description**: In response to the full adoption of ZIP compression locally and on the cloud, removed the potentially misleading "(JSON)" text from the UI settings interface and multi-language dictionaries.
+- **Environment Refresh After Restore**: Optimized the local ZIP restore flow. After a successful import, the webpage will automatically refresh to ensure all themes, settings, and global variables are correctly applied, keeping consistent with the cloud restore behavior.
 
-### 修復 (Fixes)
-- **備份版本數解鎖**：修正 GAS 雲端備份中「保留版本數量」下拉選單無法操作的問題。
+## 2026-09-09 (v1.5.1.0 - Mobile UI Optimization & Perpetual Calendar Overlap Fix)
+### Fixes
+- **Perpetual Calendar Festival Overlap & Layout**: Completely decoupled the underlying Farmer's Almanac module and interface rendering logic, removed the 2/14 festival setting, and unified it under the exclusive "Fun Valentine's Day" switch. Also optimized the display position of "Specific Festivals (Anniversaries)" by moving them below the Bazi chart in the calendar details panel.
 
-## 2026-09-02 (v1.4.1.0 - 介面優化與調整)
-### 優化 (Improvements)
-- **關於頁面改版**：徹底重新設計「關於與授權條款」的排版，改用網格卡片與高亮邊框，提高閱讀性並建立獨特風格。
-- **贊助作者按鈕**：將「贊助作者」按鈕移至系統設定與關於頁面的主標題列右側，使其更容易點擊。
-- **資料管理顏色調整**：為「資料管理」中的按鈕加入次要顏色（靛青色），確保在深色與淺色主題下皆有良好的視覺辨識度。
-- **第三方套件資訊**：在「關於」頁面中加入第三方開源技術的官方連結與目前使用的版本號。
-- **帳戶下拉選單修復**：修正深色主題下帳戶選擇下拉選單底色未跟隨主題變更的問題。
-## 2026-09-01 (v1.4.0.0 - 多帳戶預算與全域切換)
-### 新增 (Added)
-- **多帳戶預算支援**：每個帳戶現在可以擁有自己獨立的「本月預算」，切換帳戶時，首頁進度條會自動切換顯示對應的預算額度。
-- **全域預算動態加總**：在首頁選擇「全部」帳戶時，系統會自動加總所有帳戶的預算作為總額度，幫助您掌握整體財務狀況。
+### Improvements
+- **Mobile Address Input Optimization**: Fixed the issue in the add record dialog where the width of the address search field was overly compressed and text was truncated due to the default padding of the Google Maps component.
+- **Anti-Virtual Keyboard Obstruction**: Added a smart focus mechanism. When clicking the address input box on a mobile phone, the screen automatically scrolls smoothly to the very top, ensuring the Google Maps autocomplete dropdown menu is not obstructed by the pop-up virtual keyboard.
 
-### 優化 (Improvements)
-- **全域帳戶切換**：將帳戶切換按鈕從明細列表搬移至最上方的全域標題列 (Header)，現在無論在明細、統計或是固定紀錄頁面，都能隨時切換與過濾帳戶資料。
-- **首頁版面壓縮**：大幅縮小了首頁「預算進度條」區塊上下的空白，釋放更多寶貴的螢幕空間給底部的紀錄清單，提升小螢幕上的瀏覽體驗。
+## 2026-09-08 (v1.5.0.0 - International Multi-Language Support & Architecture Refactoring)
+### Added
+- **Multi-Language (i18n) Support**: Fully introduced an internationalized multi-language architecture and added an English interface. Users can instantly switch languages on the settings page, and the UI interface, chart units, built-in categories, and prompt messages can all be automatically translated and converted.
+- **UI Modular Loading Mechanism**: Implemented `htmlLoader.js` to completely break down the originally bloated `index.html` into multiple independent Views and Modals, and render them in combination with multi-language dictionaries, greatly improving loading performance and maintainability.
 
-## 2026-08-28 (v1.3.3.0 - 類別連動與照片備份修復)
-### 修復 (Fixes)
-- **類別連動更新防呆**：修正編輯大類別名稱時，若不同收支類型（例如收入與支出）剛好有同名的大類別，會不小心一併覆蓋的嚴重錯誤。
-- **照片備份遺失修復**：修復在產生 ZIP 備份檔時，無法正確將照片轉換並抽離出實體圖檔的問題，確保含有照片的紀錄皆能完美備份與還原，且維持舊備份檔的相容性。
+### Improvements
+- **Chart & Data Presentation**: Added multi-language support to `charts.js`, converting units like "Ten Thousand / Hundred Million" to "K / M / B" for display.
+- **Database Migration Script**: Added `i18nMigration.js` to upgrade the `catId` in old data to the standard multi-language `i18nKey` format.
 
-## 2026-08-25 (v1.3.2.0 - 體驗優化與版面修復)
-### 優化 (Improvements)
-- **清單定位與高亮**：新增或複製紀錄後，清單會自動捲動並精準定位至該筆資料，並加入短暫的黃色高亮提示，再也不用手動尋找剛新增的資料。
+## 2026-09-03 (v1.4.2.0 - Theme Consistency & Logging Enhancement)
+### Added
+- **Global Error Log Catching**: The system log panel can now automatically catch unexpected program errors, making troubleshooting easier.
 
-### 修復 (Fixes)
-- **萬年曆排版修復**：修正萬年曆在顯示多筆紀錄時，格子高度被強制拉齊導致大量空白的問題，現在能根據每日內容多寡自動彈性伸縮。
-- **iOS 介面微調**：微調固定紀錄設定頁面中的日期與金額輸入框比例，解決在 iOS 小螢幕裝置上文字過長被截斷的問題。
+### Improvements
+- **Settings Page Theme Sync**: All sections in the settings page (GAS Backup, Google Maps, Photo Settings, System Logs) now perfectly follow the appearance theme color changes.
+- **Settings Page Layout Unification**: Unified the spacing and subtitle formats of all setting sections to make them visually neater and more consistent.
+- **Log Message Color Differentiation**: Error messages in the system log panel have been changed to red and warnings to yellow for quick identification.
+- **Theme Selector Simplification**: The appearance theme dropdown menu only displays the theme names, making the layout cleaner.
 
-## 2026-08-25 (v1.3.1.0 - 介面與功能修復)
-### 修復 (Fixes)
-- **地點選單顯示異常**：修復編輯紀錄時，Google 地點建議選單會自動彈出且卡在畫面的問題。
-- **iOS 拍照上傳異常**：解決使用 iOS 裝置點擊上傳按鈕時，無法正確彈出系統原生「拍照/相簿」選單的問題。
+### Fixes
+- **Backup Version Count Unlock**: Fixed the issue where the "Retain Version Count" dropdown menu in the GAS cloud backup could not be operated.
 
-## 2026-08-24 (v1.3.0.0 - 影像紀錄與裁切功能升級)
-### 新增 (Added)
-- **實體收據/發票拍照上傳**：在新增或編輯紀錄時，現在可以透過「拍照」或「從相簿上傳」附加照片！這個功能支援拍攝實體發票、收據或是購買的商品。
-- **內建照片裁切與壓縮**：上傳照片後，系統會自動彈出精緻的裁切工具，讓您自由調整想要保留的畫面範圍。
-- **畫質與解析度設定**：在設定頁面中新增了「照片解析度」與「壓縮品質」的細部選項，讓您可以根據需求（例如為了保留收據文字清晰度而調高畫質）在「儲存空間」與「清晰度」間取得完美平衡。
-- **雲端/地端備份同步支援**：拍攝的所有照片都已整合進現有的資料庫結構，無論是使用本地端 JSON 下載，或是最新的 Google 雲端備份，都會自動將您的珍貴照片備份與還原！
+## 2026-09-02 (v1.4.1.0 - Interface Optimization & Adjustment)
+### Improvements
+- **About Page Redesign**: Completely redesigned the layout of "About and License Terms", switching to grid cards with highlighted borders to improve readability and establish a unique style.
+- **Sponsor Author Button**: Moved the "Sponsor Author" button to the right side of the main title bar on the system settings and about pages, making it easier to click.
+- **Data Management Color Adjustment**: Added a secondary color (indigo) to the buttons in "Data Management" to ensure good visual recognition under both dark and light themes.
+- **Third-Party Library Information**: Added official links and current version numbers of third-party open-source technologies in the "About" page.
+- **Account Dropdown Menu Fix**: Fixed the issue where the background color of the account selection dropdown menu did not change with the theme under the dark theme.
 
-### 優化 (Improvements)
-- **相機介面體驗優化**：針對手機裝置，拍照時預設開啟後置鏡頭，並自動將照片介面整合進新增紀錄的表單中。
-- **編輯介面點擊裁切**：對於已經上傳的照片，您可以直接點擊縮圖，隨時呼叫出裁切畫面重新裁切！
+## 2026-09-01 (v1.4.0.0 - Multi-Account Budget & Global Switch)
+### Added
+- **Multi-Account Budget Support**: Each account can now have its own independent "Monthly Budget". When switching accounts, the progress bar on the homepage will automatically switch to display the corresponding budget quota.
+- **Global Budget Dynamic Total**: When selecting "All" accounts on the homepage, the system will automatically sum up the budgets of all accounts as the total quota to help you grasp the overall financial situation.
 
-## 2026-08-20 (v1.2.4.0 - 私有雲備份升級與介面優化)
-### 新增 (Added)
-- **自訂重要節日提醒**：您可以在設定中新增專屬的「重要節日」（例如：結婚紀念日、伴侶生日）。在節日即將到來的前幾天，只要您新增或修改記帳紀錄，系統就會貼心地跳出提醒，避免您忘記準備禮物或大餐！
-- **重要日曆專屬星標**：在萬年曆上，您自訂的重要節日當天會顯示為獨特的「專屬星星符號」，讓這個特別的日子在月曆中脫穎而出。
-- **私有雲備份大升級**：大幅強化專屬私有雲端備份的底層系統，現在只要部署一次 Google 雲端腳本，即可給所有支援此功能的專案共同使用。系統會自動在您的 Google 雲端硬碟建立專屬資料夾並分門別類儲存，再也不用為每個專案重複設定！
+### Improvements
+- **Global Account Switch**: Moved the account switch button from the detail list to the top global header. Now, whether in the details, statistics, or fixed records pages, you can switch and filter account data at any time.
+- **Homepage Layout Compression**: Significantly reduced the blank space above and below the "Budget Progress Bar" section on the homepage, freeing up more precious screen space for the bottom record list and enhancing the browsing experience on small screens.
 
-### 優化 (Improvements)
-- **備份介面視覺統一**：將地端備份（下載檔案至手機/電腦）的區塊重新設計為精緻的圓角卡片，並支援深色模式，讓整個設定頁面的視覺更加平衡美觀。
-- **備份檔解析預覽優化**：雲端還原與地端匯入時，預覽視窗現在會直接顯示「備份檔內的真實總筆數」，讓您清楚知道備份檔裡的資料量，並於下方列出系統自動為您過濾的重複筆數，避免產生「備份檔是空的」的錯覺。
-- **排版細節修復**：修復了備份進行中提示文字偶爾會因為檔案大小資訊而產生不自然折行的問題。
+## 2026-08-28 (v1.3.3.0 - Category Linkage & Photo Backup Fix)
+### Fixes
+- **Category Linkage Update Safeguard**: Fixed a severe error where editing a major category name would accidentally overwrite identically named major categories in different income/expense types (e.g., Income and Expense).
+- **Photo Backup Loss Fix**: Fixed the issue where photos could not be correctly converted and extracted to physical image files when generating a ZIP backup file, ensuring all records with photos can be perfectly backed up and restored, while maintaining compatibility with old backup files.
 
-## 2026-08-20 (v1.2.3.0 - UI 頁面轉置與圖表自適應升級)
-### 新增 (Added)
-- **萬年曆自訂顯示開關**：新增多個日曆顯示設定，您現在可以自由決定是否要在日曆上顯示傳統節慶、二十四節氣，以及每月 14 號專屬的「趣味情人節」。
-- **設定與萬年曆頁面升級**：將原本透過小視窗 (Modal) 呈現的「萬年曆」與「系統設定」頁面，全面重構為「全螢幕頁籤 (Tab)」模式，提供更寬廣舒適的操作體驗。
+## 2026-08-25 (v1.3.2.0 - Experience Optimization & Layout Fix)
+### Improvements
+- **List Positioning & Highlighting**: After adding or duplicating a record, the list will automatically scroll and precisely position to that data, and a brief yellow highlight prompt will be added, eliminating the need to manually search for newly added data.
 
-### 修復 (Fixes)
-- **國定假日標示修正**：修正國定假日過度顯示的問題，將一般週末以紅色日期數字標示，且不顯示無意義的「國定假日」文字。
-- **版面寬度修正**：修復「萬年曆」與「系統設定」在電腦版大螢幕下，因缺乏最大寬度限制而導致版面過度延展、比例失衡的問題，統一限制最大寬度為 800px 置中對齊。
+### Fixes
+- **Perpetual Calendar Layout Fix**: Fixed the issue where the grid height was forced to be equal when displaying multiple records in the perpetual calendar, resulting in a large amount of blank space. It can now automatically expand and contract elastically based on the daily content amount.
+- **iOS Interface Tweaks**: Fine-tuned the date and amount input box proportions in the fixed record settings page, solving the issue of long text being truncated on iOS small screen devices.
 
-### 優化 (Improvements)
-- **圓餅圖完美自適應**：升級底層圓餅圖繪圖引擎，無論在手機版的窄螢幕或電腦版的大螢幕，圓餅圖都會自動偵測可用空間並進行最大化填滿，不再發生被擠壓變小或圖例文字重疊的問題。
-- **長條圖底層優化**：重構圖表繪製引擎，去除多餘的重複程式碼，提升整體圖表渲染的穩定度與效能。
+## 2026-08-25 (v1.3.1.0 - Interface & Function Fixes)
+### Fixes
+- **Location Menu Display Exception**: Fixed the issue where the Google Places suggestion menu would automatically pop up and get stuck on the screen when editing a record.
+- **iOS Photo Upload Exception**: Solved the issue where clicking the upload button on an iOS device failed to correctly pop up the system's native "Camera/Album" menu.
 
-## 2026-08-19 (v1.2.2.0 - 本機與雲端還原防護升級)
-### 優化 (Improvements)
-- **雲端還原覆蓋防護**：雲端還原時，若發現備份檔內的代理網址與本機不同，將跳出對話框詢問是否覆蓋，避免覆蓋掉原有的連線設定。
-- **本機 JSON 還原升級**：本機 JSON 匯入時也同步支援網址差異防護機制，並恢復 GAS 連線設定的自動還原能力，讓換機轉移更加順暢。
+## 2026-08-24 (v1.3.0.0 - Image Recording & Cropping Feature Upgrade)
+### Added
+- **Physical Receipt/Invoice Photo Upload**: When adding or editing a record, you can now attach photos by "Taking a Photo" or "Uploading from Album"! This feature supports capturing physical invoices, receipts, or purchased items.
+- **Built-In Photo Cropping & Compression**: After uploading a photo, the system will automatically pop up an exquisite cropping tool, allowing you to freely adjust the frame area you want to keep.
+- **Quality & Resolution Settings**: Added detailed options for "Photo Resolution" and "Compression Quality" in the settings page, allowing you to strike a perfect balance between "Storage Space" and "Clarity" based on your needs (e.g., increasing quality to preserve receipt text clarity).
+- **Cloud/Local Backup Sync Support**: All captured photos are integrated into the existing database structure. Whether using local JSON download or the latest Google Cloud Backup, your precious photos will be automatically backed up and restored!
 
-## 2026-08-19 (v1.2.1.0 - 手機版緊湊 UI 優化)
-### 優化 (Improvements)
-- **手機版介面優化**：大幅縮小頂部固定區塊的字體與卡片邊距，並將篩選器改為單行橫向滑動，將螢幕空間還給紀錄清單。
+### Improvements
+- **Camera Interface Experience Optimization**: For mobile devices, the rear camera is turned on by default when taking photos, and the photo interface is automatically integrated into the add record form.
+- **Edit Interface Click-to-Crop**: For already uploaded photos, you can directly click the thumbnail to bring up the cropping screen and re-crop at any time!
 
+## 2026-08-20 (v1.2.4.0 - Private Cloud Backup Upgrade & Interface Optimization)
+### Added
+- **Custom Important Festival Reminders**: You can add exclusive "Important Festivals" (e.g., Wedding Anniversary, Partner's Birthday) in the settings. A few days before the festival approaches, as long as you add or edit a bookkeeping record, the system will thoughtfully pop up a reminder to prevent you from forgetting to prepare a gift or a feast!
+- **Important Calendar Exclusive Star Mark**: On the perpetual calendar, the day of your custom important festival will display a unique "Exclusive Star Symbol", making this special day stand out in the monthly calendar.
+- **Private Cloud Backup Major Upgrade**: Significantly enhanced the underlying system of the exclusive private cloud backup. Now, you only need to deploy the Google Cloud Script once, and it can be shared by all projects supporting this feature. The system will automatically create exclusive folders in your Google Drive and store them by category, eliminating the need for repeated setup for each project!
 
-## 2026-08-18 (v1.2.0.0 - 雲端還原與大小類優化)
-### 新增 (Added)
-- **雲端還原版本選擇**：從雲端硬碟下載備份時，會顯示雲端上的歷史備份版本，讓使用者可以自由選擇要還原的檔案。
+### Improvements
+- **Backup Interface Visual Unification**: Redesigned the local backup (download file to phone/computer) section into exquisite rounded cards, and supported dark mode, making the overall visual of the settings page more balanced and beautiful.
+- **Backup File Parsing Preview Optimization**: During cloud restore and local import, the preview window will now directly display the "True Total Number of Records in the Backup File", letting you clearly know the data volume in the backup file, and listing the number of duplicate records automatically filtered by the system below, avoiding the illusion that "the backup file is empty".
+- **Layout Detail Fixes**: Fixed the issue where the backup-in-progress prompt text would occasionally wrap unnaturally due to file size information.
 
-### 優化 (Improvements)
-- **預設分類與目標優化**：調整並精簡預設的收支大小類（加入「購物廣場」與「房貸」），強化未來記帳的直覺度。
-- **防止重複匯入機制**：優化指紋 (Fingerprint) 的驗證防呆機制，若備份檔內有物理上重複的紀錄，匯入時將自動略過以避免資料庫汙染。
+## 2026-08-20 (v1.2.3.0 - UI Page Transposition & Chart Adaptive Upgrade)
+### Added
+- **Perpetual Calendar Custom Display Switch**: Added multiple calendar display settings, allowing you to freely decide whether to display traditional festivals, 24 solar terms, and the exclusive "Fun Valentine's Day" on the 14th of every month.
+- **Settings & Perpetual Calendar Page Upgrade**: Completely refactored the "Perpetual Calendar" and "System Settings" pages originally presented through small windows (Modal) into "Full-Screen Tabs" mode, providing a wider and more comfortable operating experience.
 
-## 2026-08-17 (v1.1.0.0 - 私有雲備份與共用頁尾)
-### 新增 (Added)
-- **GAS 私有雲端備份模組**：正式導入專屬私有雲備份機制，可將資料一鍵備份至您的 Google 雲端硬碟。
-- **共用 Google Maps API 模組**：支援教學彈窗並簡化 API Key 綁定流程。
-- **全域共用頁尾**：統一顯示版權宣告與當前版號。
+### Fixes
+- **National Holiday Marking Fix**: Fixed the issue of over-displaying national holidays. Normal weekends are now marked with red date numbers, and meaningless "National Holiday" text is no longer displayed.
+- **Layout Width Fix**: Fixed the issue where the "Perpetual Calendar" and "System Settings" over-extended and lost proportion on large computer screens due to a lack of maximum width restrictions. Unified the maximum width limit to 800px center-aligned.
 
-### 優化 (Improvements)
-- **備份按鈕介面優化**：統一設定頁面中的匯出/匯入備份按鈕視覺比例。
-- **行動裝置排版修復**：解決深色模式切換與 Tailwind CSS 載入順序造成的邊界擠壓問題。
+### Improvements
+- **Pie Chart Perfect Adaptation**: Upgraded the underlying pie chart drawing engine. Whether on a narrow mobile screen or a large computer screen, the pie chart will automatically detect available space and maximize filling, no longer experiencing issues of being squeezed smaller or legend text overlapping.
+- **Bar Chart Underlying Optimization**: Refactored the chart drawing engine, removed redundant duplicate code, and improved the stability and performance of overall chart rendering.
 
-## 2026-08-14 (v1.0.1.1 - 編輯紀錄修復)
-### 修復 (Fixes)
-- 修復單次紀錄與固定紀錄在編輯後儲存會誤判為「新增紀錄」的嚴重錯誤。
+## 2026-08-19 (v1.2.2.0 - Local & Cloud Restore Protection Upgrade)
+### Improvements
+- **Cloud Restore Overwrite Protection**: During cloud restore, if it finds that the proxy URL in the backup file is different from the local one, a dialog box will pop up asking whether to overwrite, preventing the original connection settings from being overwritten.
+- **Local JSON Restore Upgrade**: Local JSON import now also synchronously supports the URL difference protection mechanism, and restored the automatic restoration capability of GAS connection settings, making device transfer smoother.
 
-## 2026-08-12 (v1.0.1.0 - 農民曆模組修復)
-### 修復 (Fixes)
-- 修正農民曆模組中的復活節演算法導致系統無窮迴圈的問題。
-- 修正節氣計算邏輯，確保能精準比對出清明節等關鍵節氣。
+## 2026-08-19 (v1.2.1.0 - Mobile Compact UI Optimization)
+### Improvements
+- **Mobile Interface Optimization**: Significantly reduced the font size and card margins of the top fixed section, and changed the filter to a single-line horizontal scroll, returning screen space to the record list.
 
-## 2026-08-11 (v1.0.0.0 - 萬年曆與核心重構)
-### 新增 (Added)
-- **萬年曆與八字排盤**：正式上線！可透過上方日曆按鈕開啟，提供完整農曆、干支、節氣資訊。
-- **國定假日連線更新**：自動同步人事行政總處的最新假日與休市日。
-- **資料排序與檢視優化**：紀錄列表現在會依照日期、建立時間精準排序。
+## 2026-08-18 (v1.2.0.0 - Cloud Restore & Major/Minor Category Optimization)
+### Added
+- **Cloud Restore Version Selection**: When downloading backups from the cloud drive, the historical backup versions on the cloud will be displayed, allowing users to freely choose which file to restore.
+
+### Improvements
+- **Default Category & Target Optimization**: Adjusted and streamlined the default major and minor income/expense categories (added "Shopping Mall" and "Mortgage") to enhance the intuitiveness of future bookkeeping.
+- **Anti-Duplicate Import Mechanism**: Optimized the Fingerprint validation fool-proof mechanism. If physically duplicated records exist in the backup file, they will be automatically skipped during import to avoid database pollution.
+
+## 2026-08-17 (v1.1.0.0 - Private Cloud Backup & Shared Footer)
+### Added
+- **GAS Private Cloud Backup Module**: Officially introduced an exclusive private cloud backup mechanism, allowing data to be backed up to your Google Drive with one click.
+- **Shared Google Maps API Module**: Supported tutorial pop-ups and simplified the API Key binding process.
+- **Global Shared Footer**: Unified display of copyright declaration and current version number.
+
+### Improvements
+- **Backup Button Interface Optimization**: Unified the visual proportions of the export/import backup buttons in the settings page.
+- **Mobile Layout Fix**: Solved the boundary compression issue caused by dark mode switching and Tailwind CSS loading order.
+
+## 2026-08-14 (v1.0.1.1 - Edit Record Fix)
+### Fixes
+- Fixed a severe error where editing and saving a single record and a fixed record would misjudge it as a "New Record".
+
+## 2026-08-12 (v1.0.1.0 - Farmer's Almanac Module Fix)
+### Fixes
+- Fixed an issue where the Easter algorithm in the Farmer's Almanac module caused an infinite loop in the system.
+- Fixed solar terms calculation logic, ensuring key solar terms like Qingming Festival can be accurately matched.
+
+## 2026-08-11 (v1.0.0.0 - Perpetual Calendar & Core Refactoring)
+### Added
+- **Perpetual Calendar & Bazi Chart**: Officially online! Can be opened via the calendar button at the top, providing complete lunar date, stems-branches, and solar terms information.
+- **National Holiday Sync Update**: Automatically syncs the latest holidays and market closing days from the Directorate-General of Personnel Administration.
+- **Data Sorting & View Optimization**: The record list is now precisely sorted by date and creation time.
 

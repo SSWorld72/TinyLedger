@@ -1,5 +1,5 @@
 import '../utils/js/logger.js';
-import { I18nEngine } from '../utils/js/i18nEngine.js?v=2';
+import { I18nEngine } from '../utils/js/i18nEngine.js?v=3';
 window.i18nEngine = new I18nEngine();
 window.t = window.i18nEngine.t.bind(window.i18nEngine);
 // DO NOT use top-level await here, otherwise DOMContentLoaded will be missed!
@@ -160,8 +160,8 @@ if (window.__APP_INITIALIZED__) {
         // 2.5 Initialize Shared Footer
         initGlobalFooter({
             containerId: 'app-container',
-            appName: window.t('ui.app.name'),
-            version: 'v1.5.5.0',
+            appName: window.t('ui.app.fullName') || window.t('ui.app.name'),
+            version: 'v1.5.6.0',
             copyrightYear: '2025-2026',
             githubUrl: 'https://github.com/SSWorld72/TinyLedger'
         });

@@ -1,0 +1,723 @@
+export default {
+    categories: {
+        expense: {
+            food: 'Alimentation',
+            family: 'Dépenses familiales',
+            medical: 'Soins médicaux',
+            clothing: 'Vêtements',
+            device: 'Électronique (3C)',
+            transport: 'Transports',
+            entertainment: 'Divertissement',
+            education: 'Éducation',
+            tax: 'Taxes',
+            other: 'Autres'
+        },
+        income: {
+            salary: 'Salaire',
+            investment: 'Investissements',
+            other: 'Autres'
+        }
+    },
+    targets: {
+        self: 'Moi-même',
+        husband: 'Mari',
+        wife: 'Femme',
+        child: 'Enfant',
+        grandpa: 'Grand-père',
+        grandma: 'Grand-mère',
+        family: 'Famille',
+        other: 'Autres'
+    },
+    subcategories: {
+        expense: {
+            food: { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', dinner: 'Dîner', midnight: 'Snack de minuit', drink: 'Boissons', noodle: 'Nouilles', snack: 'Snacks', bread: 'Pain' },
+            family: { allowance: 'Argent de poche', water: 'Eau', electricity: 'Électricité', phone: 'Téléphone', internet: 'Internet', furniture: 'Meubles', appliance: 'Électroménager', cleaning: 'Produits d\'entretien', mortgage: 'Prêt immobilier', mall: 'Centre commercial' },
+            medical: { insurance: 'Assurance', medical: 'Frais médicaux', supplement: 'Compléments alimentaires' },
+            clothing: { coat: 'Manteau', clothes: 'Vêtements', pants: 'Pantalon', skirt: 'Jupe', shoes: 'Chaussures', hat: 'Chapeau', scarf: 'Écharpe', gloves: 'Gants', underwear: 'Sous-vêtements', underpants: 'Caleçons', socks: 'Chaussettes', contacts: 'Lentilles' },
+            device: { computer: 'Ordinateur', phone: 'Téléphone', tablet: 'Tablette', console: 'Console de jeux', accessories: 'Accessoires' },
+            transport: { train: 'Train', hsr: 'TGV', mrt: 'Métro', taxi: 'Taxi', accommodation: 'Hébergement', ticket: 'Billet', parking: 'Parking', gas: 'Carburant', maintenance: 'Entretien véhicule' },
+            entertainment: { movie: 'Cinéma', pinball: 'Flipper', balloon: 'Ballons', claw: 'Machine à pince', karaoke: 'Karaoké', gacha: 'Gacha', game: 'Jeux vidéo' },
+            education: { books: 'Livres', course: 'Cours', exam: 'Examens', dine: 'Dîner au restaurant', gift: 'Cadeaux', red_envelope: 'Enveloppe rouge' },
+            tax: { nhi: 'Assurance maladie', labor: 'Assurance travail', national: 'Retraite', business: 'Taxe professionnelle', license: 'Carte grise', income: 'Impôt sur le revenu', house: 'Taxe d\'habitation', fuel: 'Taxe carburant', land: 'Taxe foncière' },
+            other: { misc: 'Divers', lost: 'Perdu', unclassified: 'Non classé' }
+        },
+        income: {
+            salary: { base: 'Salaire de base', bonus: 'Prime', festival: 'Prime de vacances', overtime: 'Heures supp.', parttime: 'Temps partiel' },
+            investment: { stock: 'Actions', dividend: 'Dividendes', interest: 'Intérêts', fund: 'Fonds d\'investissement', crypto: 'Crypto/Forex' },
+            other: { gift: 'Cadeaux', refund: 'Remboursement', lottery: 'Loterie', subsidy: 'Subventions' }
+        }
+    },
+
+    logs: {
+        db: {
+            migrationStart: '[Base de données] Début de la migration i18n...',
+            migrationSuccess: '[Base de données] Migration i18n terminée !',
+            migrationFail: '[Base de données] Échec de la migration i18n : {error}',
+            error: '[Base de données] Erreur :',
+            saveCategorySuccess: '[Base de données] Catégorie enregistrée (saveCategory)',
+            deleteCategorySuccess: '[Base de données] Catégorie supprimée (deleteCategory)',
+            saveTargetSuccess: '[Base de données] Cible enregistrée (saveTarget)',
+            deleteTargetSuccess: '[Base de données] Cible supprimée (deleteTarget)',
+            saveTransactionSuccess: '[Base de données] Transaction enregistrée (saveTransaction)',
+            batchSaveTransactionsSuccess: '[Base de données] Transactions en lot enregistrées (batchSaveTransactions)',
+            batchSaveTransactionsFail: '[Base de données] Échec de l\'enregistrement en lot :',
+            deleteTransactionSuccess: '[Base de données] Transaction supprimée (deleteTransaction)',
+            deleteTransactionsByFixedIdSuccess: '[Base de données] Transactions fixes supprimées en lot (deleteTransactionsByFixedId)',
+            saveFixedRecordSuccess: '[Base de données] Règle fixe enregistrée (saveFixedRecord)',
+            batchSaveFixedRecordsSuccess: '[Base de données] Règles fixes en lot enregistrées (batchSaveFixedRecords)',
+            batchSaveFixedRecordsFail: '[Base de données] Échec de l\'enregistrement en lot des règles fixes :',
+            deleteFixedRecordSuccess: '[Base de données] Règle fixe supprimée (deleteFixedRecord)'
+        },
+        calendar: {
+            holidayLoadError: 'Impossible de charger les jours fériés pour {year}',
+            loadHolidaysFail: '[Calendrier] Impossible de charger les jours fériés...'
+        },
+        settings: {
+            accountUpdateSuccess: '[Paramètres] Comptes mis à jour (saveAccounts)',
+            checkAccountDataError: '[Paramètres] Erreur de vérification des comptes :',
+            backupUpdateSuccess: '[Paramètres] Paramètres Cloud enregistrés',
+            saveAccountsSuccess: '[Paramètres] Comptes mis à jour (saveAccounts)',
+            cloudBackupSuccess: '[Paramètres] Paramètres Cloud enregistrés',
+            restoreError: 'Erreur lors de la restauration :',
+            exportJsonSuccess: '[Sauvegarde] Export local réussi : Taille du fichier ',
+            fileReadError: 'Erreur de lecture du fichier',
+            importJsonSuccess: '[Sauvegarde] Import local réussi : Ajouts/Mises à jour ',
+            checkAccountError: '[Paramètres] Erreur de vérification des comptes :',
+            checkCategoryError: '[Paramètres] Erreur de vérification des catégories :',
+            checkCategoryBatchError: '[Paramètres] Erreur de vérification en lot des catégories :',
+            checkTargetError: '[Paramètres] Erreur de vérification des cibles :',
+            checkTargetBatchError: '[Paramètres] Erreur de vérification en lot des cibles :'
+        },
+        record: {
+            festivalReminderError: '[Rappel de festival] Erreur :',
+            saveFail: '[Enregistrement] Échec de la sauvegarde :'
+        },
+        location: {
+            fetchPlaceInfoFail: '[Recherche de lieu] Impossible de récupérer les infos :',
+            apiLoadFail: '[Recherche de lieu] Échec de l\'API Google Maps...'
+        },
+        app: {
+            alreadyInitialized: '[App] app.js déjà initialisé, exécution ignorée...'
+        },
+        htmlLoader: {
+            loadFail: '[HTML Loader] Échec du chargement',
+            fetchFail: '[HTML Loader] Impossible de récupérer'
+        }
+    },
+    ui: {
+        common: {
+            unnamed: '(Sans nom)'
+        },
+        footer: {
+            unnamedProject: 'Projet sans nom',
+            githubProject: 'Projet GitHub',
+            releaseDate: 'Date de sortie : {date}'
+        },
+        app: {
+            name: 'TinyLedger',
+            fullName: 'TinyLedger'
+        },
+        accounts: {
+            defaultName: 'Compte par défaut',
+            colors: {
+                blue: 'Bleu', green: 'Vert', red: 'Rouge', yellow: 'Jaune', purple: 'Violet', gray: 'Gris'
+            },
+            filterAll: 'Tous',
+            filterPartial: '({selected}/{total})',
+            alertNoAccount: 'Veuillez sélectionner au moins un compte !'
+        },
+        tabs: {
+            rules: 'Règles',
+            details: 'Détails'
+        },
+        nav: {
+            addRecord: 'Nouveau',
+            backToList: 'Retour',
+            stats: 'Stats',
+            calendar: 'Calendrier',
+            settings: 'Paramètres',
+            tabGeneral: 'Général',
+            tabGeneralMobile: 'Général',
+            tabFixed: 'Fixe',
+            tabFixedMobile: 'Fixe',
+            category: 'Catégorie'
+        },
+        list: {
+            summary: '📊 Total : {txLen} manuels, {fixLen} fixes',
+            filterAll: 'Tous',
+            emptyFixed: 'Aucun enregistrement fixe correspondant',
+            emptyGeneral: 'Aucun enregistrement pour ce mois',
+            pageInfo: 'Page {current} sur {total}',
+            prevPage: 'Précédent',
+            nextPage: 'Suivant',
+            pageSizePre: 'Par page',
+            pageSizePost: 'éléments'
+        },
+        budget: {
+            status: 'Budget : {monthlyBudget} · Dépensé : ${totalExpenseMonth} ({budgetPercent}%)',
+            over: 'Dépassement de {amount}',
+            left: 'Reste {amount}'
+        },
+        record: {
+            typeIncome: 'Revenu',
+            typeExpense: 'Dépense',
+            ruleYearly: 'Chaque année le {day} {month}',
+            ruleMonthly: 'Le {day} de chaque mois',
+            ruleWeekly: 'Chaque {weekday}',
+            weekdays: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+            ruleCount: '{count} enregistrements',
+            noDeadline: 'Sans limite',
+            labelTarget: '👤 Cible :',
+            labelLocation: '📍 Lieu :',
+            labelNote: '📝 Note :',
+            labelPhoto: '📷 Photo attachée',
+            noNote: 'Aucune note',
+            fixedGeneratedTip: 'Généré par une règle fixe (lecture seule)',
+            addTitle: 'Ajouter',
+            copyTitle: 'Copier',
+            editFixedTitle: 'Modifier la règle',
+            viewFixedTitle: 'Détails de la règle',
+            addBtn: 'Ajouter',
+            copyBtn: 'Copier',
+            promptLocation: 'Veuillez sélectionner un lieu',
+            importantFestivalPrefix: '⭐',
+            festivalJoin: ', ',
+            attachment: 'Pièce jointe'
+        },
+        batch: {
+            typeNameFixed: 'règle fixe',
+            typeNameGeneral: 'enregistrement',
+            unnamedRule: 'Règle sans nom',
+            boundPreview: '- [{name}] ({count} éléments, ex: {date})',
+            andOthers: '...et autres',
+            confirmDeleteFixed: 'Supprimer ces {count} règles fixes ? Action irréversible.',
+            confirmDeleteFixedBound: '【ATTENTION】Ces règles ont généré {totalBound} enregistrements :\n{boundLines}\n\nSupprimer la règle supprimera TOUS ces enregistrements historiques !\n(Modifiez plutôt la "date de fin" pour arrêter la génération).\n\nContinuer la suppression ?',
+            confirmDeleteType: 'Supprimer ces {count} {typeName}(s) ?',
+            btnDeleteSelected: 'Supprimer la sélection ({count})'
+        },
+        stats: {
+            tabs: {
+                pie: 'Camembert',
+                bar: 'Barres',
+                line: 'Courbe',
+                annual: 'Annuel'
+            },
+            filters: {
+                period: 'Période :',
+                week: 'Semaine',
+                month: 'Mois',
+                year: 'Année',
+                all: 'Tout',
+                custom: 'Personnalisé',
+                groupby: 'Grouper par :',
+                major: 'Cat. principale',
+                sub: 'Sous-cat.',
+                payee: 'Cible',
+                xaxis: 'Axe X :',
+                byDay: 'Par jour',
+                byMonth: 'Par mois',
+                yearLabel: 'Année :'
+            },
+            noData: 'Aucune donnée',
+            unclassified: '(Non classé)',
+            unspecified: '(Non spécifié)',
+            tableMajor: 'Principale',
+            tableSub: 'Sous-cat.',
+            tableTarget: 'Cible',
+            tableAmount: 'Montant',
+            tablePercent: 'Pourcentage',
+            tableTotal: 'Total',
+            noAnnualRecord: 'Aucun enregistrement pour {year}',
+            annualTotalIncome: 'Revenus totaux',
+            annualTotalExpense: 'Dépenses totales',
+            annualBalance: 'Solde',
+            monthlyDetails: 'Détails mensuels',
+            month: 'Mois',
+            monthSuffix: '',
+            year: 'Année',
+            income: 'Revenu',
+            expense: 'Dépense',
+            top5Expenses: 'Top 5 des dépenses'
+        },
+        settings: {
+            dangerZone: {
+                title: 'Zone Dangereuse',
+                desc: 'Supprimer toutes les données locales de l\'appareil. Action irréversible.',
+                button: 'Effacer toutes les données locales',
+                confirmTitle: 'Confirmer la suppression ?',
+                confirmMsg: 'Toutes vos données locales seront perdues.\nAvez-vous fait une sauvegarde ?',
+                doubleConfirmTitle: 'Confirmation finale',
+                doubleConfirmMsg: 'Détruire la base de données locale ?',
+                btnConfirm: 'Oui, tout effacer',
+                btnCancel: 'Annuler',
+                btnDoubleConfirm: 'Confirmer la destruction',
+                btnDoubleCancel: 'Réfléchir',
+                busyTitle: 'Suppression en cours',
+                busyDetail: 'Effacement...',
+                success: '✅ Données locales effacées !',
+                error: 'Erreur lors de la suppression : {error}'
+            },
+            systemLogs: {
+                title: 'Journaux Système (Logs)',
+                desc: 'Affiche les 999 derniers logs.',
+                placeholderSearch: 'Rechercher...',
+                titleCopy: 'Copier les logs',
+                btnCopy: 'Copier',
+                btnExport: 'Exporter',
+                titleClear: 'Effacer les logs',
+                btnClear: 'Effacer',
+                confirmClear: 'Effacer tous les journaux système ?',
+                emptyExport: 'Aucun log à exporter',
+                emptyCopy: 'Aucun log à copier',
+                copySuccess: 'Logs copiés !',
+                copyError: 'Échec de la copie : {error}'
+            },
+            language: { title: 'Langue (Language)' },
+            title: 'Paramètres du système',
+            sponsor: 'Sponsoriser l\'auteur',
+            theme: {
+                title: 'Thème de l\'interface'
+            },
+            backup: {
+                title: 'Sauvegarde manuelle et automatique',
+                manualExport: 'Exporter ZIP',
+                manualImport: 'Importer',
+                importHint: 'Supporte .zip ou .json',
+                autoExport: 'Périmètre d\'exportation',
+                daily: 'Quotidien (Mois en cours)',
+                yearly: 'Annuel',
+                yearlyAll: 'Toutes les années',
+                yearlyCurrent: 'Cette année uniquement',
+                yearlyLast: 'L\'année dernière et cette année',
+                includePhotos: 'Inclure les photos (Taille ++)',
+                exporting: 'Préparation du fichier ZIP...',
+                exportSuccess: '✅ Sauvegarde réussie !\n{txCount} transactions, {fixedCount} règles, {catCount} catégories, {tgtCount} cibles.',
+                exportError: 'Échec de l\'export : {error}',
+                importing: 'Analyse du fichier...',
+                importError: 'Erreur de restauration : {error}',
+                errorJsonParse: 'Format de fichier JSON invalide',
+                errorOldFormat: 'Format obsolète',
+                errorUnsupportedFile: 'Veuillez utiliser un fichier .zip ou .json',
+                gasUrlConflictPrompt: '⚠️ L\'URL Cloud du fichier de sauvegarde diffère de l\'URL locale.\n\n[Sauvegarde] {newUrl}\n[Locale] {oldUrl}\n\nRemplacer l\'URL locale ?',
+                parsedTitle: 'Analyse terminée',
+                startImport: 'Démarrer l\'importation',
+                cancel: 'Annuler',
+                clearingData: 'Effacement des données locales...',
+                deletingRecords: 'Suppression en cours...',
+                restoringLocal: 'Restauration...',
+                writingDb: 'Écriture dans la base de données...',
+                progressFormat: {
+                    wait: 'En attente : {type}... ({current}/{total})',
+                    doing: 'Écriture : {type}... ({current}/{total})',
+                    done: 'Terminé : {type}... ({current}/{total})',
+                    typeTx: 'Transactions',
+                    typeFixed: 'Règles',
+                    typeCat: 'Catégories',
+                    typeTgt: 'Cibles'
+                },
+                importComplete: '✅ Importation terminée !\n\n[Ajouts]\n{adds}',
+                reloading: 'Rechargement de l\'application...',
+                fullBackup: 'Sauvegarde complète :',
+                fullBackupDesc: 'Toutes vos données.',
+                overwriteWarning: 'ATTENTION : Écrase toutes les données locales',
+                exportingTitle: 'Exportation en cours',
+                advancedTitle: 'Paramètres de sauvegarde avancés',
+                mode: {
+                    title: 'Mode de sauvegarde',
+                    daily: 'Quotidien (Complet)',
+                    yearly: 'Annuel (Partiel)'
+                },
+                yearlyRange: {
+                    title: 'Périmètre annuel',
+                    all: 'Toutes les années',
+                    current: 'Cette année'
+                },
+                includePhotos: {
+                    title: 'Inclure les photos',
+                    desc: 'Désactiver pour réduire la taille'
+                },
+                restoreMode: {
+                    title: 'Mode de restauration',
+                    merge: 'Fusionner (Conserver le local, ignorer les doublons)',
+                    overwrite: 'Écraser (Remplacer totalement le local)'
+                },
+                localTitle: 'Sauvegarde locale (ZIP)',
+                localDesc: 'Télécharger un fichier ZIP sur votre appareil.',
+                exportBtn: 'Exporter',
+                importBtn: 'Importer',
+                generateSample: 'Générer des données de test'
+            },
+            cloudBackup: {
+                title: 'Synchronisation Cloud privé (Google Apps Script)',
+                syncing: 'Synchronisation Cloud...',
+                desc: 'Sauvegardez toutes vos données sur votre propre Cloud Google.',
+                successSummary: '✅ Sauvegarde Cloud réussie !\n{txCount} transactions, {fixedCount} règles, {catCount} catégories, {tgtCount} cibles.',
+                restoreConfirmMerge: '【Mode Fusion】\nFusionner ces données avec les données locales ?',
+                restoreConfirmOverwrite: '【Mode Écrasement】\nÉcraser toutes les données locales par cette sauvegarde Cloud ?',
+                restoreConfirmEmpty: '【Restauration】\nRestaurer ces données Cloud sur cet appareil ?',
+                restoreSummary: 'La sauvegarde contient :\n- Transactions : {txCount}\n- Règles fixes : {fixedCount}\n- Catégories : {catCount}\n- Cibles : {tgtCount}\n',
+                restoreFiltered: '\n(Doublons ignorés)\n',
+                restoreFilteredTx: '- Transactions : {txSkip}\n',
+                restoreFilteredFixed: '- Règles fixes : {fixedSkip}\n',
+                restoreFilteredCat: '- Catégories : {catSkip}\n',
+                restoreFilteredTgt: '- Cibles : {tgtSkip}\n',
+                restoreCompleteEmpty: '✅ Restauration Cloud terminée !\n\n【Ajouts】\n{adds}\n\nRechargement...',
+                restoreCompleteOverwrite: '✅ Restauration Cloud (Écrasement) terminée !\n\n【Ajouts】\n{adds}\n\nRechargement...',
+                restoreCompleteMerge: '✅ Restauration Cloud (Fusion) terminée !\n\n【Ajouts】\n{adds}',
+                restoreCompleteMergeSkipped: '\n\n(Doublons ignorés)\n',
+                addedTx: '{tx} transactions',
+                addedFixed: '{fixed} règles fixes',
+                addedCat: '{cat} catégories',
+                addedTgt: '{tgt} cibles'
+            },
+            accounts: {
+                title: 'Paramètres des comptes',
+                add: 'Nouveau compte',
+                edit: 'Modifier le compte',
+                defaultAccountName: 'Compte A',
+                accountName: 'Nom du compte',
+                accountNamePh: 'ex: Espèces, Carte bancaire',
+                requireName: 'Le nom est requis',
+                tagColor: 'Couleur',
+                monthlyBudget: 'Budget mensuel',
+                budgetPh: 'ex: 25000',
+                save: 'Enregistrer',
+                budget: 'Budget : ${amount}',
+                isDefault: 'Par défaut',
+                setDefault: 'Définir par défaut',
+                deleteConfirmTitle: 'Supprimer ce compte ?',
+                deleteErrorMsg: 'Impossible ! Ce compte contient :\n',
+                deleteErrorTxs: '- {count} transactions ({dates})\n',
+                deleteErrorFixed: '- {count} règles fixes\n',
+                deleteErrorEnd: '\nVeuillez déplacer ces données vers un autre compte.'
+            },
+            dataManagement: {
+                title: 'Gestion des données',
+                expense: 'Catégories de dépenses',
+                income: 'Catégories de revenus',
+                target: 'Cibles'
+            },
+            calendar: {
+                title: 'Paramètres d\'affichage du calendrier',
+                remindDaysBefore: 'Jours de rappel (avant) :',
+                monthSuffix: '',
+                daySuffix: '',
+                month: 'Mois {m}',
+                day: 'Jour {d}',
+                monthPh: 'Mois',
+                dayPh: 'Jour',
+                festivalNamePh: 'Nom de l\'événement',
+                dayNumPh: 'Jour {n}',
+                nationalHoliday: {
+                    title: 'Jours fériés',
+                    desc: 'Affiche les jours fériés officiels',
+                    lastUpdated: 'Mis à jour : ',
+                    neverUpdated: 'Jamais',
+                    updateNow: 'Mettre à jour',
+                    updating: 'Téléchargement...',
+                    updateSuccess: '✅ Jours fériés mis à jour !',
+                    updateSuccessLog: '[Paramètres] Jours fériés mis à jour.',
+                    updateError: '❌ Échec du téléchargement : {error}'
+                },
+                lunarDate: {
+                    title: 'Calendrier Lunaire (Chinois)',
+                    desc: 'Affiche le calendrier lunaire'
+                },
+                stembranch: {
+                    title: 'Tiges Célestes (Chinois)',
+                    desc: 'Affiche les Tiges Célestes'
+                },
+                solarterm: {
+                    title: 'Termes Solaires (Chinois)',
+                    desc: 'Affiche les 24 termes solaires'
+                },
+                festival: {
+                    title: 'Festivals',
+                    desc: 'Affiche les festivals traditionnels'
+                },
+                globalFestival: {
+                    title: 'Festivals Mondiaux',
+                    desc: 'Affiche les événements internationaux'
+                },
+                bazi: {
+                    title: 'BaZi (Chinois)',
+                    desc: 'Affiche les 4 piliers de la destinée'
+                },
+                valentine: {
+                    title: 'Jours de la Saint-Valentin',
+                    desc: 'Affiche les différentes Saint-Valentin'
+                },
+                importantFestival: {
+                    title: 'Rappels importants',
+                    enableTitle: 'Activer les rappels',
+                    enableDesc: 'Affiche une notification lors de la création d\'une transaction',
+                    addBtn: 'Ajouter (Max 10)'
+                }
+            },
+            photoUpload: {
+                title: 'Téléchargement de photos',
+                enableTitle: 'Activer les photos',
+                enableDesc: 'Permet de joindre des photos aux transactions',
+                maxSize: 'Taille max',
+                size320: '320 x 320',
+                size480: '480 x 480',
+                size640: '640 x 640 (Défaut)',
+                size800: '800 x 800',
+                size1024: '1024 x 1024',
+                quality: 'Qualité JPEG',
+                qual03: '0.3',
+                qual05: '0.5',
+                qual07: '0.7 (Défaut)',
+                qual09: '0.9'
+            },
+            mapLink: {
+                title: 'Lien Google Maps',
+                enableTitle: 'Lien Google Maps actif',
+                enableDesc: 'Permet de cliquer sur le lieu pour ouvrir la carte'
+            },
+            about: {
+                title: 'À propos',
+                licenseTitle: 'Code open source',
+                licenseDesc: 'Voir les licences open source',
+                openSourceLicense: 'Licence Open Source (MIT)',
+                visualAssetsCopyright: 'Droits d\'auteur visuels',
+                visualAssetsDesc: 'Les ressources visuelles sont protégées par le droit d\'auteur.',
+                poweredBy: 'Propulsé par'
+            },
+
+            categories: {
+                title: 'Gérer les catégories',
+                selectAll: 'Tout sélectionner',
+                cascadeUpdateConfirm: 'Cela mettra à jour tous les historiques de "{oldValue}" à "{newValue}". Continuer ?',
+                cascadeUpdateTitle: 'Confirmation de mise à jour',
+                confirmUpdate: 'Mettre à jour',
+                cancel: 'Annuler',
+                noData: 'Aucune donnée',
+                addExpenseMajor: 'Catégorie de Dépense',
+                addIncomeMajor: 'Catégorie de Revenu',
+                promptNewMajor: 'Nouvelle catégorie :',
+                deleteSelected: '🗑️ Supprimer ({count})',
+                addMinor: 'Sous-catégorie',
+                promptNewMinor: 'Nouvelle sous-catégorie :',
+                deleteInUseMsg: 'Impossible, catégorie utilisée par :\n',
+                deleteInUseTx: '- {count} transactions ({dates}{more})\n',
+                deleteInUseFixed: '- {count} règles fixes ({names}{more})\n',
+                deleteInUseTail: '\nVeuillez d\'abord modifier ces données.',
+                editSub: 'Modifier la sous-catégorie',
+                deleteSub: 'Supprimer',
+                moreDays: ' et {count} autres jours',
+                etc: ' etc.',
+                deleteConfirm: 'Supprimer cette catégorie ? Action irréversible.',
+                expenseTitle: 'Catégories de Dépenses',
+                incomeTitle: 'Catégories de Revenus',
+                deleteBatchConfirm: 'Supprimer {majorCount} catégories et {minorCount} sous-catégories ?',
+                deleteBatchConfirmMinorOnly: 'Supprimer ces {count} sous-catégories ?',
+                deleteBatchConfirmMajorOnly: 'Supprimer ces {count} catégories ? (Inclut les sous-catégories)',
+                deleteBatchInUseMsg: 'Impossible ! Utilisé par :\n',
+                deleteBatchInUseMinorItem: '- [{major} > {sub}] ({details})',
+                deleteBatchInUseMajorItem: '- [{major}] ({details})',
+                deleteBatchInUseTxDetail: '{count} transactions',
+                deleteBatchInUseFixedDetail: '{count} règles',
+                deleteBatchInUseMore: '\n...et autres',
+                deleteBatchInUseTail: '\nVeuillez d\'abord modifier ces données.'
+            },
+            targets: {
+                title: 'Cibles',
+                addTarget: 'Nouvelle Cible',
+                selectAll: 'Tout',
+                noData: 'Aucune donnée',
+                noDataSimple: 'Aucune',
+                deleteSelected: '🗑️ Supprimer ({count})',
+                deleteInUseMsg: 'Impossible ! Utilisé par :\n',
+                deleteInUseTx: '- {count} transactions ({dates}{more})\n',
+                deleteInUseFixed: '- {count} règles fixes ({names}{more})\n',
+                deleteInUseTail: '\nVeuillez d\'abord modifier ces données.',
+                moreDates: ' et {count} autres dates',
+                deleteConfirm: 'Supprimer cette cible ?',
+                promptNewTarget: 'Nom de la cible :',
+                duplicateAlert: 'La cible "{name}" existe déjà !',
+                reorderTitle: 'Choisir le numéro de tri',
+                deleteBatchInUseMsg: 'Impossible ! Utilisé par :\n',
+                deleteBatchInUseItem: '- [{name}] ({details})',
+                deleteBatchInUseMore: '\n...et autres',
+                deleteBatchInUseTail: '\nVeuillez d\'abord modifier ces données.',
+                deleteBatchConfirm: 'Supprimer ces {count} cibles ?',
+                cascadeUpdateTitle: 'Mise à jour en cascade',
+                cascadeUpdateConfirm: 'Mettre à jour "{oldValue}" vers "{newValue}" dans tout l\'historique ?',
+                confirmUpdate: 'Mettre à jour'
+            },
+            accountA: 'Compte A',
+            defaultBadge: 'Défaut',
+            monthlyBudget: 'Budget : ${amount}',
+            setDefault: 'Définir par défaut',
+            deleteAccountError: 'Impossible ! Contient :\n{boundTxs}{boundFixed}\nVeuillez déplacer ces données.',
+            deleteAccountErrorTx: '- {count} transactions ({displayDates}{moreStr})\n',
+            deleteAccountErrorMoreDates: ' et {count} autres dates',
+            deleteAccountErrorFixed: '- {count} règles fixes\n',
+            confirmDeleteAccount: 'Supprimer ce compte ?',
+            editAccountError: 'Erreur lors de la modification : {error}',
+            addAccountError: 'Erreur lors de l\'ajout : {error}',
+            modalAddAccount: 'Ajouter un compte',
+            modalEditAccount: 'Modifier le compte',
+            modalAccountName: 'Nom du compte',
+            modalLabelColor: 'Couleur',
+            modalSave: 'Enregistrer',
+            festivalMonth: 'Mois',
+            festivalDay: 'Jour',
+            festivalName: 'Nom de l\'événement',
+            festivalReminder: 'Rappel (jours) :',
+            festivalDays1: 'Jour 1',
+            festivalDays2: 'Jour 2',
+            festivalDays3: 'Jour 3',
+            downloading: 'Téléchargement...',
+            lastUpdated: 'Mis à jour : {date}',
+            lastUpdatedNever: 'Jamais mis à jour',
+            holidayUpdateSuccess: '✅ Jours fériés mis à jour !',
+            holidayUpdateFail: '❌ Échec : {error}',
+            holidayUpdateFailUnknown: 'Erreur inconnue',
+            btnUpdateHoliday: 'Mettre à jour',
+            backupSuccess: '✅ Sauvegarde réussie !',
+            restoreConfirmWarningLocalEmpty: '【Restauration】\nRestaurer ces données ?',
+            restoreConfirmWarningOverwrite: '【Mode Écrasement】\nÉcraser toutes les données locales ?',
+            restoreConfirmWarningMerge: '【Mode Fusion】\nFusionner ces données avec les données locales ?',
+            restoreConfirmMsg: 'Contenu :\n- Transactions : {totalTx}\n- Règles : {totalFixed}\n- Catégories : {totalCat}\n- Cibles : {totalTgt}\n',
+            restoreConfirmMsgFilter: '\n(Doublons filtrés)\n',
+            restoreConfirmMsgFilterTx: '- Transactions : {count}\n',
+            restoreConfirmMsgFilterFixed: '- Règles : {count}\n',
+            restoreConfirmMsgFilterCat: '- Catégories : {count}\n',
+            restoreConfirmMsgFilterTgt: '- Cibles : {count}\n',
+            inputNamePlaceholder: 'ex: Espèces, Visa',
+            inputBudgetPlaceholder: 'ex: 25000',
+            requireAccountName: 'Nom requis'
+        },
+        modals: {
+            accountFilter: {
+                title: 'Filtrer les comptes',
+                selectLabel: 'Comptes à afficher',
+                selectAll: 'Tout',
+                clearAll: 'Aucun',
+                confirm: 'Valider'
+            },
+            crop: {
+                title: 'Rogner la photo',
+                warning: '⚠️ Un recadrage répété réduit la qualité',
+                cancel: 'Annuler',
+                confirm: 'Valider'
+            },
+            photoHelp: {
+                title: 'Paramètres de qualité photo',
+                p1: 'La qualité 0.3 en 320x320 est très floue.',
+                p2: 'Pour lire des reçus, utilisez au moins 480x480 / Qualité 0.5.',
+                estimateTitle: 'Taille estimée',
+                li1: '320x320 / 0.3 : ~10-20 KB',
+                li2: '480x480 / 0.5 : ~15-30 KB',
+                li3: '640x640 / 0.7 : ~40-60 KB (Défaut)',
+                li4: '1024x1024 / 0.9 : ~150-250 KB',
+                understand: 'Compris'
+            },
+            record: {
+                editTitle: 'Modifier la transaction',
+                tabExpense: 'Dépense',
+                tabIncome: 'Revenu',
+                tabSingle: 'Unique',
+                tabFixed: 'Fixe',
+                date: 'Date',
+                dateRange: 'Période',
+                startDate: 'Date de début',
+                endDate: 'Date de fin',
+                amount: 'Montant',
+                repeatType: 'Type de répétition',
+                ruleYearly: 'Annuel',
+                ruleMonthly: 'Mensuel',
+                ruleWeekly: 'Hebdomadaire',
+                ruleDetail: 'Détails de la règle',
+                monday: 'Lundi',
+                tuesday: 'Mardi',
+                wednesday: 'Mercredi',
+                thursday: 'Jeudi',
+                friday: 'Vendredi',
+                saturday: 'Samedi',
+                sunday: 'Dimanche',
+                majorCat: 'Catégorie principale',
+                subCat: 'Sous-catégorie',
+                target: 'Cible',
+                location: 'Lieu',
+                locationPlaceholder: 'Nom du lieu',
+                mapTitle: 'Ouvrir la carte',
+                photo: 'Photo',
+                photoUpload: 'Prendre/Ajouter une photo',
+                photoPreview: 'Aperçu',
+                photoRecrop: 'Rogner à nouveau',
+                photoDelete: 'Supprimer la photo',
+                note: 'Note',
+                notePlaceholder: 'Note...',
+                btnDelete: 'Supprimer',
+                btnCopy: 'Copier',
+                btnSave: 'Enregistrer',
+                btnCancel: 'Annuler'
+            }
+        },
+        globalFestivals: {
+            newYear: 'Nouvel An',
+            valentinesDay: 'Saint-Valentin',
+            womensDay: 'Journée des droits des femmes',
+            foolsDay: 'Poisson d\'avril',
+            earthDay: 'Jour de la Terre',
+            laborDay: 'Fête du Travail',
+            halloween: 'Halloween',
+            christmas: 'Noël',
+            mothersDay: 'Fête des Mères',
+            thanksgiving: 'Thanksgiving',
+            easter: 'Pâques',
+            internationalCoopDay: 'Journée des coopératives',
+            captiveNationsWeek: 'Semaine des nations captives',
+            diaryValentinesDay: 'Diary Valentine\'s Day',
+            westernValentinesDay: 'Saint-Valentin (Occident)',
+            whiteValentinesDay: 'White Day',
+            blackValentinesDay: 'Black Day',
+            roseValentinesDay: 'Rose Day',
+            kissValentinesDay: 'Kiss Day',
+            silverValentinesDay: 'Silver Day',
+            greenValentinesDay: 'Green Day',
+            photoValentinesDay: 'Photo Day',
+            wineValentinesDay: 'Wine Day',
+            movieValentinesDay: 'Movie Day',
+            hugValentinesDay: 'Hug Day'
+        },
+        calendar: {
+            weekdays: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+            months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            lunarDays: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'],
+            lunarMonths: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+            lunarLeap: 'Intercalaire',
+            lunarMonthSuffix: 'Mois',
+            dayDetail: {
+                txTitle: 'Transactions du jour',
+                closeBtn: 'Fermer'
+            },
+            recordOf: 'Transactions de',
+            noRecord: 'Aucune transaction',
+            baziDayMaster: 'Maître du jour',
+            baziYearPillar: 'Pilier Année',
+            baziMonthPillar: 'Pilier Mois',
+            baziDayPillar: 'Pilier Jour',
+            baziNote: '* Pilier de l\'heure exclus'
+        }
+    },
+    systemLogs: {
+        taiwanHolidays: {
+            localStorageFormatError: '[Calendrier] Erreur de format localStorage ({func}), ignoré',
+            loadPersistedError: '[Calendrier] Échec de chargement des données locales ({func}) :',
+            noDataYet: '[Calendrier] Données manquantes pour {year}.',
+            fetchError: '[API] Échec de l\'API gouvernementale ({func} - {year}) :',
+            downloadError: '[API] Échec du téléchargement ({year}) :',
+            saveLocalStorageError: '[Calendrier] Échec de sauvegarde localStorage :',
+            updateUnexpectedError: '[API] Erreur inattendue de mise à jour :'
+        },
+        themeSwitcher: {
+            readCustomThemeError: '[Thème] Impossible de lire le thème personnalisé :',
+            containerNotFound: '[Thème] Conteneur introuvable : {containerId}',
+            switchedTheme: '[Thème] Thème changé vers : {newTheme}'
+        }
+    }
+};

@@ -1,457 +1,476 @@
-# 小小計帳本 (TinyLedger)
+# TinyLedger
 
-這是我為自己打造的一款輕量、注重隱私的純本地端記帳工具 (PWA)。
-它不僅結合了農民曆與進階理財分析，更棒的是無需安裝任何後端伺服器，只要打開瀏覽器，隨時隨地都能流暢使用！
+> 🇹🇼 若要查看繁體中文版，請參閱 [README.zh-TW.md](README.zh-TW.md)
 
-- **當前版本**：`v1.5.5.0` (2026-09-15)
-- **線上體驗 (GitHub Pages)**：[https://ssworld72.github.io/TinyLedger/](https://ssworld72.github.io/TinyLedger/)
+This is a lightweight, privacy-focused, pure local-first bookkeeping tool (PWA) that I built for myself.
+It not only combines the Farmer's Almanac with advanced financial analysis, but the best part is that it requires no backend server installation. Just open the browser and use it smoothly anytime, anywhere!
 
----
-
-## 💡 設計理念
-
-這個小工具的誕生，完全是基於我個人的實際記帳經驗與日常使用喜好量身打造的。
-與其追求繁雜卻不一定用得到的花俏功能，我更希望能回歸生活本質——我將日常記帳中最常碰到的痛點，以及生活中「如果能這樣記帳就好了」的微小需求，一點一滴轉化為軟體中的實用設計。因此，從介面的流暢度、離線操作的便利性，到農民曆的結合，每一個細節都充滿了「為了解決真實生活情境」的務實考量。希望這份從我個人體驗出發的軟體，也能剛好契合其他人的日常所需，成為一款順手的理財夥伴。
+- **Current Version**: `v1.5.6.0` (2026-09-15)
+- **Live Demo (GitHub Pages)**: [https://ssworld72.github.io/TinyLedger/](https://ssworld72.github.io/TinyLedger/)
 
 ---
 
-## 💬 交流與討論
+## 💡 Design Philosophy
 
-如果在使用過程中有任何想法、建議，或是遇到了問題，非常歡迎透過以下方式與我交流：
-- **[問題回報 (Issues)](https://github.com/SSWorld72/TinyLedger/issues)**：如果發現了 Bug 或有新功能想許願，可以在這裡提出。
-- **[專屬討論區 (Discussions)](https://github.com/SSWorld72/TinyLedger/discussions)**：如果有記帳上的心得想分享，或是任何不限主題的閒聊與提問，都歡迎來討論區坐坐！
+The birth of this small tool was entirely tailored based on my personal actual bookkeeping experience and daily usage preferences.
+Rather than pursuing complicated and flashy features that may not necessarily be used, I prefer to return to the essence of life—I have transformed the pain points most frequently encountered in daily bookkeeping, as well as the tiny "it would be great if I could track expenses like this" needs in life, bit by bit into practical designs in the software. Therefore, from the smoothness of the interface and the convenience of offline operation to the integration of the Farmer's Almanac, every detail is full of practical considerations "to solve real-life scenarios." I hope this software, which stems from my personal experience, can also perfectly fit the daily needs of others and become a handy financial partner.
 
 ---
 
-## ☕ 支持與贊助
+## 💬 Communication & Discussion
 
-這是一個完全**免費、開源、無廣告**的個人小專案。
+If you have any thoughts, suggestions, or encounter any problems during use, you are very welcome to communicate with me through the following ways:
+- **[Issue Report (Issues)](https://github.com/SSWorld72/TinyLedger/issues)**: If you find a bug or want to request a new feature, you can raise it here.
+- **[Exclusive Discussion Area (Discussions)](https://github.com/SSWorld72/TinyLedger/discussions)**: If you have any bookkeeping tips to share, or any casual chats and questions on any topic, feel free to drop by the discussion area!
 
-從敲下第一行程式碼開始，每一個功能、每一次抓蟲、每一個熬夜更新的版本，都是因為對「讓記帳變簡單」這件事的熱情。沒有團隊也沒有金主，只有我一個人配上一台電腦，默默把它打磨成現在的樣子。
+---
 
-如果這個小工具剛好有幫上忙，理清了生活中的收支，或者讓記帳這件小事變得稍微輕鬆了一點，那它就已經達成最初的心願了。
+## ☕ Support & Sponsorship
 
-如果願意更進一步請我喝杯咖啡 ☕ —— 那絕對是支持我繼續維護下去的最大動力！每一份贊助無論大小，對我來說都是超級溫暖的鼓勵，代表真的有人在使用、也覺得它有價值。
+This is a completely **free, open-source, ad-free** personal small project.
 
-**謝謝，真的。** 🙏
+From typing the first line of code, every feature, every bug fixed, and every late-night updated version has been driven by the passion to "make bookkeeping simple." There is no team and no sponsor, just me and a computer, silently polishing it into what it is today.
+
+If this small tool happens to help you sort out the income and expenses in your life, or make bookkeeping a little bit easier, then it has already achieved its original wish.
+
+If you are willing to go a step further and buy me a cup of coffee ☕ — that would definitely be the greatest motivation for me to continue maintaining it! Every sponsorship, no matter the size, is a super warm encouragement to me, meaning that people are really using it and finding it valuable.
+
+**Thank you, truly.** 🙏
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0R125NYMU)
 
 ---
 
-## ✨ 主要功能
+## ✨ Main Features
 
-這套系統涵蓋了我日常生活中會用到的各種情境：
+This system covers various scenarios I would use in my daily life:
 
-### 📝 記帳與收支管理
-- **一般紀錄清單**：支援收入、支出的日常記帳，可以自己定義大類別、小類別，還能標記這筆錢是花在誰身上（例如：自己、家人、特定專案），支援單筆即時檢視與刪除。
+### 📝 Bookkeeping & Income/Expense Management
+- **General Record List**: Supports daily bookkeeping of income and expenses. You can customize major and minor categories, and even mark who the money was spent on (e.g., yourself, family, specific projects). Supports instant viewing and deleting of single records.
   
-  ![一般紀錄清單](pics/General_List.jpg)
+  ![General Record List](pics/General_List.jpg)
 
-- **新增與編輯紀錄**：直覺好操作的記帳視窗，快速輸入金額、選擇分類、設定交易對象，並提供備忘備註與即時計算。
+- **Add & Edit Records**: An intuitive bookkeeping window that allows quick entry of amounts, category selection, transaction target setting, and provides memo notes with real-time calculation.
   
-  ![新增與編輯紀錄](pics/Edit_Record.jpg)
+  ![Add & Edit Records](pics/Edit_Record.jpg)
 
-- **實體收據照片上傳**：有時候拿到了實體發票或收據，我會想拍下來存著。系統支援直接拍照或上傳照片，內建了裁切與壓縮工具，不怕照片佔空間，而且隨時可以重新裁切。
+- **Physical Receipt Photo Upload**: Sometimes when I get a physical invoice or receipt, I want to take a picture and save it. The system supports direct photo taking or photo uploading, with built-in cropping and compression tools, so you don't have to worry about photos taking up space, and you can re-crop them anytime.
   
-  ![實體收據照片上傳](pics/Photo_Upload.jpg)
+  ![Physical Receipt Photo Upload](pics/Photo_Upload.jpg)
 
-- **固定紀錄清單**：針對每個月的房租、每週固定支出或是每年的訂閱費，自動彙整所有固定收支規則，清楚列出下次執行時間與循環頻率。
+- **Fixed Record List**: For monthly rent, weekly fixed expenses, or annual subscription fees, it automatically aggregates all fixed income and expense rules, clearly listing the next execution time and cycle frequency.
   
-  ![固定紀錄清單](pics/Fixed_list.jpg)
+  ![Fixed Record List](pics/Fixed_list.jpg)
 
-- **固定規則設定與編輯**：只要設定好週期（每日、每週、每月、每年等），系統就會自動幫我產生未來的預期紀錄，省去重複記帳的麻煩。
+- **Fixed Rule Setting & Editing**: Just set the cycle (daily, weekly, monthly, annually, etc.), and the system will automatically generate future expected records for you, saving the trouble of repetitive bookkeeping.
   
-  ![固定規則設定與編輯](pics/Edit_Fixed_Rule.jpg)
+  ![Fixed Rule Setting & Editing](pics/Edit_Fixed_Rule.jpg)
 
-- **交易資訊與對象管理**：可隨時管理自訂的收支對象（例如：家人、特定朋友、專案等）與自訂大/小分類，讓每筆收支歸屬更加精準明確。
+- **Transaction Info & Target Management**: You can manage custom income/expense targets (e.g., family, specific friends, projects, etc.) and custom major/minor categories at any time, making the attribution of every income and expense more precise and clear.
   
-  ![交易資訊與對象管理](pics/Transaction_Info%20Management.jpg)
+  ![Transaction Info & Target Management](pics/Transaction_Info%20Management.jpg)
 
-- **多帳戶管理與獨立預算**：支援自訂多個資產帳戶（如現金、銀行帳戶、信用卡等），並可為各帳戶指派獨立預算與預設使用帳戶，帳目分流更清晰。
+- **Multi-Account Management & Independent Budgets**: Supports customizing multiple asset accounts (like cash, bank accounts, credit cards, etc.), and allows assigning independent budgets and default usage accounts for each account, making account diversion clearer.
   
-  ![多帳戶管理與獨立預算](pics/Account_Settings.jpg)
+  ![Multi-Account Management & Independent Budgets](pics/Account_Settings.jpg)
 
-- **預算控管**：我可以設定「本月總預算」與「個別帳戶預算」，系統會根據累積的支出動態顯示進度條，隨時提醒自己別超支了。
+- **Budget Control**: I can set a "Total Monthly Budget" and "Individual Account Budgets." The system will dynamically display a progress bar based on accumulated expenses, reminding myself not to overspend at any time.
 
-  ![預算控管](pics/Monthly_Budget.jpg)
+  ![Budget Control](pics/Monthly_Budget.jpg)
 
-- **清單分頁與顯示筆數**：可自設「每頁 N 筆」（10 / 20 / 30 / 40 / 50 / 100 / 全部），切換月份或篩選條件時自動回第一頁。設定會持久儲存，備份/還原後也保留。
+- **List Pagination & Display Count**: You can set "N records per page" (10 / 20 / 30 / 40 / 50 / 100 / All). It will automatically return to the first page when switching months or filter conditions. Settings will be persistently stored and retained after backup/restore.
 
-### 📅 萬年曆與農民曆整合
-- **日曆檢視與顯示設定**：內建美觀的月曆模式，每天的收支總計一目了然；可依個人偏好自訂一週起始日（週日或週一）、農曆節氣顯示及國定假日標記。
+### 📅 Perpetual Calendar & Farmer's Almanac Integration
+- **Calendar View & Display Settings**: Built-in beautiful monthly calendar mode where daily income and expense totals are clear at a glance; you can customize the start day of the week (Sunday or Monday), display of lunar solar terms, and marking of national holidays according to personal preference.
   
-  ![日曆檢視與顯示設定](pics/Calendar_&_Display_Settings.jpg)
+  ![Calendar View & Display Settings](pics/Calendar_&_Display_Settings.jpg)
 
-- **當日交易紀錄與重要節慶提醒**：點選日曆上的任一天，即可即時展開該日的收支清單明細，並同時顯示當日的傳統民俗節慶提醒。
+- **Daily Transaction Records & Important Festival Reminders**: Clicking on any day on the calendar will instantly expand the income and expense list details for that day, while simultaneously displaying traditional folk festival reminders for the day.
   
-  ![當日交易紀錄與重要節慶提醒](pics/Calendar_Daily_Transaction_Records_and_Important_Festival_Reminders.jpg)
+  ![Daily Transaction Records & Important Festival Reminders](pics/Calendar_Daily_Transaction_Records_and_Important_Festival_Reminders.jpg)
 
-- **重要節慶提醒**：整合台灣二十四節氣與傳統重大節日（如春節、端午、中秋等），在日曆上即時標註，貼心提醒生活中的重要時刻。
+- **Important Festival Reminders**: Integrates Taiwan's 24 solar terms and major traditional festivals (such as Lunar New Year, Dragon Boat Festival, Mid-Autumn Festival, etc.), marked instantly on the calendar to thoughtfully remind you of important moments in life.
   
-  ![重要節慶提醒](pics/Important_Festival_Reminders.jpg)
+  ![Important Festival Reminders](pics/Important_Festival_Reminders.jpg)
 
-- **傳統農民曆**：身在台灣，看日子還是很重要的！我整合了農曆日期、天干地支（八字排盤）、二十四節氣與傳統節慶。
+- **Traditional Farmer's Almanac**: Being in Taiwan, checking the date's auspiciousness is still very important! I have integrated lunar dates, heavenly stems and earthly branches (Bazi chart), 24 solar terms, and traditional festivals.
 
-  ![傳統農民曆](pics/Lunar_Date.jpg)
+  ![Traditional Farmer's Almanac](pics/Lunar_Date.jpg)
 
-- **國定假日**：系統會自動串接台灣人事行政總處的資料，顯示台灣專屬的國定假日與休市日，按個鈕就能更新。（註：未來若有其他國家提供可串接的公開 API，也可以評估串接並新增支援！）
-  > 📌 **資料來源致謝**：感謝開源專案 [ruyut/TaiwanCalendar](https://github.com/ruyut/TaiwanCalendar) 將台灣政府行事曆資料整理為易於使用的 JSON 格式提供串接。
+- **National Holidays**: The system automatically connects with data from Taiwan's Directorate-General of Personnel Administration to display Taiwan's exclusive national holidays and market closing days, which can be updated with a single click. (Note: If other countries provide accessible public APIs in the future, integration and support can also be evaluated!)
+  > 📌 **Data Source Acknowledgement**: Thanks to the open-source project [ruyut/TaiwanCalendar](https://github.com/ruyut/TaiwanCalendar) for organizing the Taiwan government calendar data into an easy-to-use JSON format for integration.
   
-  ![國定假日](pics/National_Holidays(Taiwan).jpg)
+  ![National Holidays](pics/National_Holidays(Taiwan).jpg)
 
-- **地點定位與 Google 地圖**：串接了 Google Maps，出門記帳時可以一鍵定位並記錄消費地點，還能直接點擊連結開啟地圖導航，回憶起來更有感覺。
+- **Location Positioning & Google Maps**: Integrated with Google Maps. When tracking expenses outdoors, you can pinpoint and record the consumption location with one click, and even click the link to open map navigation directly. Recalling it brings more feeling.
   
-  ![地點定位與 Google 地圖](pics/Google_Map_Links.jpg)
+  ![Location Positioning & Google Maps](pics/Google_Map_Links.jpg)
 
-### 📊 統計與圖表分析
-- **圓餅圖（類別佔比分析）**：以原生 SVG 甜甜圈圖呈現各類別支出或收入佔比，支援互動點選下鑽查看子分類，快速掌握資金流向。
+### 📊 Statistics & Chart Analysis
+- **Pie Chart (Category Proportion Analysis)**: Uses a pure native SVG donut chart to present the proportion of various categories of expenses or income. Supports interactive click drill-down to view subcategories, quickly grasping the flow of funds.
   
-  ![圓餅圖](pics/Pie_Chart.jpg)
+  ![Pie Chart](pics/Pie_Chart.jpg)
 
-- **長條圖（收支趨勢對比）**：直觀的柱狀走勢圖，清晰對比每月份或每日的支出與收入變化，一眼看出開銷高峰。
+- **Bar Chart (Income/Expense Trend Comparison)**: An intuitive columnar trend chart clearly compares the changes in expenses and income by month or by day, showing spending peaks at a glance.
   
-  ![長條圖](pics/Bar_Chart.jpg)
+  ![Bar Chart](pics/Bar_Chart.jpg)
 
-- **折線圖（收支走勢分析）**：連續平滑的折線走勢，幫助觀察資金隨時間波動的情形，輔助擬定長遠儲蓄計畫。
+- **Line Chart (Income/Expense Trend Analysis)**: Continuous smooth line trends help observe the fluctuations of funds over time, assisting in formulating long-term savings plans.
   
-  ![折線圖](pics/Line_Chart.jpg)
+  ![Line Chart](pics/Line_Chart.jpg)
 
-- **年度收支統計分析**：跨月份與整年度的全方位收支報表，整合各項指標總結，年度結算省時省力。
+- **Annual Income & Expense Statistical Analysis**: Comprehensive income and expense reports across months and the entire year, aggregating various indicator summaries, saving time and effort on annual settlements.
   
-  ![年度收支統計分析](pics/Annual_Chart.jpg)
+  ![Annual Income & Expense Statistical Analysis](pics/Annual_Chart.jpg)
 
-- **多維度篩選**：可以依照時間、收支類型、類別或是特定對象進行深度篩選，算帳時特別好用。
+- **Multi-Dimensional Filtering**: You can do deep filtering by time, income/expense type, category, or specific target, which is particularly useful when doing accounting.
 
-  ![多維度篩選](pics/Select_Chart.jpg)
+  ![Multi-Dimensional Filtering](pics/Select_Chart.jpg)
 
-### ☁️ 備份與還原
-- **手動與定時自動備份**：支援手動立即備份與瀏覽器定期背景自動備份機制，資料安全多一層保障。
+### ☁️ Backup & Restore
+- **Manual & Scheduled Auto Backup**: Supports immediate manual backup and periodic background auto-backup mechanisms by the browser, adding an extra layer of protection to data security.
 
-- **GAS 私有雲端備份**：我實在不想把個人的財務隱私放在別人的伺服器上，所以寫了 Google Apps Script (GAS)，讓資料加密備份到我專屬的 Google 雲端硬碟。
+- **GAS Private Cloud Backup**: I really don't want to put my personal financial privacy on someone else's server, so I wrote a Google Apps Script (GAS) to allow data to be encrypted and backed up to my exclusive Google Drive.
 
-- **ZIP 圖文分離技術**：無論是雲端同步還是地端下載，系統皆採用 ZIP 圖文分離壓縮，將文字與照片分開打包，確保備份檔體積最小化，方便跨設備轉移。
+- **ZIP Text-Image Separation Technology**: Whether it's cloud synchronization or local download, the system uses ZIP text-image separation compression to pack text and photos separately, ensuring the minimum volume of the backup file and making cross-device transfer convenient.
 
-  ![手動與定時自動備份](pics/Manual_&_Auto_Backup.jpg)
+  ![Manual & Scheduled Auto Backup](pics/Manual_&_Auto_Backup.jpg)
 
-- **精準的同步狀態與進度**：支援精確至個位數的四行並列資料寫入進度表，在還原大量資料時不再卡頓，能夠順暢、真實地反映每一筆還原狀況。
+- **Precise Sync Status & Progress**: Supports a four-line parallel data writing progress bar accurate to single digits. It no longer lags when restoring massive data, and can smoothly and truly reflect the restoration status of every single record.
 
-- **資料庫安全與危險區域**：提供嚴謹的危險區域防呆設計，包含一鍵清除舊快取、重設特定資料庫或全系統清空復原，確保操作安全透明。
+- **Database Security & Danger Zone**: Provides strict fool-proof designs for the danger zone, including one-click clearing of old cache, resetting specific databases, or full system wipe recovery, ensuring operations are safe and transparent.
   
-  ![資料庫安全與危險區域](pics/Danger_Zone.jpg)
+  ![Database Security & Danger Zone](pics/Danger_Zone.jpg)
 
-- **純離線架構**：所有資料都存在瀏覽器的 IndexedDB 裡，就算在沒有網路的地下室也能正常記帳。
+- **Pure Offline Architecture**: All data is stored in the browser's IndexedDB, so you can track expenses normally even in a basement without internet.
 
-### 🎨 介面與體驗
-- **外觀主題與色彩自訂**：提供高雅深色、現代淺色等多款主題配色，更支援色彩自訂微調，打造獨一無二的專屬視覺。
+### 🎨 Interface & Experience
+- **Appearance Theme & Color Customization**: Provides multiple theme color schemes such as elegant dark and modern light, and further supports custom color fine-tuning to create a unique and exclusive visual experience.
   
-  ![外觀主題與色彩自訂](pics/Appearance_Theme.jpg)
+  ![Appearance Theme & Color Customization](pics/Appearance_Theme.jpg)
 
-- **多國語言切換 (i18n)**：內建完善的繁體中文與英語系切換，所有功能、欄位與提示訊息皆可即時雙向無縫切換。
+- **Multi-Language Switching (i18n)**: Built with perfect 9 language switching including Traditional Chinese, Simplified Chinese, English, Japanese, Korean, Thai, Hindi, French, and German. All functions, fields, and prompt messages can be seamlessly switched instantly in both directions.
   
-  ![多國語言切換](pics/Language.jpg)
+  ![Multi-Language Switching](pics/Language.jpg)
 
-- **PWA 支援**：可以直接把網站加到手機桌面，用起來就像原生的 App 一樣順暢。
+- **PWA Support**: You can directly add the website to your phone's home screen, and it runs as smoothly as a native App.
 
-- **觸控與手勢優化**：我針對手機跟平板的操作體驗做了很多調整，滑動、點擊都很直覺。
+- **Touch & Gesture Optimization**: I've made many adjustments for the operating experience on mobile phones and tablets, making scrolling and clicking very intuitive.
 
-- **個人化顯示設定**：每頁顯示筆數等個人喜好設定，持久儲存於裝置本地，備份/還原時一併保留。
+- **Personalized Display Settings**: Personal preference settings like the number of records per page are persistently stored locally on the device and retained during backup/restore.
 
-### ⚙️ 系統設定與資訊
-- **系統運作日誌 (System Logs)**：詳細記錄備份、還原、資料庫升級與各項關鍵操作歷程，發生異常時可隨時調閱排查，透明可靠。
+### ⚙️ System Settings & Info
+- **System Logs**: Records detailed operational histories of backups, restores, database upgrades, and key actions. You can access them at any time to troubleshoot anomalies, ensuring transparency and reliability.
   
-  ![系統運作日誌](pics/System_Logs.jpg)
+  ![System Logs](pics/System_Logs.jpg)
 
-- **關於系統與版本資訊**：清楚展示專案版本號、致謝名單、開源套件授權與作者資訊，持續迭代更新保持最佳品質。
+- **About System & Version Info**: Clearly displays the project version number, acknowledgment list, open-source library licenses, and author information, continuously iterating and updating to maintain the best quality.
   
-  ![關於系統與版本資訊](pics/About.jpg)
+  ![About System & Version Info](pics/About.jpg)
 
 ---
 
-## 🏗️ 技術架構
+## 🏗️ Technical Architecture
 
-| 項目 | 說明 |
+| Item | Description |
 |---|---|
-| 前端框架 | Vanilla JavaScript (ES Module) + Tailwind CSS |
-| 本地儲存 | IndexedDB + LocalStorage |
-| 圖表引擎 | 純原生 SVG 引擎 (自研 `charts.js`) |
-| 日曆運算 | 傳統農民曆與干支演算法 |
-| 跨域與定位 | Google Apps Script (GAS) / Google Maps Places API |
-| 部署方式 | GitHub Pages (靜態網頁) 或本地瀏覽器直接開啟 |
+| Frontend Framework | Vanilla JavaScript (ES Module) + Tailwind CSS |
+| Local Storage | IndexedDB + LocalStorage |
+| Chart Engine | Pure native SVG engine (In-house `charts.js`) |
+| Calendar Algorithm | Traditional Farmer's Almanac & Stems-Branches algorithm |
+| Cross-Domain & Positioning | Google Apps Script (GAS) / Google Maps Places API |
+| Deployment Method | GitHub Pages (Static Webpage) or Open directly in local browser |
 
 ---
 
-## 🚀 快速開始
+## 🚀 Quick Start
 
-不需要安裝任何軟體，直接點開網址就能用！
+No need to install any software, just click the link and use it!
 👉 [https://ssworld72.github.io/TinyLedger/](https://ssworld72.github.io/TinyLedger/)
 
-### 🎲 測試資料產生器 (Generate Sample Data)
-如果你想快速體驗系統功能，可以使用內建的測試資料產生器。它會自動為你填入過去幾個月的隨機收支與圖表資料，方便你預覽：
+### 🎲 Generate Sample Data
+If you want to quickly experience the system features, you can use the built-in sample data generator. It will automatically fill in random income/expenses and chart data from the past few months for you to preview:
 👉 [https://github.com/SSWorld72/TinyLedger/generate_sample.html](https://github.com/SSWorld72/TinyLedger/generate_sample.html)
 
-> **⚠️ 重要使用建議**
+> **⚠️ Important Usage Advice**
 > 
-> 因為這是一個純前端的工具，所有的資料都存在瀏覽器裡面。**如果手動清除了瀏覽器的「網站資料與快取 (Cache)」，記帳紀錄就會不見！**
+> Since this is a pure frontend tool, all data is stored inside the browser. **If you manually clear the browser's "Site Data and Cache," the bookkeeping records will disappear!**
 > 
-> 👉 強烈建議在使用前，先到「系統設定」完成 **「私有雲端備份 (GAS Backend)」** 的綁定。綁定後，只要輕點一下就能把資料備份到專屬的 Google 雲端硬碟，再也不怕資料遺失！
+> 👉 It is strongly recommended to complete the binding of **"Private Cloud Backup (GAS Backend)"** in the "System Settings" before using. After binding, you can backup data to your exclusive Google Drive with just a tap, and never fear data loss again!
 
 ---
 
-## ☁️ 設定私有雲端備份 (GAS Backend)
+## ☁️ Setup Private Cloud Backup (GAS Backend)
 
-這是我為了解決隱私問題而設計的方案，支援將記帳資料加密備份到私人的 Google 雲端硬碟，達到 100% 的隱私與跨裝置同步。
+This is a solution I designed to solve privacy issues, supporting encrypted backup of bookkeeping data to a private Google Drive, achieving 100% privacy and cross-device synchronization.
 
-### 部署教學 (只需設定一次)
+### Deployment Tutorial (Only needs to be set up once)
 
-#### 第一階段：貼上程式碼
-1. 前往 [Google Apps Script](https://script.google.com/)，點選左上角的「＋ 新專案」。
-2. 點選左上方預設的「未命名的專案」，將它改名為容易辨識的名稱，例如：`通用_私有雲端備份`。
-3. 將本系統 `utils/gas/` 目錄下提供的 `gas_private_backup.js` 程式碼全部貼上並儲存。
+#### Phase 1: Paste Code
+1. Go to [Google Apps Script](https://script.google.com/) and click "＋ New Project" in the top left corner.
+2. Click on the default "Untitled project" in the top left and rename it to an easily recognizable name, e.g., `General_PrivateCloudBackup`.
+3. Paste all the `gas_private_backup.js` code provided under the `utils/gas/` directory of this system and save it.
 
-#### 第二階段：部署並設定權限
-1. 點擊畫面右上角的藍色按鈕「部署」，選擇「新增部署作業」。
-2. 在跳出的視窗中，點擊左上角齒輪圖示，勾選「網頁應用程式」。
-3. **【最重要】**：「執行身分」請務必選擇「**我**」，「誰可以存取」請選擇「**所有人**」。
-4. 設定好後，按下右下角的「部署」。
+#### Phase 2: Deploy & Set Permissions
+1. Click the blue "Deploy" button in the top right corner and select "New deployment".
+2. In the pop-up window, click the gear icon in the top left corner and check "Web app".
+3. **【Most Important】**: For "Execute as", please ensure you select "**Me**", and for "Who has access", please select "**Anyone**".
+4. After setting it up, click "Deploy" in the bottom right corner.
 
-#### 第三階段：授權與取得網址
-1. (首次部署) 系統會跳出授權視窗，點擊「授權存取」並選擇 Google 帳號即可。
-2. (首次部署) 若出現警告畫面，請點擊左下角「進階」->「前往 (不安全)」，然後點擊「允許」。
-3. 授權完成後，複製「網頁應用程式」下方的「**網址 (URL)**」。
-4. 回到計帳本的「系統設定」頁面，將網址貼入 GAS 雲端備份的格子中，即可完成綁定！
+#### Phase 3: Authorize & Get URL
+1. (First Deployment) The system will pop up an authorization window. Click "Authorize access" and choose your Google account.
+2. (First Deployment) If a warning screen appears, please click "Advanced" -> "Go to ... (unsafe)" in the bottom left corner, and then click "Allow".
+3. After authorization is complete, copy the "**Web app URL**" under the Web app section.
+4. Go back to the "System Settings" page of the ledger, paste the URL into the GAS Cloud Backup box, and the binding is complete!
 
-> 💡 **小撇步**：如果之前已經為其他專案部署過通用版的 GAS 備份腳本，可以直接貼上同一個網址！系統會自動在雲端硬碟中依照專案名稱分門別類儲存，完全不會互相覆蓋。
-
----
-
-## 📦 第三方開源套件 (Third-Party Libraries)
-
-為確保專案的「純淨」與 100% 離線運作能力 (PWA)，我將所有外部套件統一放置於 `libs/` 目錄中，不與專案自有的程式碼混用。這部分維持嚴謹的管理規範：
-
-- **Cropper.js** (`libs/cropper/`): 用於提供進階的照片裁切與手勢縮放功能。
-  > 關於套件的更新與引用方式，請參考 [libs/cropper/README.md](libs/cropper/README.md) 的詳細說明。
-- **JSZip** (`libs/jszip/`): 提供瀏覽器端 ZIP 打包與解壓縮功能，用於地端圖文分離備份。
-  > 關於版本資訊與來源，請參考 [libs/jszip/README.md](libs/jszip/README.md) 的詳細說明。
-- **Tailwind CSS** (`libs/tailwind/`): 用於提供工具型 CSS class 輔助排版。
-  > 關於離線引入的原因與使用方式，請參考 [libs/tailwind/README.md](libs/tailwind/README.md) 的詳細說明。
-- **Google Fonts - Inter** (`libs/fonts/`): 用於整體介面文字排版的無襯線字體，提升閱讀體驗。
-  > 為了確保極端離線狀態的穩定性，字型檔 (`.woff2`) 已經打包下載於本地端，不再依賴外部 CDN。採用 SIL OFL 1.1 授權。
-- **Material Icons** (`libs/icons/`): 提供介面中使用的各種實用圖示（如設定、編輯、刪除等）。
-  > 為了確保斷網時圖示不破圖，核心字型檔 (`.woff2`) 已完全本地化。採用 Apache License 2.0 授權。
+> 💡 **Pro Tip**: If you have previously deployed the general version of the GAS backup script for other projects, you can directly paste the same URL! The system will automatically categorize and store it in Google Drive based on the project name, without overwriting each other at all.
 
 ---
 
-## 🗺️ 設定 Google Maps API (選填)
+## 📦 Third-Party Libraries
 
-如果跟我一樣喜歡在記帳時順便記錄消費地點，也可以考慮串接 Google Maps Places API。
+To ensure the project's "purity" and 100% offline operation capability (PWA), I have uniformly placed all external packages in the `libs/` directory, without mixing them with the project's own code. This part maintains strict management standards:
 
-### 申請與綁定教學 (只需設定一次)
+- **Cropper.js** (`libs/cropper/`): Used to provide advanced photo cropping and gesture zooming functions.
+  > For information on package updates and reference methods, please refer to the detailed description in [libs/cropper/README.md](libs/cropper/README.md).
+- **JSZip** (`libs/jszip/`): Provides browser-side ZIP packaging and extraction functions, used for local text-image separation backups.
+  > For version information and sources, please refer to the detailed description in [libs/jszip/README.md](libs/jszip/README.md).
+- **Tailwind CSS** (`libs/tailwind/`): Used to provide utility CSS classes to assist with layout.
+  > For the reasons for offline introduction and usage methods, please refer to the detailed description in [libs/tailwind/README.md](libs/tailwind/README.md).
+- **Google Fonts - Inter** (`libs/fonts/`): A sans-serif font used for overall interface text typography to enhance the reading experience.
+  > To ensure stability under extreme offline conditions, the font files (`.woff2`) have been packaged and downloaded locally, no longer relying on external CDNs. Licensed under SIL OFL 1.1.
+- **Material Icons** (`libs/icons/`): Provides various practical icons used in the interface (such as settings, edit, delete, etc.).
+  > To ensure icons do not break when disconnected from the internet, the core font files (`.woff2`) have been fully localized. Licensed under Apache License 2.0.
 
-#### 第一階段：建立 Google Cloud 專案
-1. 前往 [Google Cloud Console](https://console.cloud.google.com/)，使用 Google 帳號登入。
-2. 點擊頂部導覽列的「**選取專案**」下拉選單，再點擊右上角的「**新增專案**」。
-3. 輸入一個容易辨識的專案名稱（例如：`TinyLedger Map`），然後按「建立」。
-4. 建立完成後，確認目前已選擇到該專案（頂部應顯示剛建立的專案名稱）。
+---
 
-#### 第二階段：啟用 API 並建立金鑰
-1. 在左側選單中點擊「**API 和服務**」>「**程式庫**」。
-2. 在搜尋框中搜尋並啟用以下兩個 API：
+## 🗺️ Setup Google Maps API (Optional)
+
+If you, like me, prefer to record consumption locations conveniently while bookkeeping, you can also consider integrating the Google Maps Places API.
+
+### Application & Binding Tutorial (Only needs to be set up once)
+
+#### Phase 1: Create Google Cloud Project
+1. Go to [Google Cloud Console](https://console.cloud.google.com/) and log in with your Google account.
+2. Click the "**Select a project**" dropdown menu in the top navigation bar, and then click "**New Project**" in the top right corner.
+3. Enter an easily recognizable project name (e.g., `TinyLedger Map`), and then click "Create".
+4. After creation is complete, confirm that the project is currently selected (the newly created project name should be displayed at the top).
+
+#### Phase 2: Enable API & Create Key
+1. In the left menu, click "**APIs & Services**" > "**Library**".
+2. Search for and enable the following two APIs in the search box:
    - **Places API (New)**
    - **Maps JavaScript API**
-3. 回到左側選單，點擊「**API 和服務**」>「**憑證**」。
-4. 點擊頂部的「**+ 建立憑證**」>「**API 金鑰**」，系統會自動產生一組金鑰。
-5. 在彈出的視窗中，先**複製**這組金鑰（待會要貼回 APP）。
+3. Go back to the left menu, click "**APIs & Services**" > "**Credentials**".
+4. Click "**+ Create Credentials**" > "**API key**" at the top, and the system will automatically generate a key.
+5. In the pop-up window, first **copy** this key (you'll need to paste it back into the APP later).
 
-#### 第三階段：（建議）限制金鑰 + 貼回設定
-1. 在剛才的彈出視窗中，點擊「**編輯 API 金鑰**」（或在憑證列表中點該金鑰的鉛筆圖示）。
-2. 在「**應用程式限制**」區塊選擇「**網站**」，並點擊「**+ Add**」加入 `https://ssworld72.github.io/*` 以允許正式上線版存取。*(註：若有在本地端開發的需求，可再額外加入 `http://127.0.0.1/*` 與 `http://localhost/*`)*
-3. 向下捲動到「**API 限制**」區塊，選擇「**限制金鑰**」，然後下拉勾選剛才啟用的上述兩個 API 進行綁定。
-4. 按下「**儲存**」即可。
-5. 最後，將複製好的金鑰貼回設定頁面的「**Google Maps API Key**」輸入框中，大功告成！
+#### Phase 3: (Recommended) Restrict Key + Paste Back to Settings
+1. In the pop-up window from just now, click "**Edit API key**" (or click the pencil icon of that key in the credentials list).
+2. In the "**Application restrictions**" section, select "**Websites**", and click "**+ Add**" to add `https://ssworld72.github.io/*` to allow access for the official online version. *(Note: If you have local development needs, you can additionally add `http://127.0.0.1/*` and `http://localhost/*`)*
+3. Scroll down to the "**API restrictions**" section, select "**Restrict key**", then check the two APIs enabled above from the dropdown to bind them.
+4. Click "**Save**".
+5. Finally, paste the copied key back into the "**Google Maps API Key**" input box on the settings page, and you're done!
 
-> 💡 **費用說明**：Google 每月提供 200 美元的免費地圖額度，對於一般個人記帳用途來說，完全不需擔心費用問題。填寫帳單資訊僅為 Google 的防濫用認證步驟。
-
----
-
-## 🌐 多語系 (i18n) 擴充指南
-
-本專案支援國際化多語系，若想要新增一組新語言（例如：日文 `ja-JP`），只需三個步驟：
-
-1. **建立專案專屬字典檔**：
-   - 複製 `i18n/zh-TW.js`，另存為 `i18n/ja-JP.js`。
-   - 將裡面的中文翻譯替換為對應的日文。
-2. **建立共用模組字典檔**：
-   - 複製 `utils/i18n/zh-TW.js`，另存為 `utils/i18n/ja-JP.js`。
-   - 翻譯共用元件（如圖表格式、備份提示等）的文字。
-3. **註冊新語系**：
-   - 打開 `i18n/manifest.js`。
-   - 在 `supportedLanguages` 陣列中新增一筆紀錄，例如：`{ code: 'ja-JP', nativeName: '日本語' }`。
-
-完成上述步驟後，重新整理網頁，即可在系統「設定」的語言選單中看到新語系，切換後系統便會自動套用該字典檔。
+> 💡 **Fee Explanation**: Google provides $200 of free map credits per month, which you don't need to worry about for general personal bookkeeping purposes. Filling in billing information is only a step for Google's anti-abuse verification.
 
 ---
 
-## 📁 檔案清單與用途說明
+## 🌐 Multi-Language (i18n) Expansion Guide
 
-以下為專案的技術檔案架構與模組化說明。本專案採用純前端架構 (HTML/CSS/JS)，所有的檔案設計皆遵循高內聚、低耦合的原則：
+This project supports internationalized multi-languages. If you want to add a new language set (e.g., Japanese `ja-JP`), it only takes three steps:
+
+1. **Create Project-Specific Dictionary File**:
+   - Copy `i18n/zh-TW.js` and save it as `i18n/ja-JP.js`.
+   - Replace the Chinese translations inside with the corresponding Japanese.
+2. **Create Shared Module Dictionary File**:
+   - Copy `utils/i18n/zh-TW.js` and save it as `utils/i18n/ja-JP.js`.
+   - Translate the text for shared components (like chart formats, backup prompts, etc.).
+3. **Register New Language (Main Project Level)**:
+   - Open `i18n/manifest.js`.
+   - Add a record in the `supportedLanguages` array, for example: `{ code: 'ja-JP', nativeName: '日本語' }`.
+4. **Register New Language (Shared Layer Fallback)**:
+   - Open `utils/js/i18nEngine.js`.
+   - Find the code `const supportedLanguages = manifestMod.supportedLanguages || [`, and synchronously add the new language to the fallback array. This ensures that when the main project's language list fails to load due to caching or network issues, the system can still safely degrade and correctly display the new language.
+
+After completing the above steps, refresh the webpage, and you will be able to see the new language in the language menu under system "Settings." After switching, the system will automatically apply that dictionary file.
+
+---
+
+## 📁 File List & Usage Description
+
+Below is the technical file architecture and modularization description of the project. This project adopts a pure frontend architecture (HTML/CSS/JS), and all file designs follow the principles of high cohesion and low coupling:
 
 ```text
-📦 TinyLedger (小小計帳本)
- ├── 🧩 components/ .............................. UI 視圖碎片，透過 htmlLoader 動態載入
- │    ├── 🗂️ modals/ ........................... 對話框
- │    │    ├── 📄 modal-account-filter.html ...... 帳戶篩選器的下拉對話框
- │    │    ├── 📄 modal-add-record.html .......... 新增或編輯單筆記帳紀錄的表單視窗
- │    │    ├── 📄 modal-crop.html ................ 上傳收據照片時的圖片裁切與縮放視窗
- │    │    ├── 📄 modal-photo-settings-help.html . 設定頁中照片備份機制的說明與教學視窗
- │    │    ├── 📄 modal-settings-manage-cat.html . 用來新增、刪除、重新排序特定收支類別的編輯視窗
- │    │    └── 📄 modal-settings-manage-target.html . 用來新增與編輯特定對象的視窗
- │    └── 🗂️ tabs/ ............................. 主頁面分頁
- │         ├── 📄 tab-calendar.html .............. 月曆視圖與每日收支清單分頁
- │         ├── 📄 tab-settings.html .............. 系統設定、資料備份與帳戶管理分頁
- │         └── 📄 tab-stats.html ................. 統計報表與圖表分頁
+📦 TinyLedger
+ ├── 🧩 components/ .............................. UI view fragments, loaded dynamically via htmlLoader
+ │    ├── 🗂️ modals/ ........................... Dialog boxes
+ │    │    ├── 📄 modal-account-filter.html ...... Dropdown dialog for account filters
+ │    │    ├── 📄 modal-add-record.html .......... Form window for adding or editing a single record
+ │    │    ├── 📄 modal-crop.html ................ Image cropping and zooming window when uploading receipt photos
+ │    │    ├── 📄 modal-photo-settings-help.html . Explanation and tutorial window for photo backup mechanism in settings page
+ │    │    ├── 📄 modal-settings-manage-cat.html . Edit window for adding, deleting, and reordering specific income/expense categories
+ │    │    └── 📄 modal-settings-manage-target.html . Window for adding and editing specific targets
+ │    └── 🗂️ tabs/ ............................. Main page tabs
+ │         ├── 📄 tab-calendar.html .............. Monthly calendar view and daily income/expense list tab
+ │         ├── 📄 tab-settings.html .............. System settings, data backup, and account management tab
+ │         └── 📄 tab-stats.html ................. Statistics reports and charts tab
  │
- ├── 🎨 css/ ..................................... 專屬樣式
- │    ├── 📄 calendar.css ........................ 專門負責月曆檢視的排版，包含農曆日期、節日與收支圓點標記的樣式
- │    ├── 📄 modal.css ........................... 統一定義所有對話視窗 (Modal) 與全域遮罩層的彈出與關閉動畫樣式
- │    └── 📄 style.css ........................... 專案主要的樣式檔，負責定義專屬的版面、動態效果與佈景變數
+ ├── 🎨 css/ ..................................... Exclusive styles
+ │    ├── 📄 calendar.css ........................ Layout exclusively for calendar view, including lunar dates, festivals, and record dot markers
+ │    ├── 📄 modal.css ........................... Uniformly defines pop-up and close animation styles for all dialog windows (Modals) and global overlay layers
+ │    └── 📄 style.css ........................... Main stylesheet of the project, defining exclusive layouts, dynamic effects, and theme variables
  │
- ├── 🌐 i18n/ .................................... 專案多語系字典 (雙層架構中的應用層)
- │    ├── 📄 en-US.js ............................ 專案專屬的英文語系檔
- │    ├── 📄 manifest.js ......................... 語系宣告清單，定義系統支援的語言代碼與名稱
- │    └── 📄 zh-TW.js ............................ 專案專屬的繁體中文語系檔（包含特定分類名稱、APP 專有介面文字等）
+ ├── 🌐 i18n/ .................................... Project multi-language dictionary (Application layer in the dual-layer architecture)
+ │    ├── 📄 manifest.js ......................... Language declaration list, defining language codes and names supported by the system
+ │    ├── 📄 zh-TW.js ............................ Project-specific Traditional Chinese base dictionary
+ │    ├── 📄 zh-CN.js ............................ Project-specific Simplified Chinese dictionary
+ │    ├── 📄 en-US.js ............................ Project-specific English dictionary
+ │    ├── 📄 ja-JP.js ............................ Project-specific Japanese dictionary
+ │    ├── 📄 ko-KR.js ............................ Project-specific Korean dictionary
+ │    ├── 📄 th-TH.js ............................ Project-specific Thai dictionary
+ │    ├── 📄 hi-IN.js ............................ Project-specific Hindi dictionary
+ │    ├── 📄 fr-FR.js ............................ Project-specific French dictionary
+ │    └── 📄 de-DE.js ............................ Project-specific German dictionary
  │
- ├── ⚙️ js/ ...................................... 專案核心邏輯
- │    ├── 🗂️ components/ ......................... 視圖控制器
- │    │    ├── 📄 calendarView.js ................ 月曆視圖邏輯，負責處理日曆渲染、每日明細展開與每月收支統計
- │    │    ├── 📄 locationSearch.js .............. 地點搜尋邏輯，處理表單中的地點搜尋、自動完成與最近地點選取
- │    │    ├── 📄 recordModal.js ................. 新增/編輯紀錄的對話視窗邏輯，包含相機拍照、Cropper 裁切與照片壓縮處理
- │    │    ├── 📄 settingsView.js ................ 系統設定頁面邏輯，包含全域選項儲存與讀取，以及地端備份/還原邏輯
- │    │    └── 📄 statsView.js ................... 統計頁面邏輯，負責處理篩選、計算各類別加總，以及繪製圖表
+ ├── ⚙️ js/ ...................................... Project core logic
+ │    ├── 🗂️ components/ ......................... View controllers
+ │    │    ├── 📄 calendarView.js ................ Calendar view logic, handling calendar rendering, daily detail expansion, and monthly income/expense statistics
+ │    │    ├── 📄 locationSearch.js .............. Location search logic, handling location searching in forms, autocomplete, and recent location selection
+ │    │    ├── 📄 recordModal.js ................. Add/edit record dialog window logic, including camera capture, Cropper cropping, and photo compression processing
+ │    │    ├── 📄 settingsView.js ................ System settings page logic, including global option saving and loading, and local backup/restore logic
+ │    │    └── 📄 statsView.js ................... Statistics page logic, handling filtering, calculating category totals, and drawing charts
  │    ├── 🗂️ utils/
- │    │    └── 📄 htmlLoader.js .................. HTML 動態載入器，負責在執行期載入 components/ 下的各個模組化視圖與對話框
- │    ├── 📄 app.js .............................. 應用程式主邏輯，負責初始化、事件綁定與清單渲染，並協調各個元件
- │    ├── 📄 db.js ............................... 資料庫層，封裝對瀏覽器 IndexedDB 的所有原生操作 (CRUD)
- │    ├── 📄 i18nMigration.js .................... 負責多語系系統導入後的資料庫遷移與舊資料相容（舊有寫死中文類別轉譯）
- │    ├── 📄 state.js ............................ 狀態管理中樞，集中管理全域變數 (Global State) 並處理過濾器與統計計算
- │    └── 📄 utils.js ............................ 專案專屬的基礎工具函式 (負責固定收支展開計算、交易特徵碼產生等)
+ │    │    └── 📄 htmlLoader.js .................. HTML dynamic loader, loading modular views and dialog boxes under components/ at runtime
+ │    ├── 📄 app.js .............................. Application main logic, handling initialization, event binding, list rendering, and coordinating various components
+ │    ├── 📄 db.js ............................... Database layer, encapsulating all native operations (CRUD) for browser IndexedDB
+ │    ├── 📄 i18nMigration.js .................... Handles database migration and old data compatibility after the introduction of the multi-language system (translation of old hardcoded Chinese categories)
+ │    ├── 📄 state.js ............................ State management hub, centrally managing global state variables and handling filters and statistical calculations
+ │    └── 📄 utils.js ............................ Project-specific fundamental utility functions (handling fixed income/expense expansion calculation, transaction fingerprint generation, etc.)
  │
- ├── 📦 libs/ .................................... 第三方套件
- │    ├── 🗂️ cropper/ .......................... 提供照片拖拉縮放與裁切功能
- │    ├── 🗂️ fonts/ ............................ Google Fonts (Inter) 的本地化字型檔
- │    ├── 🗂️ icons/ ............................ Material Icons 的本地化字型檔
- │    ├── 🗂️ jszip/ ............................ 提供瀏覽器端 ZIP 打包與解壓縮功能
- │    └── 🗂️ tailwind/ ......................... 提供工具型 CSS class 輔助排版
+ ├── 📦 libs/ .................................... Third-party libraries
+ │    ├── 🗂️ cropper/ .......................... Provides photo dragging, zooming, and cropping features
+ │    ├── 🗂️ fonts/ ............................ Localized font files for Google Fonts (Inter)
+ │    ├── 🗂️ icons/ ............................ Localized font files for Material Icons
+ │    ├── 🗂️ jszip/ ............................ Provides browser-side ZIP packaging and extraction functions
+ │    └── 🗂️ tailwind/ ......................... Provides utility CSS classes to assist with layout
  │
- ├── 🖼️ pics/ .................................... README 說明文件使用的系統操作截圖
+ ├── 🖼️ pics/ .................................... System operation screenshots used in README documentation
  │
- ├── 🛠️ utils/ ................................... 跨專案共用底層模組
+ ├── 🛠️ utils/ ................................... Cross-project shared bottom-layer modules
  │    ├── 🎨 css/
- │    │    └── 📄 modern-ui.css .................. 全專案共用的現代化 UI 樣式系統與基礎顏色變數
- │    ├── ☁️ gas/ ................................ Google Apps Script 後端部署
- │    │    ├── 📄 gas_private_backup.js .......... 部署於 Google Apps Script 端的私有雲備份後端腳本（通用版）
- │    │    └── 📄 gas_proxy_with_logging.js ...... 具備擴充日誌機制的雲端備份後端腳本
- │    ├── 🌐 i18n/ ............................... 共用模組多語系字典 (雙層架構中的共用層)
- │    │    ├── 📄 en-US.js ....................... 底層共用模組的英文語系檔
- │    │    └── 📄 zh-TW.js ....................... 底層共用模組的繁體中文語系檔（確保 utils/ 下的元件跨專案時自帶翻譯）
- │    └── ⚙️ js/ ................................. 共用工具庫
- │         ├── 📄 backupManager.js ............... 泛用備份管理中心，負責統整與協調匯出、匯入的 UI 流程與進度顯示
- │         ├── 📄 charts.js ...................... 純原生的 SVG 圖表繪製引擎，負責圓餅圖與長條圖的繪製與互動邏輯
- │         ├── 📄 dangerZone.js .................. 設定頁面中的「危險操作區」（清空資料庫等高風險功能）
- │         ├── 📄 dataMerger.js .................. 資料匯入時的智慧合併邏輯（新增/更新/衝突處理）
- │         ├── 📄 deviceDetection.js ............. 裝置環境偵測模組，提供判斷手機或桌面版畫面的工具函數
- │         ├── 📄 errorHandler.js ................ 統一的錯誤捕捉與例外處理機制
- │         ├── 📄 gasBackupModule.js ............. 處理與 Google Apps Script (GAS) 溝通的私有雲備份/還原邏輯
- │         ├── 📄 gasProxy.js .................... 雲端連線代理與中繼模組
- │         ├── 📄 globalFestivals.js ............. 全球共同節日與趣味節日(如情人節)判定模組
- │         ├── 📄 globalFooter.js ................ 全域頁尾版權資訊元件
- │         ├── 📄 googleApiModule.js ............. Google Maps Places API 串接模組，負責地點搜尋與定位
- │         ├── 📄 i18nEngine.js .................. 核心多語系引擎，負責動態載入字典檔、綁定 DOM 屬性 (data-i18n) 與全域文字替換
- │         ├── 📄 logger.js ...................... 標準化日誌輸出工具
- │         ├── 📄 lunarCalendar.js ............... 農民曆、萬年曆核心運算引擎與國定假日管理
- │         ├── 📄 shared-i18n.js ................. 多語系核心共用函式，提供通用的時間、數字與貨幣格式轉換
- │         ├── 📄 stickyListHeader.js ............ 控制列表滾動時的吸頂效果
- │         ├── 📄 taiwanHolidays.js .............. 台灣人事行政總處國定假日與補班日對照資料檔
- │         ├── 📄 themeSwitcher.js ............... 負責切換深色與淺色主題模式
- │         ├── 📄 tipBox.js ...................... 提供全域的提示訊息與通知對話框 (Toast/Snackbar) 功能
- │         ├── 📄 uiBlocker.js ................... 全域 UI 遮罩與忙碌狀態管理（防止操作衝突）
- │         ├── 📄 uiDialogs.js ................... 共用的確認/警告對話框元件
- │         └── 📄 zipBackupHelper.js ............. 負責處理地端備份（打包與解析含有圖文分離資料的 ZIP 檔）
+ │    │    └── 📄 modern-ui.css .................. Modernized UI styling system and base color variables shared across all projects
+ │    ├── ☁️ gas/ ................................ Google Apps Script backend deployment
+ │    │    ├── 📄 gas_private_backup.js .......... Private cloud backup backend script deployed on the Google Apps Script side (General version)
+ │    │    └── 📄 gas_proxy_with_logging.js ...... Cloud backup backend script with extended logging mechanism
+ │    ├── 🌐 i18n/ ............................... Shared module multi-language dictionary (Shared layer in the dual-layer architecture)
+ │    │    ├── 📄 zh-TW.js ....................... Bottom-layer shared module Traditional Chinese base dictionary
+ │    │    ├── 📄 zh-CN.js ....................... Bottom-layer shared module Simplified Chinese dictionary
+ │    │    ├── 📄 en-US.js ....................... Bottom-layer shared module English dictionary
+ │    │    ├── 📄 ja-JP.js ....................... Bottom-layer shared module Japanese dictionary
+ │    │    ├── 📄 ko-KR.js ....................... Bottom-layer shared module Korean dictionary
+ │    │    ├── 📄 th-TH.js ....................... Bottom-layer shared module Thai dictionary
+ │    │    ├── 📄 hi-IN.js ....................... Bottom-layer shared module Hindi dictionary
+ │    │    ├── 📄 fr-FR.js ....................... Bottom-layer shared module French dictionary
+ │    │    └── 📄 de-DE.js ....................... Bottom-layer shared module German dictionary
+ │    └── ⚙️ js/ ................................. Shared utilities library
+ │         ├── 📄 backupManager.js ............... Universal backup management center, organizing and coordinating UI flows and progress displays for exports and imports
+ │         ├── 📄 charts.js ...................... Pure native SVG chart drawing engine, handling rendering and interaction logic for pie and bar charts
+ │         ├── 📄 dangerZone.js .................. "Danger Operations Zone" in the settings page (high-risk functions like clearing the database)
+ │         ├── 📄 dataMerger.js .................. Smart merge logic during data imports (add/update/conflict handling)
+ │         ├── 📄 deviceDetection.js ............. Device environment detection module, providing utility functions to determine mobile or desktop views
+ │         ├── 📄 errorHandler.js ................ Centralized error catching and exception handling mechanism
+ │         ├── 📄 gasBackupModule.js ............. Handles private cloud backup/restore logic for communicating with Google Apps Script (GAS)
+ │         ├── 📄 gasProxy.js .................... Cloud connection proxy and relay module
+ │         ├── 📄 globalFestivals.js ............. Global common festivals and fun festivals (e.g., Valentine's Day) determination module
+ │         ├── 📄 globalFooter.js ................ Global footer copyright information component
+ │         ├── 📄 googleApiModule.js ............. Google Maps Places API connection module, handling location searches and positioning
+ │         ├── 📄 i18nEngine.js .................. Core multi-language engine, dynamically loading dictionary files, binding DOM attributes (data-i18n), and global text replacements
+ │         ├── 📄 logger.js ...................... Standardized log output utility
+ │         ├── 📄 lunarCalendar.js ............... Farmer's Almanac, perpetual calendar core calculation engine, and national holiday management
+ │         ├── 📄 shared-i18n.js ................. Multi-language core shared functions, providing common time, number, and currency format conversions
+ │         ├── 📄 stickyListHeader.js ............ Controls sticky header effects when scrolling lists
+ │         ├── 📄 taiwanHolidays.js .............. Reference data file for Taiwan's Directorate-General of Personnel Administration national holidays and make-up workdays
+ │         ├── 📄 themeSwitcher.js ............... Handles switching between dark and light theme modes
+ │         ├── 📄 tipBox.js ...................... Provides global tooltip messages and notification dialog (Toast/Snackbar) features
+ │         ├── 📄 uiBlocker.js ................... Global UI overlay and busy state management (preventing operation conflicts)
+ │         ├── 📄 uiDialogs.js ................... Shared confirm/warning dialog components
+ │         └── 📄 zipBackupHelper.js ............. Handles local backups (packaging and parsing ZIP files containing text-image separated data)
  │
- ├── 📄 CHANGELOG.md ............................. 紀錄各版本的詳細更新歷程
- ├── 📄 generate_sample.html ..................... 開發輔助工具，用來自動產生大量的隨機測試資料 (Sample Data)
- ├── 📄 TinyLedger_SampleData.zip ............... 由測試產生器匯出的假資料備份檔
- ├── 📄 index.html ............................... 應用程式進入點，包含所有的 UI 骨架與視窗 (Modal) 定義
- └── 📄 README.md ................................ 專案介紹與使用說明書 (即本文件)
+ ├── 📄 CHANGELOG.md ............................. Records detailed update history for each version
+ ├── 📄 generate_sample.html ..................... Development helper tool, used to automatically generate massive random test data (Sample Data)
+ ├── 📄 TinyLedger_SampleData.zip ............... Fake data backup file exported by the test generator
+ ├── 📄 index.html ............................... Application entry point, containing all UI skeletons and window (Modal) definitions
+ └── 📄 README.md ................................ Project introduction and user manual (i.e., this document)
 ```
 
 ---
 
-## 💡 常見問題 (FAQ)
+## 💡 Frequently Asked Questions (FAQ)
 
-如果遇到問題，這裡有一些我之前遇過或常被整理出來的解答：
+If you encounter issues, here are some answers to problems I've faced or frequently compiled before:
 
-### Q: 記帳資料儲存在哪裡？會不會外洩？
-**只要裝置安全，資料就不會外流。**
-因為這是個「純前端」架構，所有的記帳紀錄與設定都會儲存在瀏覽器的本地資料庫 (IndexedDB) 裡。我並沒有架設任何中心化伺服器來收集資料，所以只要裝置本身沒有被駭客入侵或被惡意軟體竊取，財務隱私就只有裝置擁有者自己看得到。
+### Q: Where is the bookkeeping data stored? Will it be leaked?
+**As long as your device is safe, your data will not be leaked.**
+Because this is a "pure frontend" architecture, all bookkeeping records and settings will be stored in your browser's local database (IndexedDB). I haven't set up any centralized servers to collect data, so as long as the device itself hasn't been hacked or stolen by malicious software, the financial privacy is only visible to the device owner.
 
-### Q: 如果換手機或換電腦，資料該怎麼轉移？
-有兩種方式可以無痛轉移：
-1. **手動匯出/匯入**：在舊設備的設定頁面點擊「匯出備份」，會下載一個輕量化的 `.zip` 壓縮檔，把這個檔案傳到新設備後「匯入」就搞定了。
-2. **私有雲備份 (推薦)**：按照上面的教學，把帳本綁定私人的 Google 雲端硬碟。在舊設備點擊「備份至私有雲」，接著在新設備貼上相同的網址並點擊「從雲端還原」，就能一秒找回所有資料！
+### Q: If I change phones or computers, how do I transfer data?
+There are two ways for a painless transfer:
+1. **Manual Export/Import**: Click "Export Backup" on the old device's settings page, and it will download a lightweight `.zip` file. Transfer this file to the new device and "Import" it, and you're done.
+2. **Private Cloud Backup (Recommended)**: Follow the tutorial above to bind the ledger to a private Google Drive. Click "Backup to Private Cloud" on the old device, then paste the same URL on the new device and click "Restore from Cloud" to retrieve all data in a second!
 
-### Q: 雲端與地端的備份資料可以互通嗎？
-**100% 互通而且無縫接軌！** 
-現在無論是雲端還是地端，系統皆統一採用「ZIP 圖文分離技術」進行備份。無論您是從地端匯出 ZIP，還是直接上傳至私有雲，格式都完全相容。就算您以前儲存的是舊版純文字 JSON，系統的還原機制也能夠自動識別並完美匯入。
+### Q: Can cloud and local backup data communicate with each other?
+**100% interoperable and seamless!** 
+Now, whether it is cloud or local, the system uniformly adopts the "ZIP Text-Image Separation Technology" for backups. Whether you export a ZIP locally or upload directly to a private cloud, the formats are completely compatible. Even if you previously saved the old plain text JSON, the system's restore mechanism can automatically identify and flawlessly import it.
 
-### Q: 隨著照片越存越多，備份檔變很大會不會拖慢速度？
-**短期內沒問題，但如果用雲端備份要注意空間。**
-我在上傳照片前會先裁切與自動壓縮，一張照片大概只有 50KB~100KB。即使累積上千張，JSON 備份檔大約也就 100MB 左右，現代的手機處理起來游刃有餘。
+### Q: Will the backup file get too big and slow down the speed as more photos are saved?
+**No problem in the short term, but watch out for space if using cloud backups.**
+I will automatically crop and compress photos before uploading. One photo is only about 50KB~100KB. Even accumulating thousands of photos, the JSON backup file is only about 100MB, which modern mobile phones can handle with ease.
 
-**💡 高效的 ZIP 圖文分離技術**
-為了避免照片越存越多導致備份檔變大與載入卡頓，系統全面導入「ZIP 圖文分離技術」。
-無論是存放在您的 Google 雲端硬碟，或是下載到本地端，系統都會自動將純文字資料與實體照片分開並打包成輕量化的 `.zip` 壓縮檔。這種方式不僅解決了 Base64 轉換造成的體積膨脹，還能大幅減輕手機網頁瀏覽器解析時的記憶體負擔！
-
----
-
-## 📝 更新紀錄
-
-想知道最近又偷偷加了什麼新功能？請參考完整的 [CHANGELOG.md](CHANGELOG.md)。
+**💡 Efficient ZIP Text-Image Separation Technology**
+To avoid backup files getting too large and causing load lag as more photos are saved, the system has comprehensively introduced "ZIP Text-Image Separation Technology".
+Whether it's stored in your Google Drive or downloaded locally, the system will automatically separate plain text data from physical photos and pack them into a lightweight `.zip` file. This method not only solves the volume inflation caused by Base64 conversion but also significantly reduces the memory burden when parsing on mobile web browsers!
 
 ---
 
-## 🙏 致謝與開源資料來源
+## 📝 Update Logs
 
-本專案的誕生，除了基於個人的開發熱情，也受惠於開源社群的無私奉獻。在此特別感謝以下資料來源與開源套件的作者：
-
-### 📅 資料來源
-- **[ruyut/TaiwanCalendar](https://github.com/ruyut/TaiwanCalendar)**: 本系統的「台灣國定假日」功能，底層便是串接此專案整理並發布於 CDN 的 JSON 檔案。感謝開發者將台灣政府人事行政總處的原始資料轉化為前端開發友善的開源格式。
-
-### 🛠️ 開源套件與資源
-- **[Cropper.js](https://fengyuanchen.github.io/cropperjs/)**: 提供流暢的圖片裁切與手勢縮放體驗。
-- **[JSZip](https://stuk.github.io/jszip/)**: 實現了純前端的資料打包與解壓縮功能，是「地端圖文分離備份」功能的大功臣。
-- **[Tailwind CSS](https://tailwindcss.com/)**: 優雅的 Utility-First CSS 框架，讓介面的 RWD 響應式設計快速且美觀。
-- **[Google Fonts (Inter)](https://fonts.google.com/specimen/Inter)**: 打造了極佳閱讀體驗的現代無襯線字體。
-- **[Material Icons](https://fonts.google.com/icons)**: 提供系統中豐富且直覺的各種操作圖示。
+Want to know what new features were secretly added recently? Please refer to the complete [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
-## 📄 授權
+## 🙏 Acknowledgements & Open Source Data Sources
 
-本專案僅供個人學習與研究使用，**嚴禁商業使用**。
+The birth of this project, in addition to personal development enthusiasm, has also benefited from the selfless dedication of the open-source community. Special thanks to the authors of the following data sources and open-source packages:
+
+### 📅 Data Sources
+- **[ruyut/TaiwanCalendar](https://github.com/ruyut/TaiwanCalendar)**: The "Taiwan National Holidays" feature of this system is fundamentally connected to the JSON file organized and published on CDN by this project. Thanks to the developers for converting the raw data from Taiwan's Directorate-General of Personnel Administration into a frontend developer-friendly open-source format.
+
+### 🛠️ Open Source Libraries & Resources
+- **[Cropper.js](https://fengyuanchen.github.io/cropperjs/)**: Provides a smooth photo cropping and gesture zooming experience.
+- **[JSZip](https://stuk.github.io/jszip/)**: Implemented pure frontend data packaging and extraction functions, making it a great contributor to the "local text-image separation backup" feature.
+- **[Tailwind CSS](https://tailwindcss.com/)**: An elegant Utility-First CSS framework that makes the interface's RWD responsive design fast and beautiful.
+- **[Google Fonts (Inter)](https://fonts.google.com/specimen/Inter)**: Creates a modern sans-serif font for an excellent reading experience.
+- **[Material Icons](https://fonts.google.com/icons)**: Provides rich and intuitive operational icons in the system.
 
 ---
 
-## ☕ 支持與贊助
+## 📄 License
 
-這是一個完全**免費、開源、無廣告**的個人小專案。
+This project is for personal learning and research use only, **commercial use is strictly prohibited**.
 
-從敲下第一行程式碼開始，每一個功能、每一次抓蟲、每一個熬夜更新的版本，都是因為對「讓記帳變簡單」這件事的熱情。沒有團隊也沒有金主，只有我一個人配上一台電腦，默默把它打磨成現在的樣子。
+---
 
-如果這個小工具剛好有幫上忙，理清了生活中的收支，或者讓記帳這件小事變得稍微輕鬆了一點，那它就已經達成最初的心願了。
+## ☕ Support & Sponsorship
 
-如果願意更進一步請我喝杯咖啡 ☕ —— 那絕對是支持我繼續維護下去的最大動力！每一份贊助無論大小，對我來說都是超級溫暖的鼓勵，代表真的有人在使用、也覺得它有價值。
+This is a completely **free, open-source, ad-free** personal small project.
 
-**謝謝，真的。** 🙏
+From typing the first line of code, every feature, every bug fixed, and every late-night updated version has been driven by the passion to "make bookkeeping simple." There is no team and no sponsor, just me and a computer, silently polishing it into what it is today.
+
+If this small tool happens to help you sort out the income and expenses in your life, or make bookkeeping a little bit easier, then it has already achieved its original wish.
+
+If you are willing to go a step further and buy me a cup of coffee ☕ — that would definitely be the greatest motivation for me to continue maintaining it! Every sponsorship, no matter the size, is a super warm encouragement to me, meaning that people are really using it and finding it valuable.
+
+**Thank you, truly.** 🙏
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0R125NYMU)
