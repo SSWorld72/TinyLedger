@@ -121,8 +121,8 @@ export default {
             colors: {
                 blue: 'Blue', green: 'Green', red: 'Red', yellow: 'Yellow', purple: 'Purple', gray: 'Gray'
             },
-            filterAll: 'All Accounts',
-            filterPartial: 'Accounts ({selected}/{total})',
+            filterAll: 'All',
+            filterPartial: '({selected}/{total})',
             alertNoAccount: 'Please select at least one account!'
         },
         tabs: {

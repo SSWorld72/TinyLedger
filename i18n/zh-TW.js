@@ -121,8 +121,8 @@ export default {
             colors: {
                 blue: '藍色', green: '綠色', red: '紅色', yellow: '黃色', purple: '紫色', gray: '灰色'
             },
-            filterAll: '全部帳戶',
-            filterPartial: '帳戶 ({selected}/{total})',
+            filterAll: '全部',
+            filterPartial: '({selected}/{total})',
             alertNoAccount: '請至少選擇一個帳戶！'
         },
         tabs: {
