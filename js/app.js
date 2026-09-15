@@ -710,24 +710,40 @@ export function renderRecordList(scrollToId = null) {
     if (filteredTxs.length === 0) {
         generalList.innerHTML = `<div class="empty-state">${window.t('ui.list.emptyGeneral')}</div>`;
     } else {
+        // Pre-compute order maps to avoid expensive .find() operations inside the .sort() loop
+        const majorOrderMap = new Map();
+        const minorOrderMap = new Map();
+        const allCats = [...(state.categories.expense || []), ...(state.categories.income || [])];
+        allCats.forEach(c => {
+            majorOrderMap.set(c.major, c.order);
+            if (c.sub && Array.isArray(c.sub)) {
+                c.sub.forEach((subName, idx) => minorOrderMap.set(`${c.major}|${subName}`, idx));
+            }
+        });
+        const targetOrderMap = new Map();
+        (state.targets || []).forEach(t => targetOrderMap.set(t.name, t.order));
+
         const sortedTxs = [...filteredTxs].sort((a, b) => {
             const dateDiff = new Date(b.date) - new Date(a.date);
             if (dateDiff !== 0) return dateDiff;
             
             const majorA = a.majorCategory || '';
             const majorB = b.majorCategory || '';
-            const majorDiff = majorA.localeCompare(majorB);
-            if (majorDiff !== 0) return majorDiff;
+            const orderMajorA = majorOrderMap.has(majorA) ? majorOrderMap.get(majorA) : 9999;
+            const orderMajorB = majorOrderMap.has(majorB) ? majorOrderMap.get(majorB) : 9999;
+            if (orderMajorA !== orderMajorB) return orderMajorA - orderMajorB;
 
             const minorA = a.subCategory || '';
             const minorB = b.subCategory || '';
-            const minorDiff = minorA.localeCompare(minorB);
-            if (minorDiff !== 0) return minorDiff;
+            const orderMinorA = minorOrderMap.has(`${majorA}|${minorA}`) ? minorOrderMap.get(`${majorA}|${minorA}`) : 9999;
+            const orderMinorB = minorOrderMap.has(`${majorB}|${minorB}`) ? minorOrderMap.get(`${majorB}|${minorB}`) : 9999;
+            if (orderMinorA !== orderMinorB) return orderMinorA - orderMinorB;
 
             const payeeA = a.payee || '';
             const payeeB = b.payee || '';
-            const payeeDiff = payeeA.localeCompare(payeeB);
-            if (payeeDiff !== 0) return payeeDiff;
+            const orderPayeeA = targetOrderMap.has(payeeA) ? targetOrderMap.get(payeeA) : 9999;
+            const orderPayeeB = targetOrderMap.has(payeeB) ? targetOrderMap.get(payeeB) : 9999;
+            if (orderPayeeA !== orderPayeeB) return orderPayeeA - orderPayeeB;
 
             const amountDiff = (b.amount || 0) - (a.amount || 0);
             if (amountDiff !== 0) return amountDiff;
