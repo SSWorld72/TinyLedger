@@ -435,29 +435,27 @@ export function setupSettings(state, db, renderApp) {
                 const m = f.date ? parseInt(f.date.split('-')[0], 10) : '';
                 const d = f.date ? parseInt(f.date.split('-')[1], 10) : '';
 
-                const mSuffix = window.t('ui.settings.calendar.monthSuffix') || 'M';
-                const dSuffix = window.t('ui.settings.calendar.daySuffix') || 'D';
                 const monthOptions = Array.from({length: 12}, (_, i) => {
                     const val = i + 1;
-                    return `<option value="${val}" ${m === val ? 'selected' : ''}>${val}${mSuffix}</option>`;
+                    return `<option value="${val}" ${m === val ? 'selected' : ''}>${String(val).padStart(2, '0')}</option>`;
                 }).join('');
 
                 const dayOptions = Array.from({length: 31}, (_, i) => {
                     const val = i + 1;
-                    return `<option value="${val}" ${d === val ? 'selected' : ''}>${val}${dSuffix}</option>`;
+                    return `<option value="${val}" ${d === val ? 'selected' : ''}>${String(val).padStart(2, '0')}</option>`;
                 }).join('');
 
                 item.innerHTML = `
                     <button class="btn-close" style="position: absolute; right: 4px; top: 4px; font-size: 16px; width: 24px; height: 24px; display: flex; justify-content: center; align-items: center;" data-index="${index}">&times;</button>
                     <div style="display: flex; gap: 8px; padding-right: 24px;">
                         <div style="display: flex; gap: 6px; flex: 2; align-items: center; min-width: 0;">
-                            <select class="form-control festival-month" style="padding: 4px 8px; width: 100%; min-width: 0; appearance: none; -webkit-appearance: none;">
-                                <option value="" disabled ${m === '' ? 'selected' : ''}>${window.t('ui.settings.calendar.monthPh') || 'M'}</option>
+                            <select class="form-control festival-month" style="padding: 4px 6px; width: 100%; min-width: 0; appearance: none; -webkit-appearance: none; text-align: center;">
+                                <option value="" disabled ${m === '' ? 'selected' : ''}>MM</option>
                                 ${monthOptions}
                             </select>
                             <span>/</span>
-                            <select class="form-control festival-day" style="padding: 4px 8px; width: 100%; min-width: 0; appearance: none; -webkit-appearance: none;">
-                                <option value="" disabled ${d === '' ? 'selected' : ''}>${window.t('ui.settings.calendar.dayPh') || 'D'}</option>
+                            <select class="form-control festival-day" style="padding: 4px 6px; width: 100%; min-width: 0; appearance: none; -webkit-appearance: none; text-align: center;">
+                                <option value="" disabled ${d === '' ? 'selected' : ''}>DD</option>
                                 ${dayOptions}
                             </select>
                         </div>
