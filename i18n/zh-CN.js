@@ -49,15 +49,16 @@ export default {
     },
 
     logs: {
+        /* duplicate removed */
         db: {
             migrationStart: '[数据库] 开始进行 i18n 分类代码化迁移...',
             migrationSuccess: '[数据库] i18n 分类代码化迁移完成！',
             migrationFail: '[数据库] i18n 分类代码化迁移失败: {error}',
             error: '[数据库] 错误:',
-            saveCategorySuccess: '[数据库] 保存类别设定 (saveCategory) 成功',
-            deleteCategorySuccess: '[数据库] 删除类别设定 (deleteCategory) 成功',
-            saveTargetSuccess: '[数据库] 保存目标设定 (saveTarget) 成功',
-            deleteTargetSuccess: '[数据库] 删除目标设定 (deleteTarget) 成功',
+            saveCategorySuccess: '[数据库] 保存类别设置 (saveCategory) 成功',
+            deleteCategorySuccess: '[数据库] 删除类别设置 (deleteCategory) 成功',
+            saveTargetSuccess: '[数据库] 保存目标设置 (saveTarget) 成功',
+            deleteTargetSuccess: '[数据库] 删除目标设置 (deleteTarget) 成功',
             saveTransactionSuccess: '[数据库] 保存记账纪录 (saveTransaction) 成功',
             batchSaveTransactionsSuccess: '[数据库] 批次保存记账纪录 (batchSaveTransactions) 成功',
             batchSaveTransactionsFail: '[数据库] 批次保存记账纪录失败:',
@@ -73,20 +74,25 @@ export default {
             loadHolidaysFail: '[万年历] 无法载入该年度的国定假日数据...'
         },
         settings: {
-            accountUpdateSuccess: '[设定] 更新账户设定（saveAccounts）成功',
-            checkAccountDataError: '[设定] 检查账户数据发生错误:',
-            backupUpdateSuccess: '[设定] 私有云设定与同步状态存档成功',
-            saveAccountsSuccess: '[设定] 更新账户设定（saveAccounts）成功',
-            cloudBackupSuccess: '[设定] 私有云设定与同步状态存档成功',
+            forceClearComplete: '[设置] 强制清空完成，已清除 IndexedDB 及 {removed} 个 localStorage 设置项目 (保留了 {kept} 个系统设置)',
+            accountUpdateSuccess: '[设置] 更新账户设置（saveAccounts）成功',
+            checkAccountDataError: '[设置] 检查账户数据发生错误:',
+            backupUpdateSuccess: '[设置] 私有云设置与同步状态存档成功',
+            saveAccountsSuccess: '[设置] 更新账户设置（saveAccounts）成功',
+            cloudBackupSuccess: '[设置] 私有云设置与同步状态存档成功',
             restoreError: '还原过程中发生错误：',
             exportJsonSuccess: '[备份] 手动汇出地端备份成功: ZIP大小 ',
             fileReadError: '文件读取失败',
             importJsonSuccess: '[备份] 从地端备份导入成功: 新增/更新 ',
-            checkAccountError: '[设定] 检查账户数据发生错误:',
-            checkCategoryError: '[设定] 检查类别数据发生错误:',
-            checkCategoryBatchError: '[设定] 批次检查类别数据发生错误:',
-            checkTargetError: '[设定] 检查目标数据发生错误:',
-            checkTargetBatchError: '[设定] 批次检查目标数据发生错误:'
+            checkAccountError: '[设置] 检查账户数据发生错误:',
+            checkCategoryError: '[设置] 检查类别数据发生错误:',
+            checkCategoryBatchError: '[设置] 批次检查类别数据发生错误:',
+            checkTargetError: '[设置] 检查目标数据发生错误:',
+            checkTargetBatchError: '[设置] 批次检查目标数据发生错误:',
+            keptKeyGmaps: 'Google Maps API 密钥',
+            keptKeyGas: '私有云端 GAS 设置',
+            keptKeyI18n: 'i18n 迁移标志',
+            keptKeyLang: '语言设置'
         },
         record: {
             festivalReminderError: '[重要节日提醒] 错误:',
@@ -135,7 +141,7 @@ export default {
             backToList: '返回清单',
             stats: '统计图',
             calendar: '万年历',
-            settings: '设定',
+            settings: '设置',
             tabGeneral: '一般纪录',
             tabGeneralMobile: '一般<br>纪录',
             tabFixed: '固定纪录',
@@ -240,23 +246,7 @@ export default {
             top5Expenses: '前五大支出类别'
         },
         settings: {
-            dangerZone: {
-                title: '危险区域',
-                desc: '清空本机的所有记账纪录、固定纪录与类别设定。如果您想重新开始，或清除异常数据，可点击下方按钮。(此操作无法复原)',
-                button: '强制清空本机所有数据',
-                confirmTitle: '确定要清空吗？',
-                confirmMsg: '这将会彻底删除您手机/电脑内所有的本地数据。\n此操作无法复原，请确认您已经备份！',
-                doubleConfirmTitle: '最后确认',
-                doubleConfirmMsg: '真的要清空吗？\n此操作将永久销毁本地数据库。',
-                btnConfirm: '我要清空',
-                btnCancel: '取消',
-                btnDoubleConfirm: '确定销毁数据',
-                btnDoubleCancel: '再想一下',
-                busyTitle: '正在清空数据',
-                busyDetail: '删除中...',
-                success: '✅ 本机所有数据已彻底清空！系统将自动重新载入。',
-                error: '清空数据时发生错误: {error}'
-            },
+
             systemLogs: {
                 title: '系统日志 (System Logs)',
                 desc: '显示最近 999 笔控制台日志，方便排解连线或数据同步问题。',
@@ -273,7 +263,7 @@ export default {
                 copyError: '复制失败: {error}'
             },
             language: { title: '显示语言 (Language)' },
-            title: '系统设定',
+            title: '系统设置',
             sponsor: '赞助作者',
             theme: {
                 title: '外观主题'
@@ -291,7 +281,7 @@ export default {
                 yearlyLast: '去年与今年',
                 includePhotos: '包含照片 (将大幅增加文件大小)',
                 exporting: '准备下载 ZIP 备份档...',
-                exportSuccess: '✅ 备份汇出成功！\n共汇出 {txCount} 笔一般纪录、{fixedCount} 笔固定纪录\n包含 {catCount} 个大类与 {tgtCount} 个对象设定',
+                exportSuccess: '✅ 备份汇出成功！\n共汇出 {txCount} 笔一般纪录、{fixedCount} 笔固定纪录\n包含 {catCount} 个大类与 {tgtCount} 个对象设置',
                 exportError: '汇出失败：{error}',
                 importing: '解析备份档中...',
                 importError: '还原过程中发生错误：{error}',
@@ -312,13 +302,13 @@ export default {
                     done: '已写入{type}... ({current} / {total})',
                     typeTx: '一般纪录',
                     typeFixed: '固定纪录',
-                    typeCat: '类别设定',
-                    typeTgt: '对象设定'
+                    typeCat: '类别设置',
+                    typeTgt: '对象设置'
                 },
                 importComplete: '✅ 导入完成！\n\n[本次新增]\n{adds}',
                 reloading: '系统即将重新载入...',
                 fullBackup: '完整备份：',
-                fullBackupDesc: '您的所有记账纪录、固定纪录、类别设定、万年历偏好设定。',
+                fullBackupDesc: '您的所有记账纪录、固定纪录、类别设置、万年历偏好设置。',
                 overwriteWarning: '从私有云端还原时，将会完全覆盖目前的本地数据',
                 exportingTitle: '正在汇出数据',
                 advancedTitle: '进阶备份设定 (套用于本机与云端)',
@@ -350,28 +340,28 @@ export default {
             cloudBackup: {
                 title: '私有云端同步与备份 (Google Apps Script)',
                 syncing: '云端同步处理中...',
-                desc: '备份您的所有记账纪录、固定纪录、类别设定、万年历偏好设定。\n(*从私有云端还原时，将会完全覆盖目前的本地数据)',
-                successSummary: '✅ 备份汇出成功！\n共汇出 {txCount} 笔一般纪录、{fixedCount} 笔固定纪录\n包含 {catCount} 个大类与 {tgtCount} 个对象设定',
+                desc: '备份您的所有记账纪录、固定纪录、类别设置、万年历偏好设置。\n(*从私有云端还原时，将会完全覆盖目前的本地数据)',
+                successSummary: '✅ 备份汇出成功！\n共汇出 {txCount} 笔一般纪录、{fixedCount} 笔固定纪录\n包含 {catCount} 个大类与 {tgtCount} 个对象设置',
                 restoreConfirmMerge: '【合并模式】\n确定要将这份数据合并至本机吗？\n(会保留本机纪录，并自动跳过重复项目)',
                 restoreConfirmOverwrite: '【覆盖模式警告】\n确定要使用这份数据完全覆盖本机所有纪录吗？\n(本机现有的纪录将被全数删除！)',
                 restoreConfirmEmpty: '【数据还原】\n确定要将这份云端数据还原至本机吗？',
-                restoreSummary: '此备份共包含：\n- 一般纪录：{txCount} 笔\n- 固定纪录：{fixedCount} 笔\n- 类别设定：{catCount} 个\n- 对象设定：{tgtCount} 个\n',
+                restoreSummary: '此备份共包含：\n- 一般纪录：{txCount} 笔\n- 固定纪录：{fixedCount} 笔\n- 类别设置：{catCount} 个\n- 对象设置：{tgtCount} 个\n',
                 restoreFiltered: '\n(已自动过滤重复)\n',
                 restoreFilteredTx: '- 一般纪录：{txSkip} 笔\n',
                 restoreFilteredFixed: '- 固定纪录：{fixedSkip} 笔\n',
-                restoreFilteredCat: '- 类别设定：{catSkip} 个\n',
-                restoreFilteredTgt: '- 对象设定：{tgtSkip} 个\n',
+                restoreFilteredCat: '- 类别设置：{catSkip} 个\n',
+                restoreFilteredTgt: '- 对象设置：{tgtSkip} 个\n',
                 restoreCompleteEmpty: '✅ 云端还原完成！\n\n【新增】\n{adds}\n\n系统即将重新载入...',
                 restoreCompleteOverwrite: '✅ 云端还原完成 (覆盖模式)！\n\n【新增】\n{adds}\n\n系统即将重新载入...',
                 restoreCompleteMerge: '✅ 云端还原完成 (合并模式)！\n\n【新增】\n{adds}',
                 restoreCompleteMergeSkipped: '\n\n(自动略过重复)\n',
                 addedTx: '一般纪录 {tx} 笔',
                 addedFixed: '固定纪录 {fixed} 笔',
-                addedCat: '类别设定 {cat} 个',
-                addedTgt: '对象设定 {tgt} 个'
+                addedCat: '类别设置 {cat} 个',
+                addedTgt: '对象设置 {tgt} 个'
             },
             accounts: {
-                title: '账户参数设定',
+                title: '账户参数设置',
                 add: '新增账户',
                 edit: '编辑账户',
                 defaultAccountName: '账户 A',
@@ -398,7 +388,7 @@ export default {
                 target: '记账对象'
             },
             calendar: {
-                title: '万年历与显示设定',
+                title: '万年历与显示设置',
                 remindDaysBefore: '提前几天提醒：',
                 monthSuffix: '月',
                 daySuffix: '日',
@@ -448,7 +438,7 @@ export default {
                     desc: '显示每月 14 号的特色情人节 (包含 2/14 西洋、白色、黑色情人节等)'
                 },
                 importantFestival: {
-                    title: '重要节日提醒设定',
+                    title: '重要节日提醒设置',
                     enableTitle: '启用重要节日提醒',
                     enableDesc: '在节日到达前，记账时会自动跳出提示，并在日历显示专属星形标记',
                     addBtn: '新增节日 (最多 10 组)'
@@ -576,16 +566,16 @@ export default {
             holidayUpdateFail: '❌ 下载失败：{error}',
             holidayUpdateFailUnknown: '未知错误',
             btnUpdateHoliday: '更新国定假日',
-            backupSuccess: '✅ 备份汇出成功！\n共汇出 {txCount} 笔一般纪录、{fixedCount} 笔固定纪录\n包含 {catCount} 个大类与 {tgtCount} 个对象设定',
+            backupSuccess: '✅ 备份汇出成功！\n共汇出 {txCount} 笔一般纪录、{fixedCount} 笔固定纪录\n包含 {catCount} 个大类与 {tgtCount} 个对象设置',
             restoreConfirmWarningLocalEmpty: '【数据还原】\n确定要将这份云端数据还原至本机吗？',
             restoreConfirmWarningOverwrite: '【覆盖模式警告】\n确定要使用这份数据完全覆盖本机所有纪录吗？\n(本机现有的纪录将被全数删除！)',
             restoreConfirmWarningMerge: '【合并模式】\n确定要将这份数据合并至本机吗？\n(会保留本机纪录，并自动跳过重复项目)',
-            restoreConfirmMsg: '此备份共包含：\n- 一般纪录：{totalTx} 笔\n- 固定纪录：{totalFixed} 笔\n- 类别设定：{totalCat} 个\n- 对象设定：{totalTgt} 个\n',
+            restoreConfirmMsg: '此备份共包含：\n- 一般纪录：{totalTx} 笔\n- 固定纪录：{totalFixed} 笔\n- 类别设置：{totalCat} 个\n- 对象设置：{totalTgt} 个\n',
             restoreConfirmMsgFilter: '\n(已自动过滤重复)\n',
             restoreConfirmMsgFilterTx: '- 一般纪录：{count} 笔\n',
             restoreConfirmMsgFilterFixed: '- 固定纪录：{count} 笔\n',
-            restoreConfirmMsgFilterCat: '- 类别设定：{count} 个\n',
-            restoreConfirmMsgFilterTgt: '- 对象设定：{count} 个\n',
+            restoreConfirmMsgFilterCat: '- 类别设置：{count} 个\n',
+            restoreConfirmMsgFilterTgt: '- 对象设置：{count} 个\n',
             inputNamePlaceholder: '例如: 现金、信用卡',
             inputBudgetPlaceholder: '例如 25000',
             requireAccountName: '请输入账户名称'
@@ -721,3 +711,4 @@ export default {
         }
     }
 };
+

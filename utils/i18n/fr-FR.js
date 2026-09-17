@@ -10,7 +10,7 @@ export default {
         },
         charts: {
             format: {
-                billions: 'Mds',
+                billions: 'Md',
                 millions: 'M',
                 thousands: 'k',
                 hundredMillions: '100M',
@@ -70,6 +70,7 @@ export default {
         },
         gasBackup: {
             title: 'Sauvegarde Cloud Privée (GAS Private Cloud)',
+            titleHelp: 'Cliquez pour voir comment obtenir l\'URL de l\'application Web',
             autoSyncBadge: 'Sync Auto',
             desc: 'Entrez votre URL GAS de sauvegarde personnalisée. Le système sauvegardera vos données sur Google Drive.',
             autoSyncLabel: 'Délai de synchronisation après modification',
@@ -201,6 +202,9 @@ export default {
         }
     },
     systemLogs: {
+        gmap: {
+            networkError: '[Recherche de lieu] Échec de la requête réseau (peut être dû à une frappe rapide ou une connexion instable)'
+        },
         logger: {
             deprecated: '[Logger] Avertissement : Outil obsolète'
         },
@@ -234,6 +238,11 @@ export default {
             errorParseCloud: 'Impossible d\'analyser le cloud',
             errorCloudResponse: 'Erreur cloud :',
             errorNoBackup: 'Échec : Aucune donnée cloud'
+        },
+        dangerZone: {
+            deleteSuccess: '[Base de données] Base de données supprimée avec succès (deleteIndexedDB) : {dbName}',
+            deleteFailed: '[Base de données] Échec de la suppression de la base de données (deleteIndexedDB) {dbName} :',
+            deleteBlocked: '[Base de données] Suppression bloquée. Veuillez fermer les autres onglets utilisant cette base de données.'
         },
         errorHandler: {
             globalError: '[GlobalError] Erreur globale :',
@@ -309,6 +318,32 @@ export default {
             movieValentinesDay: 'Movie Day',
             hugValentinesDay: 'Hug Day',
             easter: 'Pâques'
+        }
+    },
+    ui: {
+        footer: {
+            unnamedProject: 'Projet sans nom',
+            githubProject: 'Projet GitHub',
+            releaseDate: 'Publié le : {date}'
+        },
+        settings: {
+            dangerZone: {
+                title: 'Zone de danger',
+                desc: 'Effacer toutes les données et paramètres locaux. Cette action ne peut pas être annulée.',
+                button: 'Effacer toutes les données',
+                confirmTitle: 'Avertissement',
+                confirmMsg: 'Êtes-vous sûr de vouloir effacer toutes les données ? Cette action ne peut pas être annulée.',
+                doubleConfirmTitle: 'Confirmation finale',
+                doubleConfirmMsg: 'Ceci est le dernier avertissement. Êtes-vous vraiment sûr de vouloir supprimer toutes les données ?',
+                btnConfirm: 'Confirmer l\'effacement',
+                btnCancel: 'Annuler',
+                btnDoubleConfirm: 'Je suis sûr',
+                btnDoubleCancel: 'Annuler',
+                busyTitle: 'Effacement des données',
+                busyDetail: 'Suppression de toutes les données, veuillez patienter...',
+                success: 'Effacé avec succès !',
+                error: 'Échec de l\'effacement : {error}'
+            }
         }
     }
 };

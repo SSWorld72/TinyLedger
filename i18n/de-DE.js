@@ -49,6 +49,7 @@ export default {
     },
 
     logs: {
+        /* duplicate removed */
         db: {
             migrationStart: '[Datenbank] i18n-Kategoriecode-Migration gestartet...',
             migrationSuccess: '[Datenbank] i18n-Kategoriecode-Migration abgeschlossen!',
@@ -73,6 +74,7 @@ export default {
             loadHolidaysFail: '[Kalender] Feiertage konnten nicht geladen werden...'
         },
         settings: {
+            forceClearComplete: '[Einstellungen] Vollständige Leerung abgeschlossen, IndexedDB und {removed} localStorage-Elemente gelöscht ({kept} Systemeinstellungen beibehalten)',
             accountUpdateSuccess: '[Einstellungen] Konten erfolgreich aktualisiert (saveAccounts)',
             checkAccountDataError: '[Einstellungen] Fehler bei der Kontoprüfung:',
             backupUpdateSuccess: '[Einstellungen] Cloud-Einstellungen gespeichert',
@@ -86,7 +88,11 @@ export default {
             checkCategoryError: '[Einstellungen] Fehler bei der Kategorieprüfung:',
             checkCategoryBatchError: '[Einstellungen] Fehler bei der Massenprüfung der Kategorien:',
             checkTargetError: '[Einstellungen] Fehler bei der Zielprüfung:',
-            checkTargetBatchError: '[Einstellungen] Fehler bei der Massenprüfung der Ziele:'
+            checkTargetBatchError: '[Einstellungen] Fehler bei der Massenprüfung der Ziele:',
+            keptKeyGmaps: 'Google Maps API-Schlüssel',
+            keptKeyGas: 'Private Cloud GAS-Einstellungen',
+            keptKeyI18n: 'i18n-Migrationsmarkierung',
+            keptKeyLang: 'Spracheinstellung'
         },
         record: {
             festivalReminderError: '[Festivals-Erinnerung] Fehler:',
@@ -240,23 +246,7 @@ export default {
             top5Expenses: 'Top 5 Ausgaben'
         },
         settings: {
-            dangerZone: {
-                title: 'Gefahrenzone',
-                desc: 'Alle lokalen Daten, Regeln und Einstellungen löschen. Aktion ist nicht umkehrbar.',
-                button: 'Alle lokalen Daten löschen',
-                confirmTitle: 'Wirklich löschen?',
-                confirmMsg: 'Alle lokalen Daten gehen dauerhaft verloren.\nHaben Sie ein Backup gemacht?',
-                doubleConfirmTitle: 'Letzte Bestätigung',
-                doubleConfirmMsg: 'Lokale Datenbank wirklich zerstören?',
-                btnConfirm: 'Ja, alles löschen',
-                btnCancel: 'Abbrechen',
-                btnDoubleConfirm: 'Zerstörung bestätigen',
-                btnDoubleCancel: 'Noch mal nachdenken',
-                busyTitle: 'Daten werden gelöscht',
-                busyDetail: 'Lösche...',
-                success: '✅ Lokale Daten gelöscht!',
-                error: 'Fehler beim Löschen: {error}'
-            },
+
             systemLogs: {
                 title: 'Systemprotokolle (Logs)',
                 desc: 'Zeigt die letzten 999 Konsolenprotokolle an.',
@@ -721,3 +711,4 @@ export default {
         }
     }
 };
+

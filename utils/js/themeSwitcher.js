@@ -502,7 +502,9 @@ export class ThemeSwitcher {
             const newTheme = e.target.value;
             this.setTheme(newTheme);
             renderPreview(newTheme);
-            console.log(t('systemLogs.themeSwitcher.switchedTheme', { newTheme }));
+            const localizedThemeName = t(`utils.theme.${newTheme}.name`);
+            const themeName = localizedThemeName !== `utils.theme.${newTheme}.name` ? localizedThemeName : newTheme;
+            console.log(t('systemLogs.themeSwitcher.switchedTheme', { newTheme: themeName }));
             if (onChange) onChange(newTheme);
 
             // Automatically open palette if custom theme is selected

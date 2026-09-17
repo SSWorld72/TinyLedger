@@ -161,7 +161,7 @@ if (window.__APP_INITIALIZED__) {
         initGlobalFooter({
             containerId: 'app-container',
             appName: window.t('ui.app.fullName') || window.t('ui.app.name'),
-            version: 'v1.5.6.0',
+            version: 'v1.5.7.0',
             copyrightYear: '2025-2026',
             githubUrl: 'https://github.com/SSWorld72/TinyLedger'
         });
@@ -715,13 +715,13 @@ export function renderRecordList(scrollToId = null) {
         const minorOrderMap = new Map();
         const allCats = [...(state.categories.expense || []), ...(state.categories.income || [])];
         allCats.forEach(c => {
-            majorOrderMap.set(c.major, c.order);
+            majorOrderMap.set(c.catId, c.order);
             if (c.sub && Array.isArray(c.sub)) {
-                c.sub.forEach((subName, idx) => minorOrderMap.set(`${c.major}|${subName}`, idx));
+                c.sub.forEach((subName, idx) => minorOrderMap.set(`${c.catId}|${subName}`, idx));
             }
         });
         const targetOrderMap = new Map();
-        (state.targets || []).forEach(t => targetOrderMap.set(t.name, t.order));
+        (state.targets || []).forEach(t => targetOrderMap.set(t.tgtId, t.order));
 
         const sortedTxs = [...filteredTxs].sort((a, b) => {
             const dateDiff = new Date(b.date) - new Date(a.date);

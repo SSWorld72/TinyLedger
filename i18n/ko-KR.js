@@ -49,6 +49,7 @@ export default {
     },
 
     logs: {
+        /* duplicate removed */
         db: {
             migrationStart: '[데이터베이스] i18n 카테고리 코드화 마이그레이션 시작...',
             migrationSuccess: '[데이터베이스] i18n 카테고리 코드화 마이그레이션 완료!',
@@ -73,6 +74,7 @@ export default {
             loadHolidaysFail: '[캘린더] 해당 연도의 공휴일 데이터를 불러올 수 없습니다...'
         },
         settings: {
+            forceClearComplete: '[설정] 강제 초기화 완료, IndexedDB 및 {removed} 개의 localStorage 항목이 삭제되었습니다({kept} 개의 시스템 설정은 유지됨)',
             accountUpdateSuccess: '[설정] 계정 설정 업데이트(saveAccounts) 성공',
             checkAccountDataError: '[설정] 계정 데이터 확인 중 오류 발생:',
             backupUpdateSuccess: '[설정] 프라이빗 클라우드 설정 및 동기화 상태 저장 성공',
@@ -86,7 +88,11 @@ export default {
             checkCategoryError: '[설정] 카테고리 데이터 확인 중 오류 발생:',
             checkCategoryBatchError: '[설정] 카테고리 데이터 일괄 확인 중 오류 발생:',
             checkTargetError: '[설정] 대상 데이터 확인 중 오류 발생:',
-            checkTargetBatchError: '[설정] 대상 데이터 일괄 확인 중 오류 발생:'
+            checkTargetBatchError: '[설정] 대상 데이터 일괄 확인 중 오류 발생:',
+            keptKeyGmaps: 'Google Maps API 키',
+            keptKeyGas: '프라이빗 클라우드 GAS 설정',
+            keptKeyI18n: 'i18n 마이그레이션 플래그',
+            keptKeyLang: '언어 설정'
         },
         record: {
             festivalReminderError: '[주요 기념일 알림] 오류:',
@@ -240,23 +246,7 @@ export default {
             top5Expenses: '지출 상위 5개 카테고리'
         },
         settings: {
-            dangerZone: {
-                title: '위험 구역 (Danger Zone)',
-                desc: '로컬의 모든 기록, 고정 규칙 및 카테고리 설정을 지웁니다. 처음부터 다시 시작하거나 비정상적인 데이터를 지우려면 아래 버튼을 클릭하세요. (이 작업은 되돌릴 수 없습니다)',
-                button: '로컬의 모든 데이터 강제 초기화',
-                confirmTitle: '정말 지우시겠습니까?',
-                confirmMsg: '스마트폰/컴퓨터 내의 모든 로컬 데이터가 완전히 삭제됩니다.\n이 작업은 되돌릴 수 없으므로 백업을 완료했는지 확인하세요!',
-                doubleConfirmTitle: '최종 확인',
-                doubleConfirmMsg: '정말 초기화하시겠습니까?\n이 작업은 로컬 데이터베이스를 영구적으로 파기합니다.',
-                btnConfirm: '초기화 진행',
-                btnCancel: '취소',
-                btnDoubleConfirm: '데이터 파기 확인',
-                btnDoubleCancel: '다시 생각하기',
-                busyTitle: '데이터 지우는 중',
-                busyDetail: '삭제 중...',
-                success: '✅ 로컬의 모든 데이터가 완전히 삭제되었습니다! 시스템이 자동으로 새로 고침됩니다.',
-                error: '데이터를 지우는 중 오류가 발생했습니다: {error}'
-            },
+
             systemLogs: {
                 title: '시스템 로그 (System Logs)',
                 desc: '연결 또는 데이터 동기화 문제를 해결하는 데 도움이 되도록 최근 999개의 콘솔 로그를 표시합니다.',
@@ -721,3 +711,4 @@ export default {
         }
     }
 };
+

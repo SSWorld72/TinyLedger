@@ -2,6 +2,16 @@
 
 > 🇹🇼 若要查看繁體中文版，請參閱 [CHANGELOG.zh-TW.md](CHANGELOG.zh-TW.md)
 
+## 2026-09-17 (v1.5.7.0 - System Translation & Mobile UI Fixes)
+### Fixes
+- **System Log Translation Fix**: Resolved a conflict in the multilingual dictionary structure that prevented "Force Clear Data" logs from being properly translated and outputted.
+- **Mobile Location Input Jump**: Fixed an issue on mobile devices where clicking the location search input would forcefully push the screen upwards, hiding the input box out of view.
+
+### Improvements
+- **Comprehensive Multilingual Logs**: Integrated deep system notifications and database cleanup logs into the dynamic multilingual engine, ensuring correct display across all 9 supported languages.
+
+---
+
 ## 2026-09-15 (v1.5.6.0 - 5 New Languages & Cache Fix)
 ### Added
 - **Support More Languages**: Added 7 display languages: Simplified Chinese, Japanese, Korean, Thai, Hindi, French, and German.

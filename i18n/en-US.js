@@ -49,6 +49,7 @@ export default {
     },
 
     logs: {
+
         db: {
             migrationStart: '[Database] Starting i18n category code migration...',
             migrationSuccess: '[Database] i18n category code migration completed!',
@@ -73,6 +74,7 @@ export default {
             loadHolidaysFail: '[Calendar] Failed to load national holidays for the year...'
         },
         settings: {
+            forceClearComplete: '[Settings] Force clear complete, cleared IndexedDB and {removed} localStorage items (kept {kept} system settings)',
             accountUpdateSuccess: '[Settings] Account settings updated successfully (saveAccounts)',
             checkAccountDataError: '[Settings] Error checking account data:',
             backupUpdateSuccess: '[Settings] Private Cloud settings and sync state saved successfully',
@@ -86,7 +88,11 @@ export default {
             checkCategoryError: '[Settings] Error checking category data:',
             checkCategoryBatchError: '[Settings] Error checking category data in batch:',
             checkTargetError: '[Settings] Error checking target data:',
-            checkTargetBatchError: '[Settings] Error checking target data in batch:'
+            checkTargetBatchError: '[Settings] Error checking target data in batch:',
+            keptKeyGmaps: 'Google Maps API Key',
+            keptKeyGas: 'Private Cloud GAS Settings',
+            keptKeyI18n: 'i18n Migration Flag',
+            keptKeyLang: 'Language Setting'
         },
         record: {
             festivalReminderError: '[Important Festival Reminder] Error:',
@@ -240,23 +246,7 @@ export default {
             top5Expenses: 'Top 5 Expenses'
         },
         settings: {
-            dangerZone: {
-                title: 'Danger Zone',
-                desc: 'Clear all local accounting records, fixed records, and category settings. If you want to start over, or clear abnormal data, click the button below. (This action cannot be undone)',
-                button: 'Force Clear All Local Data',
-                confirmTitle: 'Are you sure you want to clear?',
-                confirmMsg: 'This will completely delete all local data on your device.\nThis action cannot be undone. Please ensure you have backed up!',
-                doubleConfirmTitle: 'Final Confirmation',
-                doubleConfirmMsg: 'Are you absolutely sure?\nThis action will permanently destroy the local database.',
-                btnConfirm: 'Clear Data',
-                btnCancel: 'Cancel',
-                btnDoubleConfirm: 'Destroy Data',
-                btnDoubleCancel: 'Let me think',
-                busyTitle: 'Clearing Data',
-                busyDetail: 'Deleting...',
-                success: '✅ All local data has been completely cleared! The system will now reload.',
-                error: 'Error occurred while clearing data: {error}'
-            },
+
             systemLogs: {
                 title: 'System Logs',
                 desc: 'Displays the latest 999 console logs to help troubleshoot connection or data synchronization issues.',
@@ -721,3 +711,4 @@ export default {
         }
     }
 };
+

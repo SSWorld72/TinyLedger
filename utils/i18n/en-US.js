@@ -70,6 +70,7 @@ export default {
         },
         gasBackup: {
             title: 'Private Cloud Sync & Backup (Google Apps Script)',
+            titleHelp: 'Click to see how to get Web App URL',
             autoSyncBadge: 'Auto Sync',
             desc: 'Enter your exclusive Backup GAS URL, and the system will securely encrypt and back up all your data to your personal Google Drive via POST request.',
             autoSyncLabel: 'Auto Sync Delay After Change',
@@ -201,6 +202,9 @@ export default {
         }
     },
     systemLogs: {
+        gmap: {
+            networkError: '[Location Search] Network request failed (may be due to fast typing or unstable connection)'
+        },
         logger: {
             deprecated: '[Logger] Warning: This legacy logger is deprecated'
         },
@@ -234,6 +238,11 @@ export default {
             errorParseCloud: 'Unable to parse cloud data. Please verify the URL is correct and the GAS script is up to date.',
             errorCloudResponse: 'Cloud returned error:',
             errorNoBackup: 'Restore failed: No backup data on the cloud yet.'
+        },
+        dangerZone: {
+            deleteSuccess: '[Database] Successfully deleted database (deleteIndexedDB): {dbName}',
+            deleteFailed: '[Database] Failed to delete database (deleteIndexedDB) {dbName}:',
+            deleteBlocked: '[Database] Deletion blocked. Please close other tabs using this database.'
         },
         errorHandler: {
             globalError: '[GlobalError] Global error caught:',
@@ -309,6 +318,32 @@ export default {
             movieValentinesDay: 'Movie Day',
             hugValentinesDay: 'Hug Day',
             easter: 'Easter'
+        }
+    },
+    ui: {
+        footer: {
+            unnamedProject: 'Unnamed Project',
+            githubProject: 'GitHub Project',
+            releaseDate: 'Released: {date}'
+        },
+        settings: {
+            dangerZone: {
+                title: 'Danger Zone',
+                desc: 'Clear all local data and settings. This action cannot be undone.',
+                button: 'Clear All Data',
+                confirmTitle: 'Warning',
+                confirmMsg: 'Are you sure you want to clear all data? This action cannot be undone.',
+                doubleConfirmTitle: 'Final Confirmation',
+                doubleConfirmMsg: 'This is the final warning. Are you really sure you want to delete all data?',
+                btnConfirm: 'Confirm Clear',
+                btnCancel: 'Cancel',
+                btnDoubleConfirm: 'I am sure',
+                btnDoubleCancel: 'Cancel',
+                busyTitle: 'Clearing Data',
+                busyDetail: 'Deleting all data, please wait...',
+                success: 'Cleared Successfully!',
+                error: 'Clear Failed: {error}'
+            }
         }
     }
 };

@@ -9,3 +9,4 @@ export const supportedLanguages = [
     { code: 'fr-FR', nativeName: 'Français' },
     { code: 'de-DE', nativeName: 'Deutsch' }
 ];
+

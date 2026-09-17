@@ -69,7 +69,8 @@ export default {
             apply: 'นำไปใช้'
         },
         gasBackup: {
-            title: 'สำรองข้อมูลคลาวด์ส่วนตัว (GAS Private Cloud)',
+            title: 'สำรองข้อมูลบนคลาวด์ส่วนตัว (GAS Private Cloud)',
+            titleHelp: 'คลิกเพื่อดูวิธีรับ Web App URL',
             autoSyncBadge: 'ซิงค์อัตโนมัติ',
             desc: 'กรอก URL Backup GAS ของคุณ ระบบจะส่งข้อมูลทั้งหมดและสำรองไปยัง Google Drive ของคุณ',
             autoSyncLabel: 'ความล่าช้าการซิงค์หลังจากเปลี่ยน',
@@ -201,6 +202,9 @@ export default {
         }
     },
     systemLogs: {
+        gmap: {
+            networkError: '[ค้นหาสถานที่] คำขอเครือข่ายล้มเหลว (อาจเกิดจากการพิมพ์เร็วเกินไปหรือการเชื่อมต่อไม่เสถียร)'
+        },
         logger: {
             deprecated: '[Logger] คำเตือน: เครื่องมือเลิกใช้แล้ว'
         },
@@ -234,6 +238,11 @@ export default {
             errorParseCloud: 'ไม่สามารถแยกวิเคราะห์คลาวด์',
             errorCloudResponse: 'ข้อผิดพลาดคลาวด์:',
             errorNoBackup: 'คืนค่าล้มเหลว: ไม่มีข้อมูลคลาวด์'
+        },
+        dangerZone: {
+            deleteSuccess: '[ฐานข้อมูล] ลบฐานข้อมูลสำเร็จแล้ว (deleteIndexedDB): {dbName}',
+            deleteFailed: '[ฐานข้อมูล] ลบฐานข้อมูลไม่สำเร็จ (deleteIndexedDB) {dbName}:',
+            deleteBlocked: '[ฐานข้อมูล] การลบถูกบล็อก โปรดปิดแท็บอื่นที่ใช้ฐานข้อมูลนี้'
         },
         errorHandler: {
             globalError: '[GlobalError] ข้อผิดพลาดทั่วโลก:',
@@ -309,6 +318,32 @@ export default {
             movieValentinesDay: 'มูฟวี่วาเลนไทน์',
             hugValentinesDay: 'ฮักวาเลนไทน์',
             easter: 'อีสเตอร์'
+        }
+    },
+    ui: {
+        footer: {
+            unnamedProject: 'โครงการที่ไม่มีชื่อ',
+            githubProject: 'โครงการ GitHub',
+            releaseDate: 'วันที่เผยแพร่: {date}'
+        },
+        settings: {
+            dangerZone: {
+                title: 'เขตอันตราย',
+                desc: 'ลบข้อมูลและการตั้งค่าในเครื่องทั้งหมด การดำเนินการนี้ไม่สามารถยกเลิกได้',
+                button: 'ลบข้อมูลทั้งหมด',
+                confirmTitle: 'คำเตือน',
+                confirmMsg: 'คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลทั้งหมด? การดำเนินการนี้ไม่สามารถยกเลิกได้',
+                doubleConfirmTitle: 'ยืนยันครั้งสุดท้าย',
+                doubleConfirmMsg: 'นี่คือคำเตือนสุดท้าย คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลทั้งหมดจริง ๆ?',
+                btnConfirm: 'ยืนยันการลบ',
+                btnCancel: 'ยกเลิก',
+                btnDoubleConfirm: 'ฉันแน่ใจ',
+                btnDoubleCancel: 'ยกเลิก',
+                busyTitle: 'กำลังลบข้อมูล',
+                busyDetail: 'กำลังลบข้อมูลทั้งหมด โปรดรอสักครู่...',
+                success: 'ลบสำเร็จ!',
+                error: 'การลบล้มเหลว: {error}'
+            }
         }
     }
 };

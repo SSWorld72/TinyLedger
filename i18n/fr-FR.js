@@ -49,6 +49,7 @@ export default {
     },
 
     logs: {
+        /* duplicate removed */
         db: {
             migrationStart: '[Base de données] Début de la migration i18n...',
             migrationSuccess: '[Base de données] Migration i18n terminée !',
@@ -73,6 +74,7 @@ export default {
             loadHolidaysFail: '[Calendrier] Impossible de charger les jours fériés...'
         },
         settings: {
+            forceClearComplete: '[Paramètres] Effacement forcé terminé, IndexedDB et {removed} éléments localStorage supprimés ({kept} paramètres système conservés)',
             accountUpdateSuccess: '[Paramètres] Comptes mis à jour (saveAccounts)',
             checkAccountDataError: '[Paramètres] Erreur de vérification des comptes :',
             backupUpdateSuccess: '[Paramètres] Paramètres Cloud enregistrés',
@@ -86,7 +88,11 @@ export default {
             checkCategoryError: '[Paramètres] Erreur de vérification des catégories :',
             checkCategoryBatchError: '[Paramètres] Erreur de vérification en lot des catégories :',
             checkTargetError: '[Paramètres] Erreur de vérification des cibles :',
-            checkTargetBatchError: '[Paramètres] Erreur de vérification en lot des cibles :'
+            checkTargetBatchError: '[Paramètres] Erreur de vérification en lot des cibles :',
+            keptKeyGmaps: 'Clé API Google Maps',
+            keptKeyGas: 'Paramètres GAS du cloud privé',
+            keptKeyI18n: 'Drapeau de migration i18n',
+            keptKeyLang: 'Paramètre de langue'
         },
         record: {
             festivalReminderError: '[Rappel de festival] Erreur :',
@@ -240,23 +246,7 @@ export default {
             top5Expenses: 'Top 5 des dépenses'
         },
         settings: {
-            dangerZone: {
-                title: 'Zone Dangereuse',
-                desc: 'Supprimer toutes les données locales de l\'appareil. Action irréversible.',
-                button: 'Effacer toutes les données locales',
-                confirmTitle: 'Confirmer la suppression ?',
-                confirmMsg: 'Toutes vos données locales seront perdues.\nAvez-vous fait une sauvegarde ?',
-                doubleConfirmTitle: 'Confirmation finale',
-                doubleConfirmMsg: 'Détruire la base de données locale ?',
-                btnConfirm: 'Oui, tout effacer',
-                btnCancel: 'Annuler',
-                btnDoubleConfirm: 'Confirmer la destruction',
-                btnDoubleCancel: 'Réfléchir',
-                busyTitle: 'Suppression en cours',
-                busyDetail: 'Effacement...',
-                success: '✅ Données locales effacées !',
-                error: 'Erreur lors de la suppression : {error}'
-            },
+
             systemLogs: {
                 title: 'Journaux Système (Logs)',
                 desc: 'Affiche les 999 derniers logs.',
@@ -721,3 +711,4 @@ export default {
         }
     }
 };
+

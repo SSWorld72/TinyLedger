@@ -49,6 +49,7 @@ export default {
     },
 
     logs: {
+
         db: {
             migrationStart: '[資料庫] 開始進行 i18n 分類代碼化遷移...',
             migrationSuccess: '[資料庫] i18n 分類代碼化遷移完成！',
@@ -73,6 +74,7 @@ export default {
             loadHolidaysFail: '[萬年曆] 無法載入該年度的國定假日資料...'
         },
         settings: {
+            forceClearComplete: '[設定] 強制清空完成，已清除 IndexedDB 及 {removed} 個 localStorage 設定項目 (保留了 {kept} 個系統設定)',
             accountUpdateSuccess: '[設定] 更新帳戶設定（saveAccounts）成功',
             checkAccountDataError: '[設定] 檢查帳戶資料發生錯誤:',
             backupUpdateSuccess: '[設定] 私有雲設定與同步狀態存檔成功',
@@ -86,7 +88,11 @@ export default {
             checkCategoryError: '[設定] 檢查類別資料發生錯誤:',
             checkCategoryBatchError: '[設定] 批次檢查類別資料發生錯誤:',
             checkTargetError: '[設定] 檢查目標資料發生錯誤:',
-            checkTargetBatchError: '[設定] 批次檢查目標資料發生錯誤:'
+            checkTargetBatchError: '[設定] 批次檢查目標資料發生錯誤:',
+            keptKeyGmaps: 'Google Maps API 金鑰',
+            keptKeyGas: '私有雲端 GAS 設定',
+            keptKeyI18n: 'i18n 遷移旗標',
+            keptKeyLang: '語系設定'
         },
         record: {
             festivalReminderError: '[重要節日提醒] 錯誤:',
@@ -240,23 +246,7 @@ export default {
             top5Expenses: '前五大支出類別'
         },
         settings: {
-            dangerZone: {
-                title: '危險區域',
-                desc: '清空本機的所有記帳紀錄、固定紀錄與類別設定。如果您想重新開始，或清除異常資料，可點擊下方按鈕。(此操作無法復原)',
-                button: '強制清空本機所有資料',
-                confirmTitle: '確定要清空嗎？',
-                confirmMsg: '這將會徹底刪除您手機/電腦內所有的本地資料。\n此操作無法復原，請確認您已經備份！',
-                doubleConfirmTitle: '最後確認',
-                doubleConfirmMsg: '真的要清空嗎？\n此操作將永久銷毀本地資料庫。',
-                btnConfirm: '我要清空',
-                btnCancel: '取消',
-                btnDoubleConfirm: '確定銷毀資料',
-                btnDoubleCancel: '再想一下',
-                busyTitle: '正在清空資料',
-                busyDetail: '刪除中...',
-                success: '✅ 本機所有資料已徹底清空！系統將自動重新載入。',
-                error: '清空資料時發生錯誤: {error}'
-            },
+
             systemLogs: {
                 title: '系統日誌 (System Logs)',
                 desc: '顯示最近 999 筆主控台日誌，方便排解連線或資料同步問題。',
@@ -721,3 +711,4 @@ export default {
         }
     }
 };
+

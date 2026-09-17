@@ -122,7 +122,7 @@ export class GasBackupModule {
                             </svg>
                         </div>
                         <input type="text" id="gas-setting-private-gas-url"
-                            class="form-control" style="padding: 0.5rem;"
+                            class="form-control w-full" style="padding: 0.5rem;"
                             placeholder="https://script.google.com/macros/s/........./exec">
                         <div class="mt-2">
                             ${createTipBox({ type: 'success', html: this.customDescriptionHtml, fontSize: '0.75rem' })}
@@ -542,7 +542,7 @@ export class GasBackupModule {
                 this.settings.lastSyncTime = twTime;
                 this.onSaveSettings();
 
-                console.log((window.t ? window.t('gasBackupModule.logBackupSuccess', { type: isAutoSync ? (window.t ? window.t('gasBackupModule.typeAuto') : 'Auto') : (window.t ? window.t('gasBackupModule.typeManual') : 'Manual'), size: fileSizeKb }) : `[Cloud Backup] ${isAutoSync ? 'Auto' : 'Manual'} backup database (backupToPrivateCloud) successful: File size ${fileSizeKb} KB`));
+                console.log(t('systemLogs.gasBackupModule.logBackupSuccess', { type: isAutoSync ? t('systemLogs.gasBackupModule.typeAuto') : t('systemLogs.gasBackupModule.typeManual'), size: fileSizeKb }));
 
                 if (!isAutoSync) {
                     let successMsg = t('utils.gasBackup.backupSuccess');

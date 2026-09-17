@@ -49,6 +49,7 @@ export default {
     },
 
     logs: {
+        /* duplicate removed */
         db: {
             migrationStart: '[データベース] i18n カテゴリコード化移行を開始します...',
             migrationSuccess: '[データベース] i18n カテゴリコード化移行が完了しました！',
@@ -73,6 +74,7 @@ export default {
             loadHolidaysFail: '[カレンダー] 該当年度の祝日データを読み込めません...'
         },
         settings: {
+            forceClearComplete: '[設定] 強制クリア完了。IndexedDB と {removed} 個の localStorage 設定項目を消去しました（{kept} 個のシステム設定を保持）',
             accountUpdateSuccess: '[設定] アカウント設定の更新 (saveAccounts) 成功',
             checkAccountDataError: '[設定] アカウントデータの確認中にエラーが発生しました:',
             backupUpdateSuccess: '[設定] プライベートクラウド設定と同期ステータスの保存成功',
@@ -86,7 +88,11 @@ export default {
             checkCategoryError: '[設定] カテゴリデータの確認中にエラーが発生しました:',
             checkCategoryBatchError: '[設定] カテゴリデータの一括確認中にエラーが発生しました:',
             checkTargetError: '[設定] ターゲットデータの確認中にエラーが発生しました:',
-            checkTargetBatchError: '[設定] ターゲットデータの一括確認中にエラーが発生しました:'
+            checkTargetBatchError: '[設定] ターゲットデータの一括確認中にエラーが発生しました:',
+            keptKeyGmaps: 'Google Maps API キー',
+            keptKeyGas: 'プライベートクラウド GAS 設定',
+            keptKeyI18n: 'i18n 移行フラグ',
+            keptKeyLang: '言語設定'
         },
         record: {
             festivalReminderError: '[重要なお祭りリマインダー] エラー:',
@@ -240,23 +246,7 @@ export default {
             top5Expenses: '上位5つの支出カテゴリー'
         },
         settings: {
-            dangerZone: {
-                title: '危険領域 (Danger Zone)',
-                desc: 'ローカルのすべての記録、固定ルール、カテゴリー設定をクリアします。最初からやり直したい場合や、異常なデータを消去したい場合は、下のボタンをクリックしてください。(この操作は元に戻せません)',
-                button: 'ローカルのすべてのデータを強制的にクリア',
-                confirmTitle: '本当にクリアしますか？',
-                confirmMsg: 'これにより、スマートフォン/コンピューター内のすべてのローカルデータが完全に削除されます。\nこの操作は元に戻せません。バックアップしたことを確認してください！',
-                doubleConfirmTitle: '最終確認',
-                doubleConfirmMsg: '本当にクリアしますか？\nこの操作によりローカルデータベースが永久に破棄されます。',
-                btnConfirm: 'クリアする',
-                btnCancel: 'キャンセル',
-                btnDoubleConfirm: 'データを破棄する',
-                btnDoubleCancel: '考え直す',
-                busyTitle: 'データをクリア中',
-                busyDetail: '削除しています...',
-                success: '✅ ローカルのすべてのデータが完全にクリアされました！システムは自動的に再読み込みされます。',
-                error: 'データをクリアする際にエラーが発生しました: {error}'
-            },
+
             systemLogs: {
                 title: 'システムログ (System Logs)',
                 desc: '最近の 999 件のコンソールログを表示します。接続やデータ同期の問題をトラブルシューティングするのに役立ちます。',
@@ -721,3 +711,4 @@ export default {
         }
     }
 };
+

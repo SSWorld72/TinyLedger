@@ -1629,32 +1629,42 @@ export function setupSettings(state, db, renderApp) {
         });
     }
 
-    // Initialize Danger Zone - 使用 DangerZoneModule 直接掛載，自訂清除邏輯以同時清除 IndexedDB 與 localStorage
+    // Initialize Danger Zone - Use DangerZoneModule directly to mount, with custom logic to clear IndexedDB and localStorage
     const dangerZoneContainer = document.getElementById('danger-zone-module');
     if (dangerZoneContainer) {
         new DangerZoneModule({
             container: dangerZoneContainer,
-            description: window.t('ui.settings.dangerZone.desc'),
             onClear: async () => {
-                // 先關閉 IndexedDB 連線
+                // Close IndexedDB connection first
                 await db.closeConnection();
-                // 刪除 IndexedDB
+                // Delete IndexedDB
                 await deleteIndexedDB('TinyLedgerDB');
                 
-                // 定義不應被強制清空的設定 (Google Maps API, GAS 雲端設定, i18n 遷移標記)
+                // Define keys that should not be forcefully cleared (Google Maps API, GAS Cloud Settings, i18n migration flag, language setting)
                 const keysToKeep = [
                     'tinyledger_gmaps_api_key',
                     'tinyledger_gas_settings',
-                    'tinyledger_i18n_migrated'
+                    'tinyledger_i18n_migrated',
+                    'tinyledger_lang'
                 ];
                 
-                // 清除所有 tinyledger_ 開頭的 localStorage 設定，但保留上述金鑰與連線設定
+                // Clear all localStorage settings starting with tinyledger_, but keep the keys defined above
                 const keysToRemove = Object.keys(localStorage).filter(k => 
                     k.startsWith('tinyledger_') && !keysToKeep.includes(k)
                 );
                 keysToRemove.forEach(k => localStorage.removeItem(k));
                 
-                console.log(`[設定] 強制清空完成，已清除 IndexedDB 及 ${keysToRemove.length} 個 localStorage 設定項目 (保留了 ${keysToKeep.length} 個系統設定)`);
+                const keptKeyLabels = {
+                    'tinyledger_gmaps_api_key': window.t('logs.settings.keptKeyGmaps'),
+                    'tinyledger_gas_settings':  window.t('logs.settings.keptKeyGas'),
+                    'tinyledger_i18n_migrated': window.t('logs.settings.keptKeyI18n'),
+                    'tinyledger_lang':          window.t('logs.settings.keptKeyLang')
+                };
+                const keptLabels = keysToKeep.map(k => keptKeyLabels[k] || k).join(', ');
+                console.log(window.t('logs.settings.forceClearComplete', { 
+                    removed: keysToRemove.length, 
+                    kept: keysToKeep.length 
+                }) + ` (${keptLabels})`);
             }
         });
     }

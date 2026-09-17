@@ -20,6 +20,7 @@
  */
 // Removed dependency on specific project store.js, changed to dynamic resolution
 // import { settings } from '../../js/store.js';
+import { t } from './shared-i18n.js';
 
 // === System Logs Tracker ===
 const maxLogs = 999;
@@ -33,12 +34,17 @@ try {
 window.appLogs = storedLogs;
 
 const captureLog = (level, ...args) => {
-    const msg = args.map(a => {
+    let msg = args.map(a => {
         if (a instanceof Error) {
             return a.message + (a.stack ? '\n' + a.stack : '');
         }
         return (typeof a === 'object' ? JSON.stringify(a) : String(a));
     }).join(' ');
+
+    // Intercept specific noisy third-party errors for translation
+    if (msg.includes('<gmp-place-autocomplete>: Encountered a network request error')) {
+        msg = t('systemLogs.gmap.networkError');
+    }
     const now = new Date();
     const dateStr = now.getFullYear() + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + String(now.getDate()).padStart(2, '0');
     const timeStr = now.toLocaleTimeString('zh-TW', { hour12: false });

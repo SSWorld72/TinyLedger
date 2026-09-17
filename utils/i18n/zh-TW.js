@@ -70,6 +70,7 @@ export default {
         },
         gasBackup: {
             title: '專屬私有雲端備份 (GAS Private Cloud)',
+            titleHelp: '點擊查看如何取得 Web App URL',
             autoSyncBadge: '自動同步',
             desc: '填寫你專屬的 Backup GAS 網址，系統會透過安全的 POST 請求將你的所有資料加密傳輸並備份到你自己的 Google 雲端硬碟中。',
             autoSyncLabel: '變動後自動同步延遲',
@@ -201,6 +202,9 @@ export default {
         }
     },
     systemLogs: {
+        gmap: {
+            networkError: '[地點搜尋] 網路請求失敗 (可能是打字過快或網路連線不穩導致)'
+        },
         logger: {
             deprecated: '[Logger] 警告：此舊版日誌工具已被棄用'
         },
@@ -234,6 +238,11 @@ export default {
             errorParseCloud: '無法解析雲端資料。請確認網址正確且 GAS 腳本已更新至最新版。',
             errorCloudResponse: '雲端回傳錯誤：',
             errorNoBackup: '還原失敗：雲端尚無備份資料。'
+        },
+        dangerZone: {
+            deleteSuccess: '[資料庫] 成功刪除資料庫 (deleteIndexedDB): {dbName}',
+            deleteFailed: '[資料庫] 刪除資料庫失敗 (deleteIndexedDB) {dbName}:',
+            deleteBlocked: '[資料庫] 刪除被阻止。請關閉使用此資料庫的其他分頁。'
         },
         errorHandler: {
             globalError: '[GlobalError] 捕獲全域錯誤:',
@@ -309,6 +318,32 @@ export default {
             movieValentinesDay: '電影情人節',
             hugValentinesDay: '擁抱情人節',
             easter: '復活節'
+        }
+    },
+    ui: {
+        footer: {
+            unnamedProject: '未命名專案',
+            githubProject: '專案原始碼',
+            releaseDate: '發布日期：{date}'
+        },
+        settings: {
+            dangerZone: {
+                title: '危險區域 (Danger Zone)',
+                desc: '清空本機的所有資料與設定。此操作無法復原。',
+                button: '清除所有資料',
+                confirmTitle: '警告',
+                confirmMsg: '您確定要清除所有資料嗎？此操作無法復原。',
+                doubleConfirmTitle: '最終確認',
+                doubleConfirmMsg: '這是最後的警告。您真的確定要刪除所有資料嗎？',
+                btnConfirm: '確定清除',
+                btnCancel: '取消',
+                btnDoubleConfirm: '我確定要清除',
+                btnDoubleCancel: '取消',
+                busyTitle: '資料清除中',
+                busyDetail: '正在刪除所有資料，請稍候...',
+                success: '清除成功！',
+                error: '清除失敗：{error}'
+            }
         }
     }
 };

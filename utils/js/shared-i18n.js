@@ -23,7 +23,11 @@ import fallbackDict from '../i18n/zh-TW.js';
 export function t(key, params = {}) {
     // 1. Delegate to the global i18n engine if it exists
     if (typeof window !== 'undefined' && typeof window.t === 'function') {
-        return window.t(key, params);
+        const result = window.t(key, params);
+        // If the global engine returns something other than the key itself, it means it found a translation
+        if (result !== key) {
+            return result;
+        }
     }
     
     // 2. Fallback: Parse the local default Chinese dictionary

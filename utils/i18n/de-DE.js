@@ -14,7 +14,7 @@ export default {
                 millions: 'Mio',
                 thousands: 'Tsd',
                 hundredMillions: '100M',
-                tenThousands: '10k'
+                tenThousands: '10T'
             }
         },
         uiBlocker: {
@@ -70,6 +70,7 @@ export default {
         },
         gasBackup: {
             title: 'Privates Cloud-Backup (GAS Private Cloud)',
+            titleHelp: 'Klicken Sie hier, um zu sehen, wie Sie die Web App URL erhalten',
             autoSyncBadge: 'Auto-Sync',
             desc: 'Geben Sie Ihre eigene Backup-GAS-URL ein. Das System sichert Ihre Daten in Google Drive.',
             autoSyncLabel: 'Verzögerung für Auto-Sync nach Änderung',
@@ -201,6 +202,9 @@ export default {
         }
     },
     systemLogs: {
+        gmap: {
+            networkError: '[Ortssuche] Netzwerkabfrage fehlgeschlagen (möglicherweise durch zu schnelles Tippen oder instabile Verbindung)'
+        },
         logger: {
             deprecated: '[Logger] Warnung: Veraltetes Tool'
         },
@@ -234,6 +238,11 @@ export default {
             errorParseCloud: 'Cloud konnte nicht geparst werden',
             errorCloudResponse: 'Cloud-Fehler:',
             errorNoBackup: 'Fehler: Keine Cloud-Daten'
+        },
+        dangerZone: {
+            deleteSuccess: '[Datenbank] Datenbank erfolgreich gelöscht (deleteIndexedDB): {dbName}',
+            deleteFailed: '[Datenbank] Fehler beim Löschen der Datenbank (deleteIndexedDB) {dbName}:',
+            deleteBlocked: '[Datenbank] Löschen blockiert. Bitte schließen Sie andere Tabs, die diese Datenbank verwenden.'
         },
         errorHandler: {
             globalError: '[GlobalError] Globaler Fehler:',
@@ -309,6 +318,32 @@ export default {
             movieValentinesDay: 'Movie Day',
             hugValentinesDay: 'Hug Day',
             easter: 'Ostern'
+        }
+    },
+    ui: {
+        footer: {
+            unnamedProject: 'Unbenanntes Projekt',
+            githubProject: 'GitHub Projekt',
+            releaseDate: 'Veröffentlicht: {date}'
+        },
+        settings: {
+            dangerZone: {
+                title: 'Gefahrenzone',
+                desc: 'Löschen Sie alle lokalen Daten und Einstellungen. Diese Aktion kann nicht rückgängig gemacht werden.',
+                button: 'Alle Daten löschen',
+                confirmTitle: 'Warnung',
+                confirmMsg: 'Möchten Sie wirklich alle Daten löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
+                doubleConfirmTitle: 'Letzte Bestätigung',
+                doubleConfirmMsg: 'Dies ist die letzte Warnung. Sind Sie wirklich sicher, dass Sie alle Daten löschen möchten?',
+                btnConfirm: 'Löschen bestätigen',
+                btnCancel: 'Abbrechen',
+                btnDoubleConfirm: 'Ich bin sicher',
+                btnDoubleCancel: 'Abbrechen',
+                busyTitle: 'Daten werden gelöscht',
+                busyDetail: 'Alle Daten werden gelöscht, bitte warten...',
+                success: 'Erfolgreich gelöscht!',
+                error: 'Löschen fehlgeschlagen: {error}'
+            }
         }
     }
 };

@@ -70,7 +70,8 @@ export default {
         },
         gasBackup: {
             title: 'निजी क्लाउड बैकअप (GAS Private Cloud)',
-            autoSyncBadge: 'स्वतः सिंक',
+            titleHelp: 'वेब ऐप URL प्राप्त करने का तरीका देखने के लिए क्लिक करें',
+            autoSyncBadge: 'ऑटो सिंक',
             desc: 'अपना कस्टम बैकअप GAS URL दर्ज करें, और सिस्टम एक सुरक्षित POST अनुरोध के माध्यम से आपके सभी डेटा को एन्क्रिप्ट और Google ड्राइव में बैकअप करेगा।',
             autoSyncLabel: 'बदलाव के बाद स्वतः सिंक में देरी',
             autoSyncOff: 'स्वतः सिंक बंद करें',
@@ -201,6 +202,9 @@ export default {
         }
     },
     systemLogs: {
+        gmap: {
+            networkError: '[स्थान खोज] नेटवर्क अनुरोध विफल (तेज़ टाइपिंग या अस्थिर कनेक्शन के कारण हो सकता है)'
+        },
         logger: {
             deprecated: '[Logger] चेतावनी: उपकरण अप्रचलित'
         },
@@ -234,6 +238,11 @@ export default {
             errorParseCloud: 'क्लाउड को पार्स नहीं किया जा सका',
             errorCloudResponse: 'क्लाउड त्रुटि:',
             errorNoBackup: 'पुनर्स्थापना विफल: कोई क्लाउड डेटा नहीं'
+        },
+        dangerZone: {
+            deleteSuccess: '[डेटाबेस] डेटाबेस सफलतापूर्वक हटा दिया गया (deleteIndexedDB): {dbName}',
+            deleteFailed: '[डेटाबेस] डेटाबेस हटाने में विफल (deleteIndexedDB) {dbName}:',
+            deleteBlocked: '[डेटाबेस] हटाना अवरोधित। कृपया इस डेटाबेस का उपयोग कर रहे अन्य टैब बंद करें।'
         },
         errorHandler: {
             globalError: '[GlobalError] वैश्विक त्रुटि:',
@@ -309,6 +318,32 @@ export default {
             movieValentinesDay: 'मूवी वैलेंटाइन डे',
             hugValentinesDay: 'हग वैलेंटाइन डे',
             easter: 'ईस्टर'
+        }
+    },
+    ui: {
+        footer: {
+            unnamedProject: 'अनाम प्रोजेक्ट',
+            githubProject: 'GitHub प्रोजेक्ट',
+            releaseDate: 'रिलीज़ तिथि: {date}'
+        },
+        settings: {
+            dangerZone: {
+                title: 'खतरा क्षेत्र',
+                desc: 'सभी स्थानीय डेटा और सेटिंग्स को साफ़ करें। इस क्रिया को पूर्ववत नहीं किया जा सकता है।',
+                button: 'सभी डेटा साफ़ करें',
+                confirmTitle: 'चेतावनी',
+                confirmMsg: 'क्या आप वाकई सभी डेटा साफ़ करना चाहते हैं? इस क्रिया को पूर्ववत नहीं किया जा सकता है।',
+                doubleConfirmTitle: 'अंतिम पुष्टि',
+                doubleConfirmMsg: 'यह अंतिम चेतावनी है। क्या आप वाकई सभी डेटा हटाना चाहते हैं?',
+                btnConfirm: 'हटाने की पुष्टि करें',
+                btnCancel: 'रद्द करें',
+                btnDoubleConfirm: 'मुझे यकीन है',
+                btnDoubleCancel: 'रद्द करें',
+                busyTitle: 'डेटा साफ़ हो रहा है',
+                busyDetail: 'सभी डेटा हटाया जा रहा है, कृपया प्रतीक्षा करें...',
+                success: 'सफलतापूर्वक साफ़ हो गया!',
+                error: 'साफ़ करने में विफल: {error}'
+            }
         }
     }
 };

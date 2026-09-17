@@ -10,7 +10,7 @@ export default {
         },
         charts: {
             format: {
-                billions: '10억',
+                billions: '십억',
                 millions: '백만',
                 thousands: '천',
                 hundredMillions: '억',
@@ -70,6 +70,7 @@ export default {
         },
         gasBackup: {
             title: '전용 프라이빗 클라우드 백업 (GAS Private Cloud)',
+            titleHelp: 'Web App URL을 얻는 방법을 보려면 클릭하세요',
             autoSyncBadge: '자동 동기화',
             desc: '당신만의 전용 Backup GAS URL을 입력하면, 시스템이 안전한 POST 요청을 통해 모든 데이터를 암호화하여 개인 Google 드라이브에 백업합니다.',
             autoSyncLabel: '변경 후 자동 동기화 지연',
@@ -201,6 +202,9 @@ export default {
         }
     },
     systemLogs: {
+        gmap: {
+            networkError: '[장소 검색] 네트워크 요청 실패 (입력이 너무 빠르거나 연결이 불안정할 수 있습니다)'
+        },
         logger: {
             deprecated: '[Logger] 경고: 이 이전 버전의 로그 도구는 더 이상 사용되지 않습니다.'
         },
@@ -234,6 +238,11 @@ export default {
             errorParseCloud: '클라우드 데이터를 분석할 수 없습니다. URL이 올바르고 GAS 스크립트가 최신 버전으로 업데이트되었는지 확인해 주세요.',
             errorCloudResponse: '클라우드 반환 오류:',
             errorNoBackup: '복원 실패: 클라우드에 백업 데이터가 없습니다.'
+        },
+        dangerZone: {
+            deleteSuccess: '[데이터베이스] 데이터베이스 삭제 성공 (deleteIndexedDB): {dbName}',
+            deleteFailed: '[데이터베이스] 데이터베이스 삭제 실패 (deleteIndexedDB) {dbName}:',
+            deleteBlocked: '[데이터베이스] 삭제가 차단되었습니다. 이 데이터베이스를 사용하는 다른 탭을 닫아주세요.'
         },
         errorHandler: {
             globalError: '[GlobalError] 글로벌 오류 캡처:',
@@ -309,6 +318,32 @@ export default {
             movieValentinesDay: '무비 데이',
             hugValentinesDay: '허그 데이',
             easter: '부활절'
+        }
+    },
+    ui: {
+        footer: {
+            unnamedProject: '이름 없는 프로젝트',
+            githubProject: 'GitHub 프로젝트',
+            releaseDate: '출시일: {date}'
+        },
+        settings: {
+            dangerZone: {
+                title: '위험 구역',
+                desc: '모든 로컬 데이터 및 설정을 지웁니다. 이 작업은 되돌릴 수 없습니다.',
+                button: '모든 데이터 지우기',
+                confirmTitle: '경고',
+                confirmMsg: '정말로 모든 데이터를 지우시겠습니까? 이 작업은 되돌릴 수 없습니다.',
+                doubleConfirmTitle: '최종 확인',
+                doubleConfirmMsg: '이것은 마지막 경고입니다. 정말로 모든 데이터를 삭제하시겠습니까?',
+                btnConfirm: '지우기 확인',
+                btnCancel: '취소',
+                btnDoubleConfirm: '확실합니다',
+                btnDoubleCancel: '취소',
+                busyTitle: '데이터 지우는 중',
+                busyDetail: '모든 데이터를 삭제하고 있습니다. 잠시만 기다려 주세요...',
+                success: '성공적으로 지워졌습니다!',
+                error: '지우기 실패: {error}'
+            }
         }
     }
 };

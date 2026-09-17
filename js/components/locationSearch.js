@@ -41,12 +41,7 @@ export function initLocationSearch() {
         });
     }
 
-    // Scroll into view on focus to avoid mobile keyboard covering the autocomplete dropdown
-    inputLocation.addEventListener('focusin', () => {
-        setTimeout(() => {
-            inputLocation.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 300); // Wait for keyboard to pop up
-    });
+
 
     const apiKey = localStorage.getItem('tinyledger_gmaps_api_key');
     if (!apiKey) return;
@@ -68,7 +63,7 @@ export function initLocationSearch() {
             try {
                 if (typeof place.fetchFields === 'function') {
                     // Fetch fields that might be used by both old and new versions
-                    await place.fetchFields({ fields: ['displayName', 'formattedAddress', 'name', 'formatted_address'] });
+                    await place.fetchFields({ fields: ['displayName', 'formattedAddress'] });
                 }
             } catch (err) {
                 console.warn(window.t('logs.location.fetchPlaceInfoFail'), err);

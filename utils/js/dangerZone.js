@@ -1,5 +1,6 @@
 import { showConfirmModal } from './uiDialogs.js';
 import { createTipBox } from './tipBox.js';
+import { t } from './shared-i18n.js';
 
 /**
  * ============================================================================
@@ -24,15 +25,15 @@ export function deleteIndexedDB(dbName) {
     return new Promise((resolve, reject) => {
         const request = indexedDB.deleteDatabase(dbName);
         request.onsuccess = () => {
-            console.log(`[Database] Database ${dbName} deleted successfully`);
+            console.log(t('systemLogs.dangerZone.deleteSuccess', { dbName }));
             resolve();
         };
         request.onerror = (e) => {
-            console.error(`[Database] Failed to delete database ${dbName}:`, e);
+            console.error(t('systemLogs.dangerZone.deleteFailed', { dbName }), e);
             reject(new Error("Failed to delete database"));
         };
         request.onblocked = () => {
-            console.warn(`[Database] Deletion blocked. Please close other tabs using this database.`);
+            console.warn(t('systemLogs.dangerZone.deleteBlocked'));
             reject(new Error("Deletion blocked, please close other tabs"));
         };
     });
@@ -60,13 +61,21 @@ export class DangerZoneModule {
     constructor(config) {
         this.container = config.container;
         this.config = {
-            title: config.title || t('ui.settings.dangerZone.title'),
-            description: config.description || t('ui.settings.dangerZone.desc'),
-            buttonText: config.buttonText || t('ui.settings.dangerZone.button'),
-            confirmTitle: config.confirmTitle || t('ui.settings.dangerZone.confirmTitle'),
-            confirmMessage: config.confirmMessage || t('ui.settings.dangerZone.confirmMsg'),
-            doubleConfirmTitle: config.doubleConfirmTitle || t('ui.settings.dangerZone.doubleConfirmTitle'),
-            doubleConfirmMessage: config.doubleConfirmMessage || t('ui.settings.dangerZone.doubleConfirmMsg'),
+            title: config.title || t('ui.settings.dangerZone.title', { default: 'Danger Zone' }),
+            description: config.description || t('ui.settings.dangerZone.desc', { default: 'Clear all local data and settings. This action cannot be undone.' }),
+            buttonText: config.buttonText || t('ui.settings.dangerZone.button', { default: 'Clear All Data' }),
+            confirmTitle: config.confirmTitle || t('ui.settings.dangerZone.confirmTitle', { default: 'Warning' }),
+            confirmMessage: config.confirmMessage || t('ui.settings.dangerZone.confirmMsg', { default: 'Are you sure you want to clear all data? This action cannot be undone.' }),
+            doubleConfirmTitle: config.doubleConfirmTitle || t('ui.settings.dangerZone.doubleConfirmTitle', { default: 'Final Confirmation' }),
+            doubleConfirmMessage: config.doubleConfirmMessage || t('ui.settings.dangerZone.doubleConfirmMsg', { default: 'This is the final warning. Are you really sure you want to delete all data?' }),
+            btnConfirm: config.btnConfirm || t('ui.settings.dangerZone.btnConfirm', { default: 'Confirm Clear' }),
+            btnCancel: config.btnCancel || t('ui.settings.dangerZone.btnCancel', { default: 'Cancel' }),
+            btnDoubleConfirm: config.btnDoubleConfirm || t('ui.settings.dangerZone.btnDoubleConfirm', { default: 'I am sure' }),
+            btnDoubleCancel: config.btnDoubleCancel || t('ui.settings.dangerZone.btnDoubleCancel', { default: 'Cancel' }),
+            busyTitle: config.busyTitle || t('ui.settings.dangerZone.busyTitle', { default: 'Clearing Data' }),
+            busyDetail: config.busyDetail || t('ui.settings.dangerZone.busyDetail', { default: 'Deleting all data, please wait...' }),
+            successMsg: config.successMsg || t('ui.settings.dangerZone.success', { default: 'Cleared Successfully!' }),
+            errorMsg: config.errorMsg || t('ui.settings.dangerZone.error', { default: 'Clear Failed: {error}' }),
             onClear: config.onClear,
             setBusy: config.setBusy || (() => { })
         };
@@ -121,8 +130,8 @@ export class DangerZoneModule {
                 title: this.config.confirmTitle,
                 message: this.config.confirmMessage,
                 isDanger: true,
-                confirmText: t('ui.settings.dangerZone.btnConfirm'),
-                cancelText: t('ui.settings.dangerZone.btnCancel'),
+                confirmText: this.config.btnConfirm,
+                cancelText: this.config.btnCancel,
                 icon: '⚠️'
             });
 
@@ -133,8 +142,8 @@ export class DangerZoneModule {
                 title: this.config.doubleConfirmTitle,
                 message: this.config.doubleConfirmMessage,
                 isDanger: true,
-                confirmText: t('ui.settings.dangerZone.btnDoubleConfirm'),
-                cancelText: t('ui.settings.dangerZone.btnDoubleCancel'),
+                confirmText: this.config.btnDoubleConfirm,
+                cancelText: this.config.btnDoubleCancel,
                 icon: '🔥'
             });
 
@@ -143,8 +152,8 @@ export class DangerZoneModule {
             // Execute clear logic
             if (this.config.setBusy) {
                 this.config.setBusy(true, { 
-                    title: t('ui.settings.dangerZone.busyTitle'), 
-                    detail: t('ui.settings.dangerZone.busyDetail') 
+                    title: this.config.busyTitle, 
+                    detail: this.config.busyDetail 
                 });
             }
 
@@ -155,13 +164,13 @@ export class DangerZoneModule {
 
                 // Reload page after successful clear to reflect latest state
                 if (this.config.setBusy) this.config.setBusy(false);
-                alert(t('ui.settings.dangerZone.success'));
+                alert(this.config.successMsg);
                 window.location.reload();
 
             } catch (error) {
                 console.error('[DangerZone] Failed to clear data:', error);
                 if (this.config.setBusy) this.config.setBusy(false);
-                alert(t('ui.settings.dangerZone.error').replace('{error}', error.message));
+                alert(this.config.errorMsg.replace('{error}', error.message));
             }
         });
     }

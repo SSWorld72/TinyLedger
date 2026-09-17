@@ -70,6 +70,7 @@ export default {
         },
         gasBackup: {
             title: '専用プライベートクラウドバックアップ (GAS Private Cloud)',
+            titleHelp: 'クリックしてWeb App URLの取得方法を確認',
             autoSyncBadge: '自動同期',
             desc: 'あなた専用の Backup GAS URL を入力すると、システムは安全な POST リクエストを通じてすべてのデータを暗号化し、個人の Google ドライブにバックアップします。',
             autoSyncLabel: '変更後の自動同期遅延',
@@ -201,6 +202,9 @@ export default {
         }
     },
     systemLogs: {
+        gmap: {
+            networkError: '[場所検索] ネットワークリクエストに失敗しました (入力が速すぎるか、接続が不安定な可能性があります)'
+        },
         logger: {
             deprecated: '[Logger] 警告：この旧バージョンのログツールは非推奨になりました'
         },
@@ -234,6 +238,11 @@ export default {
             errorParseCloud: 'クラウドデータを解析できません。URL が正しく、GAS スクリプトが最新バージョンに更新されていることを確認してください。',
             errorCloudResponse: 'クラウドの応答エラー：',
             errorNoBackup: '復元失敗: クラウドにバックアップデータがありません。'
+        },
+        dangerZone: {
+            deleteSuccess: '[データベース] データベースの削除に成功しました (deleteIndexedDB): {dbName}',
+            deleteFailed: '[データベース] データベースの削除に失敗しました (deleteIndexedDB) {dbName}:',
+            deleteBlocked: '[データベース] 削除がブロックされました。このデータベースを使用している他のタブを閉じてください。'
         },
         errorHandler: {
             globalError: '[GlobalError] グローバルエラーをキャッチ:',
@@ -309,6 +318,32 @@ export default {
             movieValentinesDay: 'ムービーデー',
             hugValentinesDay: 'ハグデー',
             easter: '復活祭'
+        }
+    },
+    ui: {
+        footer: {
+            unnamedProject: '無名プロジェクト',
+            githubProject: 'GitHubプロジェクト',
+            releaseDate: 'リリース日：{date}'
+        },
+        settings: {
+            dangerZone: {
+                title: 'デンジャーゾーン',
+                desc: 'ローカルのすべてのデータと設定を消去します。この操作は元に戻せません。',
+                button: 'すべてのデータを消去',
+                confirmTitle: '警告',
+                confirmMsg: '本当にすべてのデータを消去しますか？この操作は元に戻せません。',
+                doubleConfirmTitle: '最終確認',
+                doubleConfirmMsg: 'これは最後の警告です。本当にすべてのデータを削除してよろしいですか？',
+                btnConfirm: '消去する',
+                btnCancel: 'キャンセル',
+                btnDoubleConfirm: '本当に消去する',
+                btnDoubleCancel: 'キャンセル',
+                busyTitle: 'データ消去中',
+                busyDetail: 'すべてのデータを削除しています。お待ちください...',
+                success: '消去に成功しました！',
+                error: '消去に失敗しました：{error}'
+            }
         }
     }
 };
