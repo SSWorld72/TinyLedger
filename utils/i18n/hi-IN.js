@@ -1,4 +1,4 @@
-export default {
+﻿export default {
     utils: {
         backup: {
             start: 'बैकअप शुरू करें',
@@ -74,10 +74,11 @@ export default {
             autoSyncBadge: 'ऑटो सिंक',
             desc: 'अपना कस्टम बैकअप GAS URL दर्ज करें, और सिस्टम एक सुरक्षित POST अनुरोध के माध्यम से आपके सभी डेटा को एन्क्रिप्ट और Google ड्राइव में बैकअप करेगा।',
             autoSyncLabel: 'बदलाव के बाद स्वतः सिंक में देरी',
+            autoSyncHint: 'Set a longer delay (3 mins recommended) to batch multiple records into a single upload, preventing connection rejections from Google due to rate limiting.',
             autoSyncOff: 'स्वतः सिंक बंद करें',
             sec5: '5 सेकंड',
             min1: '1 मिनट',
-            min3: '3 मिनट',
+            min3: '3 मिनट (Recommended)',
             min5: '5 मिनट',
             min10: '10 मिनट',
             min15: '15 मिनट',

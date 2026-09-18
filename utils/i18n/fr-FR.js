@@ -1,4 +1,4 @@
-export default {
+﻿export default {
     utils: {
         backup: {
             start: 'Démarrer la sauvegarde',
@@ -74,10 +74,11 @@ export default {
             autoSyncBadge: 'Sync Auto',
             desc: 'Entrez votre URL GAS de sauvegarde personnalisée. Le système sauvegardera vos données sur Google Drive.',
             autoSyncLabel: 'Délai de synchronisation après modification',
+            autoSyncHint: 'Set a longer delay (3 mins recommended) to batch multiple records into a single upload, preventing connection rejections from Google due to rate limiting.',
             autoSyncOff: 'Désactiver la synchro auto',
             sec5: '5 secondes',
             min1: '1 minute',
-            min3: '3 minutes',
+            min3: '3 minutes (Recommended)',
             min5: '5 minutes',
             min10: '10 minutes',
             min15: '15 minutes',

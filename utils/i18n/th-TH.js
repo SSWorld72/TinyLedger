@@ -1,4 +1,4 @@
-export default {
+﻿export default {
     utils: {
         backup: {
             start: 'เริ่มสำรองข้อมูล',
@@ -74,10 +74,11 @@ export default {
             autoSyncBadge: 'ซิงค์อัตโนมัติ',
             desc: 'กรอก URL Backup GAS ของคุณ ระบบจะส่งข้อมูลทั้งหมดและสำรองไปยัง Google Drive ของคุณ',
             autoSyncLabel: 'ความล่าช้าการซิงค์หลังจากเปลี่ยน',
+            autoSyncHint: 'Set a longer delay (3 mins recommended) to batch multiple records into a single upload, preventing connection rejections from Google due to rate limiting.',
             autoSyncOff: 'ปิดการซิงค์อัตโนมัติ',
             sec5: '5 วินาที',
             min1: '1 นาที',
-            min3: '3 นาที',
+            min3: '3 นาที (Recommended)',
             min5: '5 นาที',
             min10: '10 นาที',
             min15: '15 นาที',

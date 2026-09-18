@@ -2,7 +2,7 @@
 
 > 🇹🇼 若要查看繁體中文版，請參閱 [CHANGELOG.zh-TW.md](CHANGELOG.zh-TW.md)
 
-## 2026-09-17 (v1.5.7.0 - System Translation & Mobile UI Fixes)
+## 2026-09-18 (v1.5.7.1 - System Translation & Mobile UI Fixes)
 ### Fixes
 - **System Log Translation Fix**: Resolved a conflict in the multilingual dictionary structure that prevented "Force Clear Data" logs from being properly translated and outputted.
 - **Mobile Location Input Jump**: Fixed an issue on mobile devices where clicking the location search input would forcefully push the screen upwards, hiding the input box out of view.

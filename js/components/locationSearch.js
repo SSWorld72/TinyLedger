@@ -117,6 +117,23 @@ export function initLocationSearch() {
                 e.preventDefault();
             }
         });
+
+        // Fix iOS Safari over-scroll bug: when <gmp-place-autocomplete> triggers full-screen mode 
+        // and keyboard pops up, it causes the page to scroll up and hides the search bar.
+        inputLocation.addEventListener('focusin', () => {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            if (isIOS) {
+                // Wait for the keyboard to appear, then force reset the scroll to keep the search bar at the top
+                const resetScroll = () => {
+                    window.scrollTo(0, 0);
+                    document.body.scrollTop = 0;
+                    document.documentElement.scrollTop = 0;
+                };
+                // Set two timeouts to ensure the position is corrected during and after the keyboard animation
+                setTimeout(resetScroll, 100);
+                setTimeout(resetScroll, 300);
+            }
+        });
     };
 
     // Dynamically load Google Maps JavaScript API script

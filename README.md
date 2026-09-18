@@ -5,7 +5,7 @@
 This is a lightweight, privacy-focused, pure local-first bookkeeping tool (PWA) that I built for myself.
 It not only combines the Farmer's Almanac with advanced financial analysis, but the best part is that it requires no backend server installation. Just open the browser and use it smoothly anytime, anywhere!
 
-- **Current Version**: `v1.5.7.0` (2026-09-17)
+- **Current Version**: `v1.5.7.1` (2026-09-18)
 - **Live Demo (GitHub Pages)**: [https://ssworld72.github.io/TinyLedger/](https://ssworld72.github.io/TinyLedger/)
 
 ---

@@ -1,4 +1,4 @@
-export default {
+﻿export default {
     utils: {
         backup: {
             start: 'バックアップ開始',
@@ -74,10 +74,11 @@ export default {
             autoSyncBadge: '自動同期',
             desc: 'あなた専用の Backup GAS URL を入力すると、システムは安全な POST リクエストを通じてすべてのデータを暗号化し、個人の Google ドライブにバックアップします。',
             autoSyncLabel: '変更後の自動同期遅延',
+            autoSyncHint: 'Set a longer delay (3 mins recommended) to batch multiple records into a single upload, preventing connection rejections from Google due to rate limiting.',
             autoSyncOff: '自動同期をオフにする',
             sec5: '5 秒',
             min1: '1 分',
-            min3: '3 分',
+            min3: '3 分 (Recommended)',
             min5: '5 分',
             min10: '10 分',
             min15: '15 分',

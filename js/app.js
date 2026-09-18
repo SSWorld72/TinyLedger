@@ -161,7 +161,7 @@ if (window.__APP_INITIALIZED__) {
         initGlobalFooter({
             containerId: 'app-container',
             appName: window.t('ui.app.fullName') || window.t('ui.app.name'),
-            version: 'v1.5.7.0',
+            version: 'v1.5.7.1',
             copyrightYear: '2025-2026',
             githubUrl: 'https://github.com/SSWorld72/TinyLedger'
         });

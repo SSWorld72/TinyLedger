@@ -85,7 +85,8 @@ export class GasBackupModule {
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3 p-3 rounded-lg border" style="background: var(--bg-color); border-color: var(--border-color);">
                     <div>
-                        <label class="block text-xs font-medium text-muted mb-1">${t('utils.gasBackup.autoSyncLabel')}</label>
+                        <label class="block text-xs font-medium text-main mb-1">${t('utils.gasBackup.autoSyncLabel')}</label>
+                        <p class="text-[0.75rem] text-muted mb-2 leading-snug">${t('utils.gasBackup.autoSyncHint')}</p>
                         <select id="gas-setting-auto-sync-interval" class="form-control" style="padding: 0.5rem;">
                             <option value="0">${t('utils.gasBackup.autoSyncOff')}</option>
                             <option value="5000">${t('utils.gasBackup.sec5')}</option>
@@ -267,7 +268,7 @@ export class GasBackupModule {
 
         const autoSyncIntervalSelect = document.getElementById('gas-setting-auto-sync-interval');
         if (autoSyncIntervalSelect) {
-            autoSyncIntervalSelect.value = (this.settings.autoSyncInterval !== undefined ? this.settings.autoSyncInterval : 5000).toString();
+            autoSyncIntervalSelect.value = (this.settings.autoSyncInterval !== undefined ? this.settings.autoSyncInterval : 180000).toString();
             autoSyncIntervalSelect.addEventListener('change', (e) => {
                 this.settings.autoSyncInterval = parseInt(e.target.value, 10);
                 this.onSaveSettings();
@@ -343,7 +344,7 @@ export class GasBackupModule {
     triggerAutoSync() {
         if (!this.settings.privateGasUrl) return;
         
-        const interval = this.settings.autoSyncInterval !== undefined ? this.settings.autoSyncInterval : 5000;
+        const interval = this.settings.autoSyncInterval !== undefined ? this.settings.autoSyncInterval : 180000;
         if (interval <= 0) {
             if (this.autoSyncTimer) clearTimeout(this.autoSyncTimer);
             return;

@@ -1,4 +1,4 @@
-export default {
+﻿export default {
     utils: {
         backup: {
             start: '백업 시작',
@@ -74,10 +74,11 @@ export default {
             autoSyncBadge: '자동 동기화',
             desc: '당신만의 전용 Backup GAS URL을 입력하면, 시스템이 안전한 POST 요청을 통해 모든 데이터를 암호화하여 개인 Google 드라이브에 백업합니다.',
             autoSyncLabel: '변경 후 자동 동기화 지연',
+            autoSyncHint: 'Set a longer delay (3 mins recommended) to batch multiple records into a single upload, preventing connection rejections from Google due to rate limiting.',
             autoSyncOff: '자동 동기화 끄기',
             sec5: '5 초',
             min1: '1 분',
-            min3: '3 분',
+            min3: '3 분 (Recommended)',
             min5: '5 분',
             min10: '10 분',
             min15: '15 분',
