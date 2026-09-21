@@ -67,7 +67,9 @@ export default {
             saveFixedRecordSuccess: '[데이터베이스] 고정 규칙(saveFixedRecord) 저장 성공',
             batchSaveFixedRecordsSuccess: '[데이터베이스] 고정 규칙 일괄 저장(batchSaveFixedRecords) 성공',
             batchSaveFixedRecordsFail: '[데이터베이스] 고정 규칙 일괄 저장 실패:',
-            deleteFixedRecordSuccess: '[데이터베이스] 고정 규칙(deleteFixedRecord) 삭제 성공'
+            deleteFixedRecordSuccess: '[데이터베이스] 고정 규칙(deleteFixedRecord) 삭제 성공',
+            reconnect: '[데이터베이스] 연결이 닫혔습니다 ({msg}). 다시 연결을 시도합니다...',
+            reconnectFailed: '[데이터베이스] 다시 연결 실패:'
         },
         calendar: {
             holidayLoadError: '{year}년 공휴일 데이터를 불러올 수 없습니다.',
@@ -191,6 +193,7 @@ export default {
             attachment: '첨부파일'
         },
         batch: {
+            confirmDeleteGeneral: '이 기록을 삭제하시겠습니까? 이 작업은 실행 취소할 수 없습니다.',
             typeNameFixed: '고정 규칙',
             typeNameGeneral: '일반 기록',
             unnamedRule: '이름 없는 규칙',

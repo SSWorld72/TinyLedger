@@ -161,8 +161,8 @@ if (window.__APP_INITIALIZED__) {
         initGlobalFooter({
             containerId: 'app-container',
             appName: window.t('ui.app.fullName') || window.t('ui.app.name'),
-            version: 'v1.5.7.1',
-            copyrightYear: '2025-2026',
+            version: 'v1.5.7.5',
+            copyrightYear: '2026',
             githubUrl: 'https://github.com/SSWorld72/TinyLedger'
         });
 
@@ -782,17 +782,16 @@ export function renderRecordList(scrollToId = null) {
                     </div>
                     <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px; display: flex; flex-direction: column; gap: 2px;">
                         <div>${tx.date}</div>
-                        ${(tx.payee || tx.location) ? `<div style="display: flex; flex-wrap: wrap; column-gap: 12px; row-gap: 2px; line-height: 1.4;">
-                            ${tx.payee ? `<div style="display: flex;"><span style="white-space: nowrap;">${window.t('ui.record.labelTarget')}</span><span style="word-break: break-word;">${getTargetName(tx.payee)}</span></div>` : ''}
-                            ${tx.location ? `<div class="location-meta" style="display: flex; ${enableListMapLink ? 'cursor:pointer; color: var(--link-color);' : ''}"><span style="white-space: nowrap;">${window.t('ui.record.labelLocation')}</span><span style="word-break: break-word;">${tx.location}</span></div>` : ''}
-                        </div>` : ''}
+                        ${tx.payee ? `<div style="display: flex; line-height: 1.4;"><span style="white-space: nowrap;">${window.t('ui.record.labelTarget')}</span><span style="word-break: break-word;">${getTargetName(tx.payee)}</span></div>` : ''}
+                        ${tx.location ? `<div class="location-meta" style="display: flex; line-height: 1.4; ${enableListMapLink ? 'cursor:pointer; color: var(--link-color);' : ''}"><span style="white-space: nowrap;">${window.t('ui.record.labelLocation')}</span><span style="word-break: break-word;">${tx.location}</span></div>` : ''}
                         ${tx.note ? `<div style="line-height: 1.4; display: flex;"><span style="white-space: nowrap;">${window.t('ui.record.labelNote')}</span><span style="word-break: break-word;">${tx.note}</span></div>` : ''}
                         ${tx.attachment ? `<div style="line-height: 1.4; display: flex; color: var(--primary-color);"><span style="white-space: nowrap;">${window.t('ui.record.labelPhoto')}</span></div>` : ''}
                     </div>
                 </div>
-                ${tx.attachment ? `<div class="col-photo" style="width: 48px; height: 48px; margin-right: 12px; border-radius: 4px; overflow: hidden; flex-shrink: 0; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; background-color: #fafafa;"><img src="${tx.attachment}" style="width: 100%; height: 100%; object-fit: cover;" alt="${window.t('ui.record.attachment')}"></div>` : ''}
-                <div class="col-amount" style="color: ${tx.type === 'income' ? 'var(--link-color)' : 'var(--accent-red)'};">
-                    ${tx.type === 'expense' ? '-' : ''}${tx.amount.toLocaleString()}
+                </div>
+                <div class="col-amount" style="color: ${tx.type === 'income' ? 'var(--link-color)' : 'var(--accent-red)'}; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                    <div>${tx.type === 'expense' ? '-' : ''}${tx.amount.toLocaleString()}</div>
+                    ${tx.attachment ? `<div class="col-photo" style="width: 42px; height: 42px; border-radius: 4px; overflow: hidden; flex-shrink: 0; border: 1px solid var(--border-color, #eee); display: flex; align-items: center; justify-content: center; background-color: var(--surface-color, #fafafa);"><img src="${tx.attachment}" style="width: 100%; height: 100%; object-fit: cover;" alt="${window.t('ui.record.attachment')}"></div>` : ''}
                 </div>
             `;
             if (tx.isFixed) {
@@ -957,17 +956,16 @@ export function renderRecordList(scrollToId = null) {
                     </div>
                     <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px; display: flex; flex-direction: column; gap: 2px;">
                         <div>${fr.startDate} ~ ${fr.endDate || window.t('ui.record.noDeadline')} · ${ruleText}</div>
-                        ${(fr.payee || fr.location) ? `<div style="display: flex; flex-wrap: wrap; column-gap: 12px; row-gap: 2px; line-height: 1.4;">
-                            ${fr.payee ? `<div style="display: flex;"><span style="white-space: nowrap;">${window.t('ui.record.labelTarget')}</span><span style="word-break: break-word;">${getTargetName(fr.payee)}</span></div>` : ''}
-                            ${fr.location ? `<div class="location-meta" style="display: flex; ${enableListMapLink ? 'cursor:pointer; color: var(--link-color);' : ''}"><span style="white-space: nowrap;">${window.t('ui.record.labelLocation')}</span><span style="word-break: break-word;">${fr.location}</span></div>` : ''}
-                        </div>` : ''}
+                        ${fr.payee ? `<div style="display: flex; line-height: 1.4;"><span style="white-space: nowrap;">${window.t('ui.record.labelTarget')}</span><span style="word-break: break-word;">${getTargetName(fr.payee)}</span></div>` : ''}
+                        ${fr.location ? `<div class="location-meta" style="display: flex; line-height: 1.4; ${enableListMapLink ? 'cursor:pointer; color: var(--link-color);' : ''}"><span style="white-space: nowrap;">${window.t('ui.record.labelLocation')}</span><span style="word-break: break-word;">${fr.location}</span></div>` : ''}
                         ${fr.note ? `<div style="line-height: 1.4; display: flex;"><span style="white-space: nowrap;">${window.t('ui.record.labelNote')}</span><span style="word-break: break-word;">${fr.note}</span></div>` : ''}
                         ${fr.attachment ? `<div style="line-height: 1.4; display: flex; color: var(--primary-color);"><span style="white-space: nowrap;">${window.t('ui.record.labelPhoto')}</span></div>` : ''}
                     </div>
                 </div>
-                ${fr.attachment ? `<div class="col-photo" style="width: 48px; height: 48px; margin-right: 12px; border-radius: 4px; overflow: hidden; flex-shrink: 0; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; background-color: #fafafa;"><img src="${fr.attachment}" style="width: 100%; height: 100%; object-fit: cover;" alt="${window.t('ui.record.attachment')}"></div>` : ''}
-                <div class="col-amount" style="color: ${fr.type === 'income' ? 'var(--link-color)' : 'var(--accent-red)'};">
-                    ${fr.type === 'expense' ? '-' : ''}${fr.amount.toLocaleString()}
+                </div>
+                <div class="col-amount" style="color: ${fr.type === 'income' ? 'var(--link-color)' : 'var(--accent-red)'}; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                    <div>${fr.type === 'expense' ? '-' : ''}${fr.amount.toLocaleString()}</div>
+                    ${fr.attachment ? `<div class="col-photo" style="width: 42px; height: 42px; border-radius: 4px; overflow: hidden; flex-shrink: 0; border: 1px solid var(--border-color, #eee); display: flex; align-items: center; justify-content: center; background-color: var(--surface-color, #fafafa);"><img src="${fr.attachment}" style="width: 100%; height: 100%; object-fit: cover;" alt="${window.t('ui.record.attachment')}"></div>` : ''}
                 </div>
             `;
             el.addEventListener('click', (e) => {

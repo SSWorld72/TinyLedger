@@ -117,6 +117,7 @@ export default {
             btnOk: '我了解了',
             logFirstUrl: '[GasBackup] 初次设定 URL，已暂时锁定自动同步，防止空数据覆盖云端。',
             logAutoSyncTrigger: '[云端备份] 延迟 {interval} 毫秒后触发背景自动同步：准备将本地数据库打包上传至专属私有云进行备份。',
+            logAutoSyncForce: '[云端备份] 应用程序进入后台，立即执行排队中的自动同步。',
             logAutoSyncStop: '[云端备份] 背景自动同步已强制停止。',
             logAutoSyncQueueing: '[GAS 备份] 当前已有同步作业进行中，已将此次异动排入等候队列...',
             logAutoSyncRestart: '[GAS 备份] 侦测到队列中有未完成的异动，已重新启动自动同步计时器...',

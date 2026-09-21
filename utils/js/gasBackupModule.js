@@ -62,6 +62,16 @@ export class GasBackupModule {
         this.renderUI();
         this.initHelpModal();
         this.bindEvents();
+        
+        // Listen to visibilitychange for mobile devices to immediately trigger backup when backgrounded
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && this.autoSyncTimer && !this.isSyncing) {
+                console.log(t('utils.gasBackup.logAutoSyncForce'));
+                clearTimeout(this.autoSyncTimer);
+                this.autoSyncTimer = null;
+                this.backupToPrivateCloud(true);
+            }
+        });
     }
 
     renderUI() {
@@ -638,20 +648,20 @@ export class GasBackupModule {
             try {
                 listPayload = JSON.parse(listText);
             } catch (e) {
-                console.error((window.t ? window.t('gasBackupModule.errorNonJson') : 'Cloud returned non-JSON data:'), listText);
+                console.error((window.t ? window.t('utils.gasBackupModule.errorNonJson') : 'Cloud returned non-JSON data:'), listText);
                 let extraHint = '';
                 if (listText.toLowerCase().includes('<html')) {
-                    extraHint = (window.t ? window.t('gasBackupModule.errorHtmlHint') : '\\n(System received webpage HTML instead of data. Please check: 1. Did you copy the script editor URL? It must be the "Web App" URL. 2. Is access set to "Anyone"?)');
+                    extraHint = (window.t ? window.t('utils.gasBackupModule.errorHtmlHint') : '\\n(System received webpage HTML instead of data. Please check: 1. Did you copy the script editor URL? It must be the "Web App" URL. 2. Is access set to "Anyone"?)');
                 }
-                throw new Error((window.t ? window.t('gasBackupModule.errorParseCloud') : 'Unable to parse cloud data. Please verify the URL is correct and the GAS script is up to date.') + extraHint);
+                throw new Error((window.t ? window.t('utils.gasBackupModule.errorParseCloud') : 'Unable to parse cloud data. Please verify the URL is correct and the GAS script is up to date.') + extraHint);
             }
             if (listPayload.status === 'error') {
-                throw new Error((window.t ? window.t('gasBackupModule.errorCloudResponse') : 'Cloud returned error: ') + listPayload.message);
+                throw new Error((window.t ? window.t('utils.gasBackupModule.errorCloudResponse') : 'Cloud returned error: ') + listPayload.message);
             }
 
             const versions = listPayload.data || [];
             if (versions.length === 0) {
-                throw new Error(window.t ? window.t('gasBackupModule.errorNoBackup') : 'Restore failed: No backup data on the cloud yet.');
+                throw new Error(window.t ? window.t('utils.gasBackupModule.errorNoBackup') : 'Restore failed: No backup data on the cloud yet.');
             }
 
             let selectedFileId = null;
@@ -831,14 +841,14 @@ export class GasBackupModule {
             overlay.className = 'fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-[9999] p-4';
             
             const modal = document.createElement('div');
-            modal.className = 'bg-white rounded-xl shadow-2xl w-full max-w-sm flex flex-col overflow-hidden';
+            modal.className = 'bg-[var(--surface-color)] text-[var(--text-main)] rounded-xl shadow-2xl w-full max-w-sm flex flex-col overflow-hidden';
             
             // Header
             const header = document.createElement('div');
-            header.className = 'px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50';
+            header.className = 'px-5 py-4 border-b border-[var(--border-color)] flex items-center justify-between bg-[var(--bg-color)]';
             header.innerHTML = `
-                <h3 class="font-bold text-slate-800 text-base">${t('utils.gasBackup.modalVersionTitle')}</h3>
-                <button class="text-slate-400 hover:text-slate-600 transition-colors p-1" id="btn-close-version-modal">
+                <h3 class="font-bold text-[var(--text-main)] text-base">${t('utils.gasBackup.modalVersionTitle')}</h3>
+                <button class="text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors p-1" id="btn-close-version-modal">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             `;
@@ -852,7 +862,7 @@ export class GasBackupModule {
             
             versions.forEach((v, index) => {
                 const btn = document.createElement('button');
-                btn.className = 'w-full text-left px-4 py-3 rounded-lg hover:bg-blue-50 focus:bg-blue-50 focus:outline-none transition-colors group border border-transparent hover:border-blue-100 flex items-center justify-between';
+                btn.className = 'w-full text-left px-4 py-3 rounded-lg hover:bg-[var(--bg-color)] focus:bg-[var(--bg-color)] focus:outline-none transition-colors group border border-transparent hover:border-[var(--border-color)] flex items-center justify-between';
                 
                 const d = new Date(v.date || v.dateCreated);
                 const dateStr = d.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -868,12 +878,12 @@ export class GasBackupModule {
                 btn.innerHTML = `
                     <div class="flex flex-col">
                         <div class="flex items-center">
-                            <span class="font-medium text-slate-700 group-hover:text-blue-700">${dateStr} ${timeStr}</span>
+                            <span class="font-medium text-[var(--text-main)] group-hover:text-[var(--primary-color)]">${dateStr} ${timeStr}</span>
                             ${badge}
                         </div>
-                        <span class="text-xs text-slate-400 mt-0.5 font-mono">${displayFileName}</span>
+                        <span class="text-xs text-[var(--text-muted)] mt-0.5 font-mono">${displayFileName}</span>
                     </div>
-                    <svg class="w-5 h-5 text-slate-300 group-hover:text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    <svg class="w-5 h-5 text-[var(--text-muted)] group-hover:text-[var(--primary-color)] opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 `;
                 
                 btn.onclick = () => {

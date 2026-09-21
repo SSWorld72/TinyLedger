@@ -67,7 +67,9 @@ export default {
             saveFixedRecordSuccess: '[ฐานข้อมูล] บันทึกรายการคงที่ (saveFixedRecord) สำเร็จ',
             batchSaveFixedRecordsSuccess: '[ฐานข้อมูล] บันทึกรายการคงที่แบบกลุ่ม (batchSaveFixedRecords) สำเร็จ',
             batchSaveFixedRecordsFail: '[ฐานข้อมูล] การบันทึกรายการคงที่แบบกลุ่มล้มเหลว:',
-            deleteFixedRecordSuccess: '[ฐานข้อมูล] ลบรายการคงที่ (deleteFixedRecord) สำเร็จ'
+            deleteFixedRecordSuccess: '[ฐานข้อมูล] ลบรายการคงที่ (deleteFixedRecord) สำเร็จ',
+            reconnect: '[ฐานข้อมูล] ตรวจพบการเชื่อมต่อที่ปิดอยู่ ({msg}) กำลังพยายามเชื่อมต่อใหม่...',
+            reconnectFailed: '[ฐานข้อมูล] การเชื่อมต่อใหม่ล้มเหลว:'
         },
         calendar: {
             holidayLoadError: 'ไม่สามารถโหลดข้อมูลวันหยุดสำหรับปี {year}',
@@ -191,6 +193,7 @@ export default {
             attachment: 'ไฟล์แนบ'
         },
         batch: {
+            confirmDeleteGeneral: 'คุณแน่ใจหรือไม่ว่าต้องการลบบันทึกนี้ การดำเนินการนี้ไม่สามารถยกเลิกได้',
             typeNameFixed: 'กฎคงที่',
             typeNameGeneral: 'บันทึกทั่วไป',
             unnamedRule: 'กฎที่ไม่มีชื่อ',

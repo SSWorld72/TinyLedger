@@ -1,4 +1,4 @@
-﻿export default {
+export default {
     utils: {
         backup: {
             start: 'Démarrer la sauvegarde',
@@ -117,6 +117,7 @@
             btnOk: 'J\'ai compris',
             logFirstUrl: '[GasBackup] Première configuration de l\'URL, synchro auto verrouillée.',
             logAutoSyncTrigger: '[Cloud] Déclenchement de la synchro auto dans {interval} ms.',
+            logAutoSyncForce: '[Sauvegarde Cloud] L\'application est passée en arrière-plan, exécution immédiate de la synchronisation en file d\'attente.',
             logAutoSyncStop: '[Cloud] Synchro auto arrêtée de force.',
             logAutoSyncQueueing: '[GAS] Synchro en cours, mise en file d\'attente...',
             logAutoSyncRestart: '[GAS] Changements détectés dans la file, redémarrage...',

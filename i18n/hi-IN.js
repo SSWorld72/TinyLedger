@@ -67,7 +67,9 @@ export default {
             saveFixedRecordSuccess: '[डेटाबेस] निश्चित रिकॉर्ड सहेजना (saveFixedRecord) सफल',
             batchSaveFixedRecordsSuccess: '[डेटाबेस] बैच निश्चित रिकॉर्ड सहेजना (batchSaveFixedRecords) सफल',
             batchSaveFixedRecordsFail: '[डेटाबेस] बैच निश्चित रिकॉर्ड सहेजना विफल:',
-            deleteFixedRecordSuccess: '[डेटाबेस] निश्चित रिकॉर्ड हटाना (deleteFixedRecord) सफल'
+            deleteFixedRecordSuccess: '[डेटाबेस] निश्चित रिकॉर्ड हटाना (deleteFixedRecord) सफल',
+            reconnect: '[डेटाबेस] बंद कनेक्शन का पता चला ({msg}), पुनः कनेक्ट करने का प्रयास किया जा रहा है...',
+            reconnectFailed: '[डेटाबेस] पुनः कनेक्ट करने में विफल:'
         },
         calendar: {
             holidayLoadError: 'वर्ष {year} के लिए अवकाश डेटा लोड करने में असमर्थ',
@@ -191,6 +193,7 @@ export default {
             attachment: 'अनुलग्नक'
         },
         batch: {
+            confirmDeleteGeneral: 'क्या आप वाकई इस रिकॉर्ड को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।',
             typeNameFixed: 'निश्चित नियम',
             typeNameGeneral: 'सामान्य रिकॉर्ड',
             unnamedRule: 'अनाम नियम',

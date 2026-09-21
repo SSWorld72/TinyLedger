@@ -1,4 +1,4 @@
-﻿export default {
+export default {
     utils: {
         backup: {
             start: '백업 시작',
@@ -117,6 +117,7 @@
             btnOk: '알겠습니다',
             logFirstUrl: '[GasBackup] 최초 URL 설정. 빈 데이터로 인한 클라우드 덮어쓰기를 방지하기 위해 자동 동기화가 일시적으로 잠겼습니다.',
             logAutoSyncTrigger: '[클라우드 백업] {interval}밀리초 후 백그라운드 자동 동기화 트리거: 로컬 데이터베이스를 패키징하여 전용 프라이빗 클라우드에 업로드할 준비 중입니다.',
+            logAutoSyncForce: '[클라우드 백업] 앱이 백그라운드로 전환되었습니다. 대기 중인 자동 동기화를 즉시 실행합니다.',
             logAutoSyncStop: '[클라우드 백업] 백그라운드 자동 동기화가 강제 종료되었습니다.',
             logAutoSyncQueueing: '[GAS 백업] 현재 동기화 작업이 진행 중이므로, 이 변경 사항을 대기열에 넣었습니다...',
             logAutoSyncRestart: '[GAS 백업] 대기열에 미완료된 변경 사항이 감지되어 자동 동기화 타이머를 다시 시작했습니다...',

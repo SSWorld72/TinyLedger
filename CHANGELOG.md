@@ -2,10 +2,21 @@
 
 > 🇹🇼 若要查看繁體中文版，請參閱 [CHANGELOG.zh-TW.md](CHANGELOG.zh-TW.md)
 
-## 2026-09-18 (v1.5.7.1 - System Translation & Mobile UI Fixes)
+## 2026-09-21 (v1.5.7.5 - Background Sync & Mobile Stability Fixes)
+### Fixes
+- **Mobile Background Disconnect Fix**: Fixed an issue where keeping the app in the background for too long or locking the screen would cause database connection errors upon returning. The system now automatically attempts to reconnect.
+- **Delayed Sync Interruption Fix**: Fixed an issue where the background automatic sync would fail to trigger if the user switched to another app or locked their phone during the delay countdown. The sync will now execute immediately when the app goes into the background.
+- **Cloud Restore Theme Support**: Fixed an issue where the cloud restore history modal would remain bright white even when the dark mode theme was active. It now correctly adapts to the system theme settings.
+
+---
+
+## 2026-09-18 (v1.5.7.4 - System Translation & Mobile UI Fixes)
 ### Fixes
 - **System Log Translation Fix**: Resolved a conflict in the multilingual dictionary structure that prevented "Force Clear Data" logs from being properly translated and outputted.
 - **Mobile Location Input Jump**: Fixed an issue on mobile devices where clicking the location search input would forcefully push the screen upwards, hiding the input box out of view.
+- **List Layout Squeezing**: Restructured the record list layout by moving the photo thumbnail directly beneath the amount, completely preventing the photo from squashing the location and note text into a narrow column.
+- **Cloud Restore Error Message Fix**: Fixed an issue where entering an invalid Cloud Backup URL would display technical code snippets instead of the correct localized error message (e.g., prompting the user to check their URL and permissions).
+- **Delete Confirmation Missing Translation**: Fixed an issue where deleting a general record would display a raw system code instead of the proper translated confirmation prompt across all supported languages.
 
 ### Improvements
 - **Comprehensive Multilingual Logs**: Integrated deep system notifications and database cleanup logs into the dynamic multilingual engine, ensuring correct display across all 9 supported languages.

@@ -67,7 +67,9 @@ export default {
             saveFixedRecordSuccess: '[数据库] 保存固定纪录 (saveFixedRecord) 成功',
             batchSaveFixedRecordsSuccess: '[数据库] 批次保存固定纪录 (batchSaveFixedRecords) 成功',
             batchSaveFixedRecordsFail: '[数据库] 批次保存固定纪录失败:',
-            deleteFixedRecordSuccess: '[数据库] 删除固定纪录 (deleteFixedRecord) 成功'
+            deleteFixedRecordSuccess: '[数据库] 删除固定纪录 (deleteFixedRecord) 成功',
+            reconnect: '[数据库] 检测到连接已关闭 ({msg})，尝试重新连接...',
+            reconnectFailed: '[数据库] 重新连接失败:'
         },
         calendar: {
             holidayLoadError: '无法载入 {year} 年度国定假日数据',
@@ -191,6 +193,7 @@ export default {
             attachment: '附件'
         },
         batch: {
+            confirmDeleteGeneral: '确定要删除这条记录吗？此操作无法撤销。',
             typeNameFixed: '固定规则',
             typeNameGeneral: '一般纪录',
             unnamedRule: '未命名规则',

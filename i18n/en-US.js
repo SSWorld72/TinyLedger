@@ -67,7 +67,9 @@ export default {
             saveFixedRecordSuccess: '[Database] Save fixed record (saveFixedRecord) successful',
             batchSaveFixedRecordsSuccess: '[Database] Batch save fixed records (batchSaveFixedRecords) successful',
             batchSaveFixedRecordsFail: '[Database] Batch save fixed records failed:',
-            deleteFixedRecordSuccess: '[Database] Delete fixed record (deleteFixedRecord) successful'
+            deleteFixedRecordSuccess: '[Database] Delete fixed record (deleteFixedRecord) successful',
+            reconnect: '[Database] Detected closed connection ({msg}), attempting reconnect...',
+            reconnectFailed: '[Database] Reconnect failed:'
         },
         calendar: {
             holidayLoadError: 'Failed to load {year} national holiday data',
@@ -191,6 +193,7 @@ export default {
             attachment: 'Attachment'
         },
         batch: {
+            confirmDeleteGeneral: 'Are you sure you want to delete this record? This action cannot be undone.',
             typeNameFixed: 'Fixed Rules',
             typeNameGeneral: 'Records',
             unnamedRule: 'Unnamed Rule',

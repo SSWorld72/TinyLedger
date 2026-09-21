@@ -67,7 +67,9 @@ export default {
             saveFixedRecordSuccess: '[データベース] 固定ルール (saveFixedRecord) 保存成功',
             batchSaveFixedRecordsSuccess: '[データベース] 固定ルールの一括保存 (batchSaveFixedRecords) 成功',
             batchSaveFixedRecordsFail: '[データベース] 固定ルールの一括保存失敗:',
-            deleteFixedRecordSuccess: '[データベース] 固定ルール (deleteFixedRecord) 削除成功'
+            deleteFixedRecordSuccess: '[データベース] 固定ルール (deleteFixedRecord) 削除成功',
+            reconnect: '[データベース] 接続が閉じられました ({msg})。再接続を試みます...',
+            reconnectFailed: '[データベース] 再接続に失敗しました:'
         },
         calendar: {
             holidayLoadError: '{year} 年度の祝日データを読み込めません',
@@ -191,6 +193,7 @@ export default {
             attachment: '添付ファイル'
         },
         batch: {
+            confirmDeleteGeneral: 'この記録を削除してもよろしいですか？この操作は元に戻せません。',
             typeNameFixed: '固定ルール',
             typeNameGeneral: '一般記録',
             unnamedRule: '無名ルール',

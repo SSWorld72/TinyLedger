@@ -1,4 +1,4 @@
-﻿export default {
+export default {
     utils: {
         backup: {
             start: 'バックアップ開始',
@@ -117,6 +117,7 @@
             btnOk: '理解しました',
             logFirstUrl: '[GasBackup] 初回 URL 設定。空データによるクラウド上書きを防ぐため、自動同期を一時的にロックしました。',
             logAutoSyncTrigger: '[クラウドバックアップ] {interval} ミリ秒後にバックグラウンド自動同期をトリガーします：ローカルデータベースをパッケージ化し、専用プライベートクラウドにアップロードする準備をしています。',
+            logAutoSyncForce: '[クラウドバックアップ] アプリがバックグラウンドに移行しました。キュー内の自動同期を直ちに実行します。',
             logAutoSyncStop: '[クラウドバックアップ] バックグラウンド自動同期が強制停止されました。',
             logAutoSyncQueueing: '[GAS バックアップ] 現在同期作業が進行中のため、この変更を待機キューに入れました...',
             logAutoSyncRestart: '[GAS バックアップ] キューに未完了の変更が検出されたため、自動同期タイマーを再起動しました...',

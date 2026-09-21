@@ -67,7 +67,9 @@ export default {
             saveFixedRecordSuccess: '[Base de données] Règle fixe enregistrée (saveFixedRecord)',
             batchSaveFixedRecordsSuccess: '[Base de données] Règles fixes en lot enregistrées (batchSaveFixedRecords)',
             batchSaveFixedRecordsFail: '[Base de données] Échec de l\'enregistrement en lot des règles fixes :',
-            deleteFixedRecordSuccess: '[Base de données] Règle fixe supprimée (deleteFixedRecord)'
+            deleteFixedRecordSuccess: '[Base de données] Règle fixe supprimée (deleteFixedRecord)',
+            reconnect: '[Base de données] Connexion fermée détectée ({msg}), tentative de reconnexion...',
+            reconnectFailed: '[Base de données] Échec de la reconnexion :'
         },
         calendar: {
             holidayLoadError: 'Impossible de charger les jours fériés pour {year}',
@@ -191,6 +193,7 @@ export default {
             attachment: 'Pièce jointe'
         },
         batch: {
+            confirmDeleteGeneral: 'Êtes-vous sûr de vouloir supprimer cet enregistrement ? Cette action ne peut pas être annulée.',
             typeNameFixed: 'règle fixe',
             typeNameGeneral: 'enregistrement',
             unnamedRule: 'Règle sans nom',

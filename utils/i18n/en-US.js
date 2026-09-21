@@ -117,6 +117,7 @@ export default {
             btnOk: 'I Got It',
             logFirstUrl: '[GasBackup] Initial URL setting, auto sync temporarily locked to prevent overriding cloud with empty data.',
             logAutoSyncTrigger: '[CloudBackup] Auto sync triggered after {interval}ms delay: preparing to package local DB and upload to private cloud.',
+            logAutoSyncForce: '[CloudBackup] App went to background, executing queued sync immediately.',
             logAutoSyncStop: '[CloudBackup] Background auto sync forcibly stopped.',
             logAutoSyncQueueing: '[CloudBackup] A sync task is currently in progress, queuing this change...',
             logAutoSyncRestart: '[CloudBackup] Detected pending changes in queue, restarting auto sync timer...',

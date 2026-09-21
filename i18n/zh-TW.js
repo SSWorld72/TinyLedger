@@ -67,7 +67,9 @@ export default {
             saveFixedRecordSuccess: '[資料庫] 儲存固定紀錄 (saveFixedRecord) 成功',
             batchSaveFixedRecordsSuccess: '[資料庫] 批次儲存固定紀錄 (batchSaveFixedRecords) 成功',
             batchSaveFixedRecordsFail: '[資料庫] 批次儲存固定紀錄失敗:',
-            deleteFixedRecordSuccess: '[資料庫] 刪除固定紀錄 (deleteFixedRecord) 成功'
+            deleteFixedRecordSuccess: '[資料庫] 刪除固定紀錄 (deleteFixedRecord) 成功',
+            reconnect: '[資料庫] 偵測到連線已關閉 ({msg})，嘗試重新連線...',
+            reconnectFailed: '[資料庫] 重新連線失敗:'
         },
         calendar: {
             holidayLoadError: '無法載入 {year} 年度國定假日資料',
@@ -191,6 +193,7 @@ export default {
             attachment: '附件'
         },
         batch: {
+            confirmDeleteGeneral: '確定要刪除這筆紀錄嗎？此動作無法復原。',
             typeNameFixed: '固定規則',
             typeNameGeneral: '一般紀錄',
             unnamedRule: '未命名規則',

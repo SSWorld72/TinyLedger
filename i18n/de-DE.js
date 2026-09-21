@@ -67,7 +67,9 @@ export default {
             saveFixedRecordSuccess: '[Datenbank] Feste Regel erfolgreich gespeichert (saveFixedRecord)',
             batchSaveFixedRecordsSuccess: '[Datenbank] Feste Regeln massenhaft gespeichert (batchSaveFixedRecords)',
             batchSaveFixedRecordsFail: '[Datenbank] Massenspeicherung fester Regeln fehlgeschlagen:',
-            deleteFixedRecordSuccess: '[Datenbank] Feste Regel erfolgreich gelöscht (deleteFixedRecord)'
+            deleteFixedRecordSuccess: '[Datenbank] Feste Regel erfolgreich gelöscht (deleteFixedRecord)',
+            reconnect: '[Datenbank] Geschlossene Verbindung erkannt ({msg}), Versuch einer Neuverbindung...',
+            reconnectFailed: '[Datenbank] Neuverbindung fehlgeschlagen:'
         },
         calendar: {
             holidayLoadError: 'Feiertage für {year} konnten nicht geladen werden',
@@ -191,6 +193,7 @@ export default {
             attachment: 'Anhang'
         },
         batch: {
+            confirmDeleteGeneral: 'Möchten Sie diesen Datensatz wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
             typeNameFixed: 'Feste Regel',
             typeNameGeneral: 'Allgemeiner Eintrag',
             unnamedRule: 'Unbenannte Regel',

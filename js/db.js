@@ -51,18 +51,52 @@ export const initDB = () => {
 const executeTx = (storeName, mode, callback) => {
     return new Promise((resolve, reject) => {
         if (!dbInstance) return reject('Database not initialized');
-        const transaction = dbInstance.transaction(storeName, mode);
-        const store = transaction.objectStore(storeName);
-        const request = callback(store);
+        
+        const attemptTx = () => {
+            try {
+                const transaction = dbInstance.transaction(storeName, mode);
+                const store = transaction.objectStore(storeName);
+                const request = callback(store);
 
-        request.onsuccess = () => {
-            // Trigger auto-sync on write operations if auto-backup is not disabled
-            if (mode === 'readwrite' && !window._disableGasAutoSync && window.gasBackupInstance && typeof window.gasBackupInstance.triggerAutoSync === 'function') {
-                window.gasBackupInstance.triggerAutoSync();
+                request.onsuccess = () => {
+                    // Trigger auto-sync on write operations if auto-backup is not disabled
+                    if (mode === 'readwrite' && !window._disableGasAutoSync && window.gasBackupInstance && typeof window.gasBackupInstance.triggerAutoSync === 'function') {
+                        window.gasBackupInstance.triggerAutoSync();
+                    }
+                    resolve(request.result);
+                };
+                request.onerror = () => reject(request.error);
+            } catch (error) {
+                // Check if connection is closed/closing (often happens on mobile when app is suspended)
+                if (error.name === 'InvalidStateError' || (error.message && error.message.includes('closing'))) {
+                    console.warn(window.t ? window.t('logs.db.reconnect', { msg: error.message }) : `[Database] Connection closed (${error.message}), attempting reconnect...`);
+                    initDB().then(() => {
+                        try {
+                            const retryTx = dbInstance.transaction(storeName, mode);
+                            const retryStore = retryTx.objectStore(storeName);
+                            const retryReq = callback(retryStore);
+                            
+                            retryReq.onsuccess = () => {
+                                if (mode === 'readwrite' && !window._disableGasAutoSync && window.gasBackupInstance && typeof window.gasBackupInstance.triggerAutoSync === 'function') {
+                                    window.gasBackupInstance.triggerAutoSync();
+                                }
+                                resolve(retryReq.result);
+                            };
+                            retryReq.onerror = () => reject(retryReq.error);
+                        } catch (retryErr) {
+                            reject(retryErr);
+                        }
+                    }).catch(initErr => {
+                        console.error(window.t ? window.t('logs.db.reconnectFailed') : '[Database] Reconnect failed:', initErr);
+                        reject(error); // Reject with original error
+                    });
+                } else {
+                    reject(error);
+                }
             }
-            resolve(request.result);
         };
-        request.onerror = () => reject(request.error);
+
+        attemptTx();
     });
 };
 

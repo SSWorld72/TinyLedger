@@ -562,7 +562,7 @@ html {
 
 /* Right: Amount */
 .col-amount {
-    width: 105px; /* Fixed width for amount plus padding */
+    width: 90px; /* Fixed width for amount plus padding */
     flex-shrink: 0;
     text-align: right; /* Right align amount */
     font-size: 16px;
