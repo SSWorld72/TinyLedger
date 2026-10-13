@@ -2,6 +2,13 @@
 
 > 🇬🇧 For the English version, please refer to [CHANGELOG.md](CHANGELOG.md)
 
+## 2026-10-13 (v1.5.7.7 - 行事曆崩潰修復 / Calendar Crash Fix)
+### 修復 (Fixes)
+- **行事曆頁面啟動崩潰 (Calendar View Crash)**：修復切換至行事曆頁面時，應用程式立即崩潰無法顯示的問題。原因為月份名稱的語言翻譯資料未正確部署至線上版本，導致行事曆無法初始化。
+- **部分語系翻譯檔未部署 (Missing Translation Files on Deployment)**：修復發布腳本中，共用翻譯資料夾僅上傳單一語言版本的問題。現在每次發布皆會包含全部 9 種語言的翻譯檔。
+
+---
+
 ## 2026-10-12 (v1.5.7.6 - 紀念日提醒與儲存按鈕多語系修復 / Festival Reminder & Button Multilingual Fix)
 ### 修復 (Fixes)
 - **紀念日提醒多語系修復 (Festival Reminder Translation)**：修復在記帳表單觸發重要節日提醒時，提示視窗顯示未翻譯代碼而非在地化文字的問題。

@@ -2,6 +2,13 @@
 
 > 🇹🇼 若要查看繁體中文版，請參閱 [CHANGELOG.zh-TW.md](CHANGELOG.zh-TW.md)
 
+## 2026-10-13 (v1.5.7.7 - Calendar Crash Fix)
+### Fixes
+- **Calendar View Crash**: Fixed an issue where the app crashed immediately on load when switching to the Calendar view. The month name list was not being deployed correctly to GitHub Pages, causing the calendar to fail to initialize.
+- **Missing Translation Files on Deployment**: Fixed a deployment script issue where only one language's shared translation file was being uploaded. All 9 supported languages are now included in every release.
+
+---
+
 ## 2026-10-12 (v1.5.7.6 - Festival Reminder & Save Button Multilingual Fix)
 ### Fixes
 - **Festival Reminder Translation**: Fixed an issue where festival reminder alerts displayed unlocalized technical text instead of localized messages.
