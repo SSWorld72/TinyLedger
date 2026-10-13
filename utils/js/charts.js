@@ -440,7 +440,7 @@ export function drawBarChart(containerId, labelsOrData, data1OrOptions, data2, c
         const xCenter = padLeft + (i + 0.5) * barSpacing;
 
         // X-axis label
-        const maxLabels = 12;
+        const maxLabels = Math.max(3, Math.floor(chartW / 40));
         const step = Math.max(1, Math.ceil(labels.length / maxLabels));
         if (i % step === 0 || i === labels.length - 1) {
             const fillColor = labelDrawnCount % 2 === 0 ? 'var(--text-main)' : 'var(--text-muted)';
@@ -619,7 +619,7 @@ export function drawLineChart(containerId, data, options = {}) {
 
     // X-axis label
     const gLabels = createSvgElement('g');
-    const maxLabels = 12;
+    const maxLabels = Math.max(3, Math.floor(chartW / 40));
     const step = Math.max(1, Math.ceil(data.length / maxLabels));
     let labelDrawnCount = 0;
     data.forEach((d, i) => {

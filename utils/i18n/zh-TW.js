@@ -121,6 +121,8 @@ export default {
             logAutoSyncStop: '[雲端備份] 背景自動同步已強制停止。',
             logAutoSyncQueueing: '[GAS 備份] 當前已有同步作業進行中，已將此次異動排入等候佇列...',
             logAutoSyncRestart: '[GAS 備份] 偵測到佇列中有未完成的異動，已重新啟動自動同步計時器...',
+            logRestoreOverwrite: '[雲端備份] 執行覆蓋還原（restoreFromPrivateCloud）...',
+            logRestoreMerge: '[雲端備份] 執行合併還原（restoreFromPrivateCloud）...',
             needUrlTitle: '需要設定網址',
             needUrlMsg: '請先在上方輸入您的「專屬備份 GAS URL」！',
             confirmKnown: '我知道了',
@@ -163,7 +165,9 @@ export default {
             badgeLatest: '最新',
             defaultDescComplete: '✅ 完整備份：',
             defaultDescNote: '您的所有紀錄與系統偏好設定。',
-            defaultDescHint: '(*保持私人備份檔的極致輕量與安全)'
+            defaultDescHint: '(*保持私人備份檔的極致輕量與安全)',
+            coldStartDetected: 'GAS 容器暖機中，{sec} 秒後自動重試...',
+            coldStartRetrying: '重試中 ({current}/{max})'
         },
         googleApi: {
             missingParams: 'GoogleApiModule: 缺少必要的參數 containerId 或 storageKey',
@@ -325,10 +329,22 @@ export default {
     ui: {
         footer: {
             unnamedProject: '未命名專案',
-            githubProject: '專案原始碼',
+            githubProject: 'GitHub',
             releaseDate: '發布日期：{date}'
         },
         settings: {
+            systemLogs: {
+                title: '系統日誌 (System Logs)',
+                placeholderSearch: '搜尋時間 (如 11:36) 或關鍵字...',
+                titleCopy: '複製過濾後的日誌',
+                btnCopy: '複製',
+                btnExport: '匯出日誌',
+                titleClear: '清除日誌',
+                btnClear: '清除',
+                desc: '顯示最近 999 筆主控台日誌，方便排解連線或資料抓取問題。',
+                confirmClear: '確定要清除所有系統日誌嗎？',
+                emptyExport: '沒有日誌可以匯出'
+            },
             dangerZone: {
                 title: '危險區域 (Danger Zone)',
                 desc: '清空本機的所有資料與設定。此操作無法復原。',

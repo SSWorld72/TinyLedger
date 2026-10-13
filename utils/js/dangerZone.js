@@ -61,23 +61,24 @@ export class DangerZoneModule {
     constructor(config) {
         this.container = config.container;
         this.config = {
-            title: config.title || t('ui.settings.dangerZone.title', { default: 'Danger Zone' }),
-            description: config.description || t('ui.settings.dangerZone.desc', { default: 'Clear all local data and settings. This action cannot be undone.' }),
-            buttonText: config.buttonText || t('ui.settings.dangerZone.button', { default: 'Clear All Data' }),
-            confirmTitle: config.confirmTitle || t('ui.settings.dangerZone.confirmTitle', { default: 'Warning' }),
-            confirmMessage: config.confirmMessage || t('ui.settings.dangerZone.confirmMsg', { default: 'Are you sure you want to clear all data? This action cannot be undone.' }),
-            doubleConfirmTitle: config.doubleConfirmTitle || t('ui.settings.dangerZone.doubleConfirmTitle', { default: 'Final Confirmation' }),
-            doubleConfirmMessage: config.doubleConfirmMessage || t('ui.settings.dangerZone.doubleConfirmMsg', { default: 'This is the final warning. Are you really sure you want to delete all data?' }),
-            btnConfirm: config.btnConfirm || t('ui.settings.dangerZone.btnConfirm', { default: 'Confirm Clear' }),
-            btnCancel: config.btnCancel || t('ui.settings.dangerZone.btnCancel', { default: 'Cancel' }),
-            btnDoubleConfirm: config.btnDoubleConfirm || t('ui.settings.dangerZone.btnDoubleConfirm', { default: 'I am sure' }),
-            btnDoubleCancel: config.btnDoubleCancel || t('ui.settings.dangerZone.btnDoubleCancel', { default: 'Cancel' }),
-            busyTitle: config.busyTitle || t('ui.settings.dangerZone.busyTitle', { default: 'Clearing Data' }),
-            busyDetail: config.busyDetail || t('ui.settings.dangerZone.busyDetail', { default: 'Deleting all data, please wait...' }),
-            successMsg: config.successMsg || t('ui.settings.dangerZone.success', { default: 'Cleared Successfully!' }),
-            errorMsg: config.errorMsg || t('ui.settings.dangerZone.error', { default: 'Clear Failed: {error}' }),
+            title: config.title || t('ui.settings.dangerZone.title', { default: '危險區域 (Danger Zone)' }),
+            description: config.description || t('ui.settings.dangerZone.desc', { default: '清除所有本機資料與設定。此動作無法復原。' }),
+            buttonText: config.buttonText || t('ui.settings.dangerZone.button', { default: '清除所有資料' }),
+            confirmTitle: config.confirmTitle || t('ui.settings.dangerZone.confirmTitle', { default: '警告' }),
+            confirmMessage: config.confirmMessage || t('ui.settings.dangerZone.confirmMsg', { default: '您確定要清除所有資料嗎？此動作無法復原。' }),
+            doubleConfirmTitle: config.doubleConfirmTitle || t('ui.settings.dangerZone.doubleConfirmTitle', { default: '最終確認' }),
+            doubleConfirmMessage: config.doubleConfirmMessage || t('ui.settings.dangerZone.doubleConfirmMsg', { default: '這是最後的警告。您真的確定要刪除所有資料嗎？' }),
+            btnConfirm: config.btnConfirm || t('ui.settings.dangerZone.btnConfirm', { default: '確認清除' }),
+            btnCancel: config.btnCancel || t('ui.settings.dangerZone.btnCancel', { default: '取消' }),
+            btnDoubleConfirm: config.btnDoubleConfirm || t('ui.settings.dangerZone.btnDoubleConfirm', { default: '我確定' }),
+            btnDoubleCancel: config.btnDoubleCancel || t('ui.settings.dangerZone.btnDoubleCancel', { default: '取消' }),
+            busyTitle: config.busyTitle || t('ui.settings.dangerZone.busyTitle', { default: '正在清除資料' }),
+            busyDetail: config.busyDetail || t('ui.settings.dangerZone.busyDetail', { default: '正在刪除所有資料，請稍候...' }),
+            successMsg: config.successMsg || t('ui.settings.dangerZone.success', { default: '清除成功！' }),
+            errorMsg: config.errorMsg || t('ui.settings.dangerZone.error', { default: '清除失敗：{error}' }),
             onClear: config.onClear,
-            setBusy: config.setBusy || (() => { })
+            setBusy: config.setBusy || (() => { }),
+            wrapperClass: config.wrapperClass
         };
 
         if (!this.container) {
@@ -90,9 +91,11 @@ export class DangerZoneModule {
     }
 
     render() {
+        const wrapperClass = this.config.wrapperClass !== undefined ? this.config.wrapperClass : 'settings-section mb-8 rounded-3xl p-4 sm:p-5 border';
+        
         // Use standard settings-section large card structure to align width with other sections
         this.container.innerHTML = `
-            <div class="settings-section mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+            <div class="${wrapperClass}" style="background: var(--surface-color); border-color: var(--border-color);">
                 <div class="flex items-center gap-3 mb-4 px-2">
                     <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border"
                         style="background: var(--active-bg); color: #ef4444; border-color: var(--border-color);">
@@ -103,7 +106,7 @@ export class DangerZoneModule {
                     <h3 class="m-0 text-[1.05rem] font-bold tracking-wide" style="color: #ef4444;">${this.config.title}</h3>
                 </div>
                 <div class="rounded-2xl overflow-hidden shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
-                    <div style="padding: 0;">
+                    <div style="padding: 16px;">
                         ${createTipBox({ type: 'danger', html: this.config.description })}
                     </div>
                     <div style="padding: 0;">

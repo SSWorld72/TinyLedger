@@ -100,55 +100,58 @@ window.clearAppLogs = () => {
  * @param {Object} config 
  * @param {string} config.containerId - Container ID for rendering UI
  * @param {string} [config.description] - Custom description text
+ * @param {string} [config.wrapperClass] - Custom wrapper CSS classes
  */
-export function mountSystemLogsUI(config) {
+export function mountSystemLogsUI(config = {}) {
     const container = document.getElementById(config.containerId);
     if (!container) {
         console.error(window.t ? window.t('systemLogs.logger.containerNotFound', { id: config.containerId }) : 'mountSystemLogsUI: Cannot find container #' + config.containerId);
         return;
     }
 
+    const wrapperClass = config.wrapperClass !== undefined ? config.wrapperClass : 'settings-section mt-8 mb-8 rounded-3xl p-4 sm:p-5 border';
+
     // Render HTML structure
     container.innerHTML = `
-        <div class="settings-section mt-8 mb-8 rounded-3xl p-4 sm:p-5 border" style="background: var(--surface-color); border-color: var(--border-color);">
+        <div class="${wrapperClass}" style="background: var(--surface-color); border-color: var(--border-color);">
             <div class="flex items-center gap-3 mb-4 px-2">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm border" style="background: var(--active-bg); color: var(--active-text); border-color: var(--border-color);">
-                    <span class="material-icons text-[20px]">receipt_long</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 </div>
-                <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">${window.t ? window.t('ui.settings.systemLogs.title') : 'System Logs'}</h3>
+                <h3 class="m-0 text-[1.05rem] font-bold text-main tracking-wide">${window.t ? window.t('ui.settings.systemLogs.title') : '系統日誌 (System Logs)'}</h3>
             </div>
             
             <div class="rounded-2xl overflow-hidden shadow-sm border" style="background: var(--bg-color); border-color: var(--border-color);">
                 <div class="flex flex-col sm:flex-row gap-2 p-4 pb-3">
                     <div class="relative w-full sm:flex-1">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <span class="material-icons text-[16px] text-slate-400">search</span>
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
                         <input type="text" id="log-time-filter"
                             class="w-full text-sm pl-9 pr-2 py-2 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:text-slate-200 placeholder-slate-400 shadow-sm border"
                             style="background: var(--surface-color); border-color: var(--border-color); color: var(--text-main);"
-                            placeholder="${window.t ? window.t('ui.settings.systemLogs.placeholderSearch') : 'Search...'}">
+                            placeholder="${window.t ? window.t('ui.settings.systemLogs.placeholderSearch') : '搜尋日誌...'}">
                     </div>
                     <div class="flex gap-2 w-full sm:w-auto">
                         <button id="btn-copy-logs"
                             class="flex-1 sm:flex-none whitespace-nowrap text-sm px-3 py-2 rounded-xl transition-colors flex items-center justify-center gap-1 shadow-sm border"
                             style="background: var(--surface-color); border-color: var(--border-color); color: var(--text-main);"
-                            title="${window.t ? window.t('ui.settings.systemLogs.titleCopy') : 'Copy filtered logs'}">
-                            <span class="material-icons text-[16px]">content_copy</span>
-                            <span class="hidden sm:inline">${window.t ? window.t('ui.settings.systemLogs.btnCopy') : 'Copy'}</span>
+                            title="${window.t ? window.t('ui.settings.systemLogs.titleCopy') : '複製目前過濾的日誌'}">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span class="hidden sm:inline">${window.t ? window.t('ui.settings.systemLogs.btnCopy') : '複製'}</span>
                         </button>
                         <button id="btn-export-logs"
                             class="flex-1 sm:flex-none whitespace-nowrap text-sm px-3 py-2 rounded-xl transition-colors flex items-center justify-center gap-1 shadow-sm border"
                             style="background: var(--surface-color); border-color: var(--border-color); color: var(--text-main);">
-                            <span class="material-icons text-[16px]">download</span>
-                            <span class="hidden sm:inline">${window.t ? window.t('ui.settings.systemLogs.btnExport') : 'Export'}</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            <span class="hidden sm:inline">${window.t ? window.t('ui.settings.systemLogs.btnExport') : '匯出'}</span>
                         </button>
                         <button id="btn-clear-logs"
                             class="flex-1 sm:flex-none whitespace-nowrap text-sm px-3 py-2 rounded-xl transition-colors flex items-center justify-center gap-1 shadow-sm border"
                             style="background: var(--surface-color); border-color: var(--border-color); color: #ef4444;"
-                            title="${window.t ? window.t('ui.settings.systemLogs.titleClear') : 'Clear logs'}">
-                            <span class="material-icons text-[16px]">delete_sweep</span>
-                            <span class="hidden sm:inline">${window.t ? window.t('ui.settings.systemLogs.btnClear') : 'Clear'}</span>
+                            title="${window.t ? window.t('ui.settings.systemLogs.titleClear') : '清除所有日誌'}">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            <span class="hidden sm:inline">${window.t ? window.t('ui.settings.systemLogs.btnClear') : '清除'}</span>
                         </button>
                     </div>
                 </div>
@@ -161,7 +164,7 @@ export function mountSystemLogsUI(config) {
                     </div>
                 </div>
                 <p class="text-[11px] text-muted p-4 text-center sm:text-left m-0">
-                    ${config.description || (window.t ? window.t('ui.settings.systemLogs.desc') : 'Display system logs.')}
+                    ${config.description || (window.t ? window.t('ui.settings.systemLogs.desc') : '顯示系統運作紀錄。')}
                 </p>
             </div>
         </div>
@@ -210,7 +213,7 @@ export function mountSystemLogsUI(config) {
     }
     if (btnClear) {
         btnClear.addEventListener('click', () => {
-            if (confirm(window.t ? window.t('ui.settings.systemLogs.confirmClear') : 'Are you sure you want to clear all system logs?')) {
+            if (confirm(window.t ? window.t('ui.settings.systemLogs.confirmClear') : '確定要清除所有系統日誌嗎？')) {
                 if (window.clearAppLogs) window.clearAppLogs();
             }
         });
@@ -219,7 +222,7 @@ export function mountSystemLogsUI(config) {
         btnExport.addEventListener('click', () => {
             const currentContent = logContainer.textContent;
             if (!currentContent) {
-                alert(window.t ? window.t('ui.settings.systemLogs.emptyExport') : 'No logs to export');
+                alert(window.t ? window.t('ui.settings.systemLogs.emptyExport') : '沒有可匯出的日誌');
                 return;
             }
             const blob = new Blob([currentContent], { type: 'text/plain;charset=utf-8' });
@@ -235,13 +238,13 @@ export function mountSystemLogsUI(config) {
         btnCopy.addEventListener('click', () => {
             const currentContent = logContainer.textContent;
             if (!currentContent) {
-                alert(window.t ? window.t('ui.settings.systemLogs.emptyCopy') : 'No logs to copy');
+                alert(window.t ? window.t('ui.settings.systemLogs.emptyCopy') : '沒有可複製的日誌');
                 return;
             }
             navigator.clipboard.writeText(currentContent).then(() => {
-                alert(window.t ? window.t('ui.settings.systemLogs.copySuccess') : 'Logs copied');
+                alert(window.t ? window.t('ui.settings.systemLogs.copySuccess') : '日誌已複製到剪貼簿');
             }).catch(err => {
-                alert((window.t ? window.t('ui.settings.systemLogs.copyError') : 'Copy failed: {error}').replace('{error}', err));
+                alert((window.t ? window.t('ui.settings.systemLogs.copyError') : '複製失敗：{error}').replace('{error}', err));
             });
         });
     }

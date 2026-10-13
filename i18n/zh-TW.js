@@ -190,7 +190,14 @@ export default {
             promptLocation: '請先輸入或選擇一個地點',
             importantFestivalPrefix: '⭐',
             festivalJoin: '、',
-            attachment: '附件'
+            attachment: '附件',
+            saving: '儲存中...',
+            saveFailed: '儲存失敗：',
+            festivalReminderTitle: '【重要節日提醒】',
+            festivalReminderDays: '還有 {days} 天！',
+            alertSelectCategory: '請選擇大類與小類！',
+            alertFixedStartDate: '固定紀錄必須填寫開始日期！',
+            alertFixedDateOrder: '開始日期不能大於結束日期！'
         },
         batch: {
             confirmDeleteGeneral: '確定要刪除這筆紀錄嗎？此動作無法復原。',
@@ -512,7 +519,9 @@ export default {
                 deleteBatchInUseTxDetail: '{count}筆紀錄(如{date})',
                 deleteBatchInUseFixedDetail: '{count}筆規則',
                 deleteBatchInUseMore: '\n...及其他項目',
-                deleteBatchInUseTail: '\n\n請先將這些紀錄刪除或修改為其他類別後再試。'
+                deleteBatchInUseTail: '\n\n請先將這些紀錄刪除或修改為其他類別後再試。',
+                saving: '儲存中...',
+                saveFailed: '儲存失敗：'
             },
             targets: {
                 title: '記帳對象',

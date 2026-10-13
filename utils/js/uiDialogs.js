@@ -80,18 +80,18 @@ export function showOptionsModal(config) {
         });
 
         modal.innerHTML = `
-            <div class="bg-surface rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-theme transform transition-all scale-100">
-                <div class="px-6 pt-6 pb-4 border-b border-theme flex items-center justify-between">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200 dark:border-slate-700 transform transition-all scale-100">
+                <div class="px-6 pt-6 pb-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg shadow-xs">
                             ${config.icon || '📦'}
                         </div>
                         <div>
-                            <h3 class="text-base font-bold text-main tracking-tight">${config.title}</h3>
-                            <p class="text-xs text-muted mt-0.5">${config.subtitle || ''}</p>
+                            <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 tracking-tight">${config.title}</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${config.subtitle || ''}</p>
                         </div>
                     </div>
-                    <button id="btn-generic-choice-close" class="text-muted hover:text-main p-1.5 rounded-lg hover:bg-slate-500/10 transition-colors">
+                    <button id="btn-generic-choice-close" class="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 p-1.5 rounded-lg hover:bg-slate-500/10 transition-colors">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
@@ -156,21 +156,21 @@ export function showConfirmModal(config) {
         const messageHtml = (config.message || '').replace(/\n/g, '<br>');
 
         modal.innerHTML = `
-            <div class="bg-surface rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-theme transform transition-all scale-100">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-200 dark:border-slate-700 transform transition-all scale-100">
                 <div class="p-6">
                     <div class="flex flex-col items-center text-center gap-4">
                         <div class="w-14 h-14 rounded-full ${iconThemeClass} flex items-center justify-center font-bold text-2xl shadow-xs ring-4 ring-white">
                             ${config.icon || defaultIcon}
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold text-main tracking-tight">${config.title}</h3>
-                            <p class="text-sm text-muted mt-2 leading-relaxed">${messageHtml}</p>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 tracking-tight">${config.title}</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${messageHtml}</p>
                         </div>
                     </div>
                 </div>
                 
-                <div class="px-6 py-4 bg-surface border-t border-theme flex gap-3">
-                    <button id="btn-generic-confirm-cancel" class="btn-secondary flex-1 px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-xs focus:outline-none focus:ring-2 focus:ring-slate-200">
+                <div class="px-6 py-4 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 flex gap-3">
+                    <button id="btn-generic-confirm-cancel" class="btn-secondary flex-1 px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-xs border border-slate-200 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200 text-slate-700">
                         ${config.cancelText || t('utils.uiDialogs.cancel')}
                     </button>
                     <button id="btn-generic-confirm-ok" class="flex-1 px-4 py-2 rounded-lg text-sm font-semibold transition-all focus:outline-none ${confirmBtnClass}">

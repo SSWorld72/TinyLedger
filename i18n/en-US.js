@@ -190,7 +190,14 @@ export default {
             promptLocation: 'Please enter or select a location',
             importantFestivalPrefix: '⭐',
             festivalJoin: ', ',
-            attachment: 'Attachment'
+            attachment: 'Attachment',
+            saving: 'Saving...',
+            saveFailed: 'Save failed: ',
+            festivalReminderTitle: '【Important Festival Reminder】',
+            festivalReminderDays: 'is in {days} days!',
+            alertSelectCategory: 'Please select main and sub categories!',
+            alertFixedStartDate: 'Fixed record must have a start date!',
+            alertFixedDateOrder: 'Start date cannot be greater than end date!'
         },
         batch: {
             confirmDeleteGeneral: 'Are you sure you want to delete this record? This action cannot be undone.',
@@ -512,7 +519,9 @@ export default {
                 deleteBatchInUseTxDetail: '{count} records (e.g. {date})',
                 deleteBatchInUseFixedDetail: '{count} fixed rules',
                 deleteBatchInUseMore: '\n...and other items',
-                deleteBatchInUseTail: '\n\nPlease delete or reassign these records before trying again.'
+                deleteBatchInUseTail: '\n\nPlease delete or reassign these records before trying again.',
+                saving: 'Saving...',
+                saveFailed: 'Save failed: '
             },
             targets: {
                 title: 'Payees',

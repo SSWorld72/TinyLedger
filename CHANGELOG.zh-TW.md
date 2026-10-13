@@ -2,6 +2,14 @@
 
 > 🇬🇧 For the English version, please refer to [CHANGELOG.md](CHANGELOG.md)
 
+## 2026-10-12 (v1.5.7.6 - 紀念日提醒與儲存按鈕多語系修復 / Festival Reminder & Button Multilingual Fix)
+### 修復 (Fixes)
+- **紀念日提醒多語系修復 (Festival Reminder Translation)**：修復在記帳表單觸發重要節日提醒時，提示視窗顯示未翻譯代碼而非在地化文字的問題。
+- **儲存按鈕狀態文字修復 (Save Button Status Fix)**：修復送出記帳紀錄時，按鈕短暫顯示英文代碼而非正確在地化「儲存中」狀態文字的問題。
+- **全語系字典補齊 (Full Multilingual Alignment)**：於全 9 國語系字典檔中，全面補齊記帳驗證與操作提示相關的多語系詞條。
+
+---
+
 ## 2026-09-21 (v1.5.7.5 - 背景同步與手機版穩定性修正)
 ### 修復 (Fixes)
 - **手機版背景斷線修復**：修復了當應用程式在背景閒置過久或鎖屏後，返回時會出現資料庫連線中斷錯誤的問題。系統現在會自動嘗試重新連線。

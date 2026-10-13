@@ -190,7 +190,14 @@ export default {
             promptLocation: '장소를 입력하거나 선택해 주세요',
             importantFestivalPrefix: '⭐',
             festivalJoin: ', ',
-            attachment: '첨부파일'
+            attachment: '첨부파일',
+            saving: '저장 중...',
+            saveFailed: '저장 실패: ',
+            festivalReminderTitle: '【주요 기념일 알림】',
+            festivalReminderDays: '{days}일 남았습니다!',
+            alertSelectCategory: '대분류와 소분류를 선택해주세요!',
+            alertFixedStartDate: '고정 기록에는 시작일이 필요합니다!',
+            alertFixedDateOrder: '시작일은 종료일보다 클 수 없습니다!'
         },
         batch: {
             confirmDeleteGeneral: '이 기록을 삭제하시겠습니까? 이 작업은 실행 취소할 수 없습니다.',
@@ -512,7 +519,9 @@ export default {
                 deleteBatchInUseTxDetail: '{count}건의 기록(예 {date})',
                 deleteBatchInUseFixedDetail: '{count}건의 규칙',
                 deleteBatchInUseMore: '\n...및 기타 항목',
-                deleteBatchInUseTail: '\n\n먼저 이러한 기록을 삭제하거나 다른 카테고리로 변경한 후 다시 시도해 주세요.'
+                deleteBatchInUseTail: '\n\n먼저 이러한 기록을 삭제하거나 다른 카테고리로 변경한 후 다시 시도해 주세요.',
+                saving: '저장 중...',
+                saveFailed: '저장 실패: '
             },
             targets: {
                 title: '기록 대상',

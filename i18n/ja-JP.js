@@ -190,7 +190,14 @@ export default {
             promptLocation: '場所を入力または選択してください',
             importantFestivalPrefix: '⭐',
             festivalJoin: '、',
-            attachment: '添付ファイル'
+            attachment: '添付ファイル',
+            saving: '保存中...',
+            saveFailed: '保存に失敗しました: ',
+            festivalReminderTitle: '【重要なお祭りリマインダー】',
+            festivalReminderDays: 'あと {days} 日です！',
+            alertSelectCategory: 'メインカテゴリーとサブカテゴリーを選択してください！',
+            alertFixedStartDate: '固定記録には開始日が必要です！',
+            alertFixedDateOrder: '開始日は終了日より後にすることはできません！'
         },
         batch: {
             confirmDeleteGeneral: 'この記録を削除してもよろしいですか？この操作は元に戻せません。',
@@ -512,7 +519,9 @@ export default {
                 deleteBatchInUseTxDetail: '{count}件の記録(例 {date})',
                 deleteBatchInUseFixedDetail: '{count}件のルール',
                 deleteBatchInUseMore: '\n...その他',
-                deleteBatchInUseTail: '\n\nこれらの記録を削除するか、他のカテゴリに変更してから再試行してください。'
+                deleteBatchInUseTail: '\n\nこれらの記録を削除するか、他のカテゴリに変更してから再試行してください。',
+                saving: '保存中...',
+                saveFailed: '保存に失敗しました: '
             },
             targets: {
                 title: '記録対象',

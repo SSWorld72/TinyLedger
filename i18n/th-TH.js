@@ -190,7 +190,14 @@ export default {
             promptLocation: 'กรุณากรอกหรือเลือกสถานที่',
             importantFestivalPrefix: '⭐',
             festivalJoin: ' ',
-            attachment: 'ไฟล์แนบ'
+            attachment: 'ไฟล์แนบ',
+            saving: 'กำลังบันทึก...',
+            saveFailed: 'บันทึกไม่สำเร็จ: ',
+            festivalReminderTitle: '【เตือนความจำเทศกาลสำคัญ】',
+            festivalReminderDays: 'อีก {days} วัน!',
+            alertSelectCategory: 'กรุณาเลือกหมวดหมู่หลักและหมวดหมู่ย่อย!',
+            alertFixedStartDate: 'บันทึกประจำต้องมีวันที่เริ่มต้น!',
+            alertFixedDateOrder: 'วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด!'
         },
         batch: {
             confirmDeleteGeneral: 'คุณแน่ใจหรือไม่ว่าต้องการลบบันทึกนี้ การดำเนินการนี้ไม่สามารถยกเลิกได้',
@@ -512,7 +519,9 @@ export default {
                 deleteBatchInUseTxDetail: '{count} รายการ (เช่น {date})',
                 deleteBatchInUseFixedDetail: '{count} กฎ',
                 deleteBatchInUseMore: '\n...และอื่นๆ',
-                deleteBatchInUseTail: '\n\nกรุณาลบรายการเหล่านี้หรืออัปเดตไปเป็นหมวดหมู่อื่นก่อนแล้วลองอีกครั้ง.'
+                deleteBatchInUseTail: '\n\nกรุณาลบรายการเหล่านี้หรืออัปเดตไปเป็นหมวดหมู่อื่นก่อนแล้วลองอีกครั้ง.',
+                saving: 'กำลังบันทึก...',
+                saveFailed: 'บันทึกไม่สำเร็จ: '
             },
             targets: {
                 title: 'เป้าหมายการใช้จ่าย',

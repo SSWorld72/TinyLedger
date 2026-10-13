@@ -44,10 +44,13 @@ export class GasBackupModule {
         this.settings = config.settingsObj;
         this.onSaveSettings = config.onSaveSettings;
         this.getCleanPayload = config.getCleanPayload;
+        this.customMergeLogic = config.customMergeLogic || null;
         this.onRestoreSuccess = config.onRestoreSuccess;
         this.useGlobalRestoreMode = config.useGlobalRestoreMode || false;
         this.setAppBusy = config.setAppBusy || window.setAppBusy;
         this.useZip = config.useZip || false;
+        this.titleHtml = config.titleHtml || null;
+        this.tipBoxType = config.tipBoxType || 'success';
         
         // External custom message generators
         this.generateRestoreConfirmMessage = config.generateRestoreConfirmMessage || null;
@@ -85,7 +88,7 @@ export class GasBackupModule {
             <div style="padding-top: 16px;">
                 <div class="flex items-center justify-between mb-1">
                     <h4 style="margin: 0; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 6px; color: var(--text-main);">
-                        ${t('utils.gasBackup.title')}
+                        ${this.titleHtml || t('utils.gasBackup.title')}
                     </h4>
                     <span class="text-[11px] font-medium px-2 py-0.5 rounded-full" style="background: var(--primary-color); color: #ffffff;">${t('utils.gasBackup.autoSyncBadge')}</span>
                 </div>
@@ -136,12 +139,12 @@ export class GasBackupModule {
                             class="form-control w-full" style="padding: 0.5rem;"
                             placeholder="https://script.google.com/macros/s/........./exec">
                         <div class="mt-2">
-                            ${createTipBox({ type: 'success', html: this.customDescriptionHtml, fontSize: '0.75rem' })}
+                            ${createTipBox({ type: this.tipBoxType, html: this.customDescriptionHtml, fontSize: '0.75rem' })}
                         </div>
                     </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex flex-row gap-3">
                     <button id="gas-btn-cloud-backup"
                         class="btn-primary flex-1 flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-medium rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,8 +183,8 @@ export class GasBackupModule {
             gasHelpModal.id = 'gas-help-modal';
             gasHelpModal.className = 'hidden fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4';
             gasHelpModal.innerHTML = `
-                <div class="rounded-xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border" style="background-color: var(--surface-solid); border-color: var(--border-color);">
-                    <div class="px-5 py-4 flex justify-between items-center" style="background-color: var(--bg-color); border-bottom: 1px solid var(--border-color);">
+                <div class="rounded-xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border bg-white dark:bg-slate-800" style="border-color: var(--border-color);">
+                    <div class="px-5 py-4 flex justify-between items-center" style="background-color: var(--bg-color, #f8fafc); border-bottom: 1px solid var(--border-color);">
                         <h3 class="font-semibold text-lg flex items-center gap-2" style="color: var(--text-main);">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--primary-color);">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -504,20 +507,58 @@ export class GasBackupModule {
                     backupVersions: this.settings.backupVersions || 50
                 };
 
-                const res = await fetch(this.settings.privateGasUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(uploadPayload)
-                });
-                
-                const text = await res.text();
-                try {
-                    resData = JSON.parse(text);
-                } catch (e) {
-                    if (text.includes('<!DOCTYPE') || text.toLowerCase().includes('<html')) {
-                        throw new Error('GAS proxy returned HTML instead of JSON. Ensure your GAS Web App is deployed to execute as "User accessing the web app" or that the user is authenticated.');
+                // GAS request function with automatic retry (handling cold start issue)
+                // When GAS Serverless container is idle for a long time, the first request might return HTML (warming up)
+                // If HTML is detected, automatically wait 4 seconds and retry, up to 2 times
+                const MAX_RETRIES = 2;
+                const RETRY_DELAY_MS = 4000;
+                let lastError = null;
+                resData = null;
+
+                for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+                    if (attempt > 0) {
+                        console.warn(`[Cloud Backup] GAS cold start detected, waiting ${RETRY_DELAY_MS / 1000}s before retry (${attempt}/${MAX_RETRIES})...`);
+                        if (this.setAppBusy && !isAutoSync) {
+                            this.setAppBusy(true, {
+                                title: t('utils.gasBackup.busyBackupTitle'),
+                                detail: t('utils.gasBackup.coldStartDetected', `GAS container warming up, auto-retrying in ${RETRY_DELAY_MS / 1000}s...`).replace('{sec}', RETRY_DELAY_MS / 1000),
+                                statusText: t('utils.gasBackup.coldStartRetrying', `Retrying (${attempt}/${MAX_RETRIES})`).replace('{current}', attempt).replace('{max}', MAX_RETRIES),
+                                progress: 40 + Math.floor((i / totalChunks) * 60)
+                            });
+                        }
+                        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS));
                     }
-                    throw new Error(`Failed to parse response: ${text.substring(0, 100)}...`);
+
+                    try {
+                        const res = await fetch(this.settings.privateGasUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(uploadPayload)
+                        });
+
+                        const text = await res.text();
+                        try {
+                            resData = JSON.parse(text);
+                            lastError = null;
+                            break; // Parsing successful, break the retry loop
+                        } catch (parseErr) {
+                            if (text.includes('<!DOCTYPE') || text.toLowerCase().includes('<html')) {
+                                // GAS cold start returned HTML, record error and continue retry
+                                lastError = new Error('GAS proxy returned HTML instead of JSON. Ensure your GAS Web App is deployed to: Execute as "Me" and Access to "Anyone".');
+                                // If max retries reached, throw the error
+                                if (attempt === MAX_RETRIES) throw lastError;
+                                continue; // Continue to the next retry attempt
+                            }
+                            // Other parsing errors, throw immediately without retrying
+                            throw new Error(`Failed to parse response: ${text.substring(0, 100)}...`);
+                        }
+                    } catch (fetchErr) {
+                        // Network error from fetch itself, throw immediately without retrying
+                        if (fetchErr.message && (fetchErr.message.includes('GAS proxy') || fetchErr.message.includes('Failed to parse'))) {
+                            throw fetchErr;
+                        }
+                        throw fetchErr;
+                    }
                 }
                 
                 if (resData && resData.status === 'success') {
@@ -551,7 +592,7 @@ export class GasBackupModule {
                 }
                 
                 this.settings.lastSyncTime = twTime;
-                this.onSaveSettings();
+                if (this.onSaveSettings) this.onSaveSettings(true); // Pass true to prevent triggering ANOTHER auto-sync!
 
                 console.log(t('systemLogs.gasBackupModule.logBackupSuccess', { type: isAutoSync ? t('systemLogs.gasBackupModule.typeAuto') : t('systemLogs.gasBackupModule.typeManual'), size: fileSizeKb }));
 
@@ -780,31 +821,49 @@ export class GasBackupModule {
             }
 
             const oldPrivateGasUrl = this.settings.privateGasUrl;
-            
-            for (const key in this.settings) {
-                delete this.settings[key];
-            }
-            
-            // Write global data
+
+            // Parse backup data source (compatible with preferences.gasSettings wrapper format)
+            let dataToApply = backupData;
             if (backupData.preferences && backupData.preferences.gasSettings) {
                 try {
-                    const parsedGasSettings = typeof backupData.preferences.gasSettings === 'string' 
-                        ? JSON.parse(backupData.preferences.gasSettings) 
+                    dataToApply = typeof backupData.preferences.gasSettings === 'string'
+                        ? JSON.parse(backupData.preferences.gasSettings)
                         : backupData.preferences.gasSettings;
-                    Object.assign(this.settings, parsedGasSettings);
-                } catch(e) {}
+                } catch(e) { dataToApply = backupData; }
+            } else if (backupData.preferences && typeof backupData.preferences === 'object' && !Array.isArray(backupData.preferences)) {
+                dataToApply = backupData.preferences;
+            }
+
+            if (isOverwrite) {
+                // ── Overwrite mode: Clear all settings and fully overwrite ──
+                console.log(t('utils.gasBackup.logRestoreOverwrite'));
+                for (const key in this.settings) {
+                    delete this.settings[key];
+                }
+                Object.assign(this.settings, dataToApply);
             } else {
-                if (backupData.preferences && typeof backupData.preferences === 'object' && !Array.isArray(backupData.preferences)) {
-                    Object.assign(this.settings, backupData.preferences);
+                // ── Merge mode: Merge specific data types precisely ──
+                console.log(t('utils.gasBackup.logRestoreMerge'));
+                
+                if (this.customMergeLogic && typeof this.customMergeLogic === 'function') {
+                    // Delegate custom merge logic to upper-level application
+                    this.customMergeLogic(this.settings, dataToApply);
                 } else {
-                    Object.assign(this.settings, backupData);
+                    // Default merge logic: retain local arrays and values, only fill in empty local fields
+                    for (const [key, value] of Object.entries(dataToApply)) {
+                        const localVal = this.settings[key];
+                        if (localVal === null || localVal === undefined || localVal === '' || 
+                            (Array.isArray(localVal) && localVal.length === 0)) {
+                            this.settings[key] = value;
+                        }
+                    }
                 }
             }
-            
+
             const newPrivateGasUrl = this.settings.privateGasUrl;
 
-            // 1. Check and ask for Private Gas Url
-            if (newPrivateGasUrl && oldPrivateGasUrl && newPrivateGasUrl !== oldPrivateGasUrl) {
+            // Check if cloud backup URL changed (only possible in overwrite mode)
+            if (isOverwrite && newPrivateGasUrl && oldPrivateGasUrl && newPrivateGasUrl !== oldPrivateGasUrl) {
                 const msg = t('utils.gasBackup.warningUrlDiff').replace('{newUrl}', newPrivateGasUrl).replace('{oldUrl}', oldPrivateGasUrl);
                 if (!confirm(msg)) {
                     this.settings.privateGasUrl = oldPrivateGasUrl;
@@ -813,7 +872,7 @@ export class GasBackupModule {
                 this.settings.privateGasUrl = oldPrivateGasUrl;
             }
 
-            await this.onSaveSettings();
+            await this.onSaveSettings(true); // Pass true to prevent triggering ANOTHER auto-sync immediately after restore
             
             console.log(t('utils.gasBackup.restoreSuccessLog'));
             
@@ -841,14 +900,14 @@ export class GasBackupModule {
             overlay.className = 'fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-[9999] p-4';
             
             const modal = document.createElement('div');
-            modal.className = 'bg-[var(--surface-color)] text-[var(--text-main)] rounded-xl shadow-2xl w-full max-w-sm flex flex-col overflow-hidden';
+            modal.className = 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl shadow-2xl w-full max-w-sm flex flex-col overflow-hidden';
             
             // Header
             const header = document.createElement('div');
-            header.className = 'px-5 py-4 border-b border-[var(--border-color)] flex items-center justify-between bg-[var(--bg-color)]';
+            header.className = 'px-5 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-900';
             header.innerHTML = `
-                <h3 class="font-bold text-[var(--text-main)] text-base">${t('utils.gasBackup.modalVersionTitle')}</h3>
-                <button class="text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors p-1" id="btn-close-version-modal">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base">${t('utils.gasBackup.modalVersionTitle')}</h3>
+                <button class="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 transition-colors p-1" id="btn-close-version-modal">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             `;
@@ -862,7 +921,7 @@ export class GasBackupModule {
             
             versions.forEach((v, index) => {
                 const btn = document.createElement('button');
-                btn.className = 'w-full text-left px-4 py-3 rounded-lg hover:bg-[var(--bg-color)] focus:bg-[var(--bg-color)] focus:outline-none transition-colors group border border-transparent hover:border-[var(--border-color)] flex items-center justify-between';
+                btn.className = 'w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 focus:bg-slate-50 dark:focus:bg-slate-700 focus:outline-none transition-colors group border border-transparent hover:border-slate-200 dark:hover:border-slate-600 flex items-center justify-between';
                 
                 const d = new Date(v.date || v.dateCreated);
                 const dateStr = d.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' });

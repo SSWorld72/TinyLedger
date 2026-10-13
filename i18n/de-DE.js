@@ -190,7 +190,14 @@ export default {
             promptLocation: 'Bitte einen Ort auswählen',
             importantFestivalPrefix: '⭐',
             festivalJoin: ', ',
-            attachment: 'Anhang'
+            attachment: 'Anhang',
+            saving: 'Wird gespeichert...',
+            saveFailed: 'Speichern fehlgeschlagen: ',
+            festivalReminderTitle: '【Festivals-Erinnerung】',
+            festivalReminderDays: 'ist in {days} Tagen!',
+            alertSelectCategory: 'Bitte Haupt- und Unterkategorie auswählen!',
+            alertFixedStartDate: 'Feste Aufzeichnung muss ein Startdatum haben!',
+            alertFixedDateOrder: 'Startdatum darf nicht nach dem Enddatum liegen!'
         },
         batch: {
             confirmDeleteGeneral: 'Möchten Sie diesen Datensatz wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
@@ -512,7 +519,9 @@ export default {
                 deleteBatchInUseTxDetail: '{count} Transaktionen',
                 deleteBatchInUseFixedDetail: '{count} Regeln',
                 deleteBatchInUseMore: '\n...und andere',
-                deleteBatchInUseTail: '\nBitte ändern Sie diese Daten zuerst.'
+                deleteBatchInUseTail: '\nBitte ändern Sie diese Daten zuerst.',
+                saving: 'Wird gespeichert...',
+                saveFailed: 'Speichern fehlgeschlagen: '
             },
             targets: {
                 title: 'Ziele',

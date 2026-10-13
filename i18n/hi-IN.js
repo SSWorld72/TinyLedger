@@ -190,7 +190,14 @@ export default {
             promptLocation: 'कृपया कोई स्थान दर्ज करें या चुनें',
             importantFestivalPrefix: '⭐',
             festivalJoin: ', ',
-            attachment: 'अनुलग्नक'
+            attachment: 'अनुलग्नक',
+            saving: 'सहेजा जा रहा है...',
+            saveFailed: 'सहेजने में विफल: ',
+            festivalReminderTitle: '【महत्वपूर्ण त्योहार अनुस्मारक】',
+            festivalReminderDays: '{days} दिनों में है!',
+            alertSelectCategory: 'कृपया मुख्य और उप श्रेणियां चुनें!',
+            alertFixedStartDate: 'निश्चित रिकॉर्ड में एक प्रारंभ तिथि होनी चाहिए!',
+            alertFixedDateOrder: 'प्रारंभ तिथि समाप्ति तिथि से बड़ी नहीं हो सकती!'
         },
         batch: {
             confirmDeleteGeneral: 'क्या आप वाकई इस रिकॉर्ड को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।',
@@ -512,7 +519,9 @@ export default {
                 deleteBatchInUseTxDetail: '{count} रिकॉर्ड (जैसे {date})',
                 deleteBatchInUseFixedDetail: '{count} नियम',
                 deleteBatchInUseMore: '\n...और अन्य आइटम',
-                deleteBatchInUseTail: '\n\nकृपया इन रिकॉर्डों को हटा दें या उन्हें किसी अन्य श्रेणी में संशोधित करने का प्रयास करें।'
+                deleteBatchInUseTail: '\n\nकृपया इन रिकॉर्डों को हटा दें या उन्हें किसी अन्य श्रेणी में संशोधित करने का प्रयास करें।',
+                saving: 'सहेजा जा रहा है...',
+                saveFailed: 'सहेजने में विफल: '
             },
             targets: {
                 title: 'बिलिंग लक्ष्य',

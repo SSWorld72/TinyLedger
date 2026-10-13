@@ -686,7 +686,7 @@ export const initRecordModal = (callbacks = {}) => {
         if (btnSave.disabled) return;
         btnSave.disabled = true;
         const originalText = btnSave.textContent;
-        btnSave.textContent = window.t('ui.settings.categories.saving') || 'Saving...';
+        btnSave.textContent = window.t('ui.record.saving') || 'Saving...';
 
         try {
             let targetScrollId = null;
@@ -862,7 +862,7 @@ export const initRecordModal = (callbacks = {}) => {
             closeModal();
         } catch (e) {
             console.error(window.t('logs.record.saveFail'), e);
-            alert((window.t('ui.settings.categories.saveFailed') || 'Save failed: ') + e.message);
+            alert((window.t('ui.record.saveFailed') || 'Save failed: ') + e.message);
         } finally {
             btnSave.disabled = false;
             btnSave.textContent = originalText;

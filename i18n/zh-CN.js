@@ -190,7 +190,14 @@ export default {
             promptLocation: '请先输入或选择一个地点',
             importantFestivalPrefix: '⭐',
             festivalJoin: '、',
-            attachment: '附件'
+            attachment: '附件',
+            saving: '保存中...',
+            saveFailed: '保存失败：',
+            festivalReminderTitle: '【重要节日提醒】',
+            festivalReminderDays: '还有 {days} 天！',
+            alertSelectCategory: '请选择大类与小类！',
+            alertFixedStartDate: '固定记录必须填写开始日期！',
+            alertFixedDateOrder: '开始日期不能大于结束日期！'
         },
         batch: {
             confirmDeleteGeneral: '确定要删除这条记录吗？此操作无法撤销。',
@@ -512,7 +519,9 @@ export default {
                 deleteBatchInUseTxDetail: '{count}笔纪录(如{date})',
                 deleteBatchInUseFixedDetail: '{count}笔规则',
                 deleteBatchInUseMore: '\n...及其他项目',
-                deleteBatchInUseTail: '\n\n请先将这些纪录删除或修改为其他类别后再试。'
+                deleteBatchInUseTail: '\n\n请先将这些纪录删除或修改为其他类别后再试。',
+                saving: '保存中...',
+                saveFailed: '保存失败：'
             },
             targets: {
                 title: '记账对象',

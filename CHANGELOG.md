@@ -2,6 +2,14 @@
 
 > 🇹🇼 若要查看繁體中文版，請參閱 [CHANGELOG.zh-TW.md](CHANGELOG.zh-TW.md)
 
+## 2026-10-12 (v1.5.7.6 - Festival Reminder & Save Button Multilingual Fix)
+### Fixes
+- **Festival Reminder Translation**: Fixed an issue where festival reminder alerts displayed unlocalized technical text instead of localized messages.
+- **Save Button Status Fix**: Resolved an issue where the save button briefly displayed raw text keys instead of the localized saving status when submitting records.
+- **Full Multilingual Alignment**: Synchronized missing form validation and prompt messages across all 9 supported languages.
+
+---
+
 ## 2026-09-21 (v1.5.7.5 - Background Sync & Mobile Stability Fixes)
 ### Fixes
 - **Mobile Background Disconnect Fix**: Fixed an issue where keeping the app in the background for too long or locking the screen would cause database connection errors upon returning. The system now automatically attempts to reconnect.

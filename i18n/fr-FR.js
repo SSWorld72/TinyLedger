@@ -190,7 +190,14 @@ export default {
             promptLocation: 'Veuillez sélectionner un lieu',
             importantFestivalPrefix: '⭐',
             festivalJoin: ', ',
-            attachment: 'Pièce jointe'
+            attachment: 'Pièce jointe',
+            saving: 'Enregistrement...',
+            saveFailed: 'Échec de l\'enregistrement : ',
+            festivalReminderTitle: '【Rappel de festival】',
+            festivalReminderDays: 'est dans {days} jours !',
+            alertSelectCategory: 'Veuillez sélectionner les catégories principale et secondaire !',
+            alertFixedStartDate: 'L\'enregistrement fixe doit avoir une date de début !',
+            alertFixedDateOrder: 'La date de début ne peut pas être postérieure à la date de fin !'
         },
         batch: {
             confirmDeleteGeneral: 'Êtes-vous sûr de vouloir supprimer cet enregistrement ? Cette action ne peut pas être annulée.',
@@ -512,7 +519,9 @@ export default {
                 deleteBatchInUseTxDetail: '{count} transactions',
                 deleteBatchInUseFixedDetail: '{count} règles',
                 deleteBatchInUseMore: '\n...et autres',
-                deleteBatchInUseTail: '\nVeuillez d\'abord modifier ces données.'
+                deleteBatchInUseTail: '\nVeuillez d\'abord modifier ces données.',
+                saving: 'Enregistrement...',
+                saveFailed: 'Échec de l\'enregistrement : '
             },
             targets: {
                 title: 'Cibles',
